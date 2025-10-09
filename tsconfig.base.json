@@ -1,0 +1,35 @@
+{
+  "compilerOptions": {
+    /* 语言和环境 */
+    "target": "ES2020",
+    "lib": ["ES2020"],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    
+    /* 严格模式 */
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
+    "noFallthroughCasesInSwitch": true,
+    
+    /* 模块解析 */
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "isolatedModules": true,
+    
+    /* 类型检查 */
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    
+    /* 输出 */
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "removeComments": false,
+    
+    /* 其他 */
+    "allowJs": false
+  },
+  "exclude": ["node_modules", "dist", ".rslib"]
+}

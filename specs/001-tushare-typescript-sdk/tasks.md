@@ -17,13 +17,13 @@
 
 **目的**: 创建 monorepo 结构和基础配置
 
-- [ ] T001 创建 Turborepo monorepo 根目录结构（turbo.json, pnpm-workspace.yaml, package.json）
-- [ ] T002 创建 packages/tushare-sdk 目录结构（src/, tests/, rslib.config.ts, tsconfig.json, vitest.config.ts, package.json）
-- [ ] T003 [P] 配置根 tsconfig.base.json（strict: true, target: ES2020）
-- [ ] T004 [P] 配置 ESLint（.eslintrc.js）和 Prettier（.prettierrc）
-- [ ] T005 [P] 配置 Turborepo 任务管道（turbo.json: build, test, lint）
-- [ ] T006 安装核心依赖（typescript, rslib, vitest, turborepo）
-- [ ] T007 创建 .gitignore 和 README.md
+- [x] T001 创建 Turborepo monorepo 根目录结构（turbo.json, pnpm-workspace.yaml, package.json）
+- [x] T002 创建 packages/tushare-sdk 目录结构（src/, tests/, rslib.config.ts, tsconfig.json, vitest.config.ts, package.json）
+- [x] T003 [P] 配置根 tsconfig.base.json（strict: true, target: ES2020）
+- [x] T004 [P] 配置 ESLint（.eslintrc.js）和 Prettier（.prettierrc）
+- [x] T005 [P] 配置 Turborepo 任务管道（turbo.json: build, test, lint）
+- [x] T006 安装核心依赖（typescript, rslib, vitest, turborepo）
+- [x] T007 创建 .gitignore 和 README.md
 
 ---
 
@@ -33,16 +33,16 @@
 
 **⚠️ 关键**: 所有用户故事工作必须等待此阶段完成
 
-- [ ] T008 [P] 实现 Logger 接口和 ConsoleLogger（packages/tushare-sdk/src/utils/logger.ts）
-- [ ] T009 [P] 实现日期工具函数（packages/tushare-sdk/src/utils/date.ts: formatDate, parseDate）
-- [ ] T010 [P] 定义核心类型（packages/tushare-sdk/src/types/config.ts: TushareConfig, RetryConfig, LogLevel）
-- [ ] T011 [P] 定义错误类型（packages/tushare-sdk/src/types/error.ts: ApiError, ApiErrorType）
-- [ ] T012 [P] 定义响应类型（packages/tushare-sdk/src/types/response.ts: TushareResponse, TushareRequest）
-- [ ] T013 实现 HTTP 客户端（packages/tushare-sdk/src/client/http.ts: 基于 fetch API）
-- [ ] T014 实现参数验证服务（packages/tushare-sdk/src/services/validator.ts: validateConfig, validateParams）
-- [ ] T015 实现重试服务（packages/tushare-sdk/src/services/retry.ts: RetryService 类）
-- [ ] T016 实现 CacheProvider 接口和 MemoryCacheProvider（packages/tushare-sdk/src/services/cache.ts）
-- [ ] T017 实现并发控制器（packages/tushare-sdk/src/services/concurrency.ts: ConcurrencyLimiter 类）
+- [x] T008 [P] 实现 Logger 接口和 ConsoleLogger（packages/tushare-sdk/src/utils/logger.ts）
+- [x] T009 [P] 实现日期工具函数（packages/tushare-sdk/src/utils/date.ts: formatDate, parseDate）
+- [x] T010 [P] 定义核心类型（packages/tushare-sdk/src/types/config.ts: TushareConfig, RetryConfig, LogLevel）
+- [x] T011 [P] 定义错误类型（packages/tushare-sdk/src/types/error.ts: ApiError, ApiErrorType）
+- [x] T012 [P] 定义响应类型（packages/tushare-sdk/src/types/response.ts: TushareResponse, TushareRequest）
+- [x] T013 实现 HTTP 客户端（packages/tushare-sdk/src/client/http.ts: 基于 fetch API）
+- [x] T014 实现参数验证服务（packages/tushare-sdk/src/services/validator.ts: validateConfig, validateParams）
+- [x] T015 实现重试服务（packages/tushare-sdk/src/services/retry.ts: RetryService 类）
+- [x] T016 实现 CacheProvider 接口和 MemoryCacheProvider（packages/tushare-sdk/src/services/cache.ts）
+- [x] T017 实现并发控制器（packages/tushare-sdk/src/services/concurrency.ts: ConcurrencyLimiter 类）
 
 **Checkpoint**: 基础设施就绪 - 用户故事实现现在可以并行开始
 
