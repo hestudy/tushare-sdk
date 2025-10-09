@@ -65,15 +65,15 @@
 
 ### 实现 - User Story 1
 
-- [ ] T022 [P] [US1] 定义股票数据模型（packages/tushare-sdk/src/models/stock.ts: StockBasicItem, StockBasicParams）
-- [ ] T023 [P] [US1] 定义行情数据模型（packages/tushare-sdk/src/models/quote.ts: DailyQuoteItem, DailyQuoteParams）
-- [ ] T024 [US1] 实现 TushareClient 核心类（packages/tushare-sdk/src/client/TushareClient.ts: 构造函数、query 方法）
-- [ ] T025 [US1] 实现响应数据转换逻辑（packages/tushare-sdk/src/client/TushareClient.ts: transformResponse 方法）
-- [ ] T026 [US1] 实现 stock_basic API 方法（packages/tushare-sdk/src/api/stock.ts: getStockBasic）
-- [ ] T027 [US1] 实现 daily API 方法（packages/tushare-sdk/src/api/quote.ts: getDailyQuote）
-- [ ] T028 [US1] 集成 HTTP 客户端、重试服务到 TushareClient（packages/tushare-sdk/src/client/TushareClient.ts）
-- [ ] T029 [US1] 添加请求/响应日志记录（packages/tushare-sdk/src/client/TushareClient.ts）
-- [ ] T030 [US1] 创建主入口文件并导出公共 API（packages/tushare-sdk/src/index.ts）
+- [x] T022 [P] [US1] 定义股票数据模型（packages/tushare-sdk/src/models/stock.ts: StockBasicItem, StockBasicParams）
+- [x] T023 [P] [US1] 定义行情数据模型（packages/tushare-sdk/src/models/quote.ts: DailyQuoteItem, DailyQuoteParams）
+- [x] T024 [US1] 实现 TushareClient 核心类（packages/tushare-sdk/src/client/TushareClient.ts: 构造函数、query 方法）
+- [x] T025 [US1] 实现响应数据转换逻辑（packages/tushare-sdk/src/client/TushareClient.ts: transformResponse 方法）
+- [x] T026 [US1] 实现 stock_basic API 方法（packages/tushare-sdk/src/api/stock.ts: getStockBasic）
+- [x] T027 [US1] 实现 daily API 方法（packages/tushare-sdk/src/api/quote.ts: getDailyQuote）
+- [x] T028 [US1] 集成 HTTP 客户端、重试服务到 TushareClient（packages/tushare-sdk/src/client/TushareClient.ts）
+- [x] T029 [US1] 添加请求/响应日志记录（packages/tushare-sdk/src/client/TushareClient.ts）
+- [x] T030 [US1] 创建主入口文件并导出公共 API（packages/tushare-sdk/src/index.ts）
 
 **Checkpoint**: 此时 User Story 1 应完全可用且可独立测试
 

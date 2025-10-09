@@ -5,17 +5,11 @@ import { ConcurrencyLimiter } from '../services/concurrency.js';
 import { ConsoleLogger, LogLevel } from '../utils/logger.js';
 import { validateConfig, validateParams } from '../services/validator.js';
 import { transformResponseData } from '../types/response.js';
-import type {
-  TushareConfig,
-  CacheProvider,
-  DEFAULT_ENDPOINT,
-  DEFAULT_TIMEOUT,
-  DEFAULT_RETRY_CONFIG,
-  DEFAULT_CACHE_CONFIG,
-  DEFAULT_CONCURRENCY_CONFIG,
-} from '../types/config.js';
+import type { TushareConfig, CacheProvider } from '../types/config.js';
 import type { Logger } from '../utils/logger.js';
 import type { TushareRequest } from '../types/response.js';
+import type { StockBasicItem, StockBasicParams } from '../models/stock.js';
+import type { DailyQuoteItem, DailyQuoteParams } from '../models/quote.js';
 
 /**
  * Tushare 客户端
@@ -164,5 +158,42 @@ export class TushareClient {
     }
 
     return result;
+  }
+
+  /**
+   * 获取股票基础信息
+   * 
+   * @param params - 查询参数
+   * @returns 股票基础信息列表
+   * 
+   * @example
+   * ```typescript
+   * const stocks = await client.getStockBasic({
+   *   list_status: 'L',
+   *   exchange: 'SSE'
+   * });
+   * ```
+   */
+  async getStockBasic(params?: StockBasicParams): Promise<StockBasicItem[]> {
+    return this.query<StockBasicItem>('stock_basic', params as Record<string, unknown>);
+  }
+
+  /**
+   * 获取日线行情数据
+   * 
+   * @param params - 查询参数
+   * @returns 日线行情数据列表
+   * 
+   * @example
+   * ```typescript
+   * const quotes = await client.getDailyQuote({
+   *   ts_code: '000001.SZ',
+   *   start_date: '20230101',
+   *   end_date: '20231231'
+   * });
+   * ```
+   */
+  async getDailyQuote(params: DailyQuoteParams): Promise<DailyQuoteItem[]> {
+    return this.query<DailyQuoteItem>('daily', params as Record<string, unknown>);
   }
 }
