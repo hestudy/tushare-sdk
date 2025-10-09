@@ -58,10 +58,10 @@
 
 **注意: 先编写测试，确保测试失败后再实现功能**
 
-- [ ] T018 [P] [US1] 契约测试：验证 stock_basic API 响应格式（tests/contract/tushare-api.test.ts）
-- [ ] T019 [P] [US1] 契约测试：验证 daily API 响应格式（tests/contract/tushare-api.test.ts）
-- [ ] T020 [P] [US1] 集成测试：完整的 API 调用流程（tests/integration/api.test.ts）
-- [ ] T021 [P] [US1] 单元测试：TushareClient 初始化和配置验证（tests/unit/client.test.ts）
+- [x] T018 [P] [US1] 契约测试：验证 stock_basic API 响应格式（tests/contract/tushare-api.test.ts）
+- [x] T019 [P] [US1] 契约测试：验证 daily API 响应格式（tests/contract/tushare-api.test.ts）
+- [x] T020 [P] [US1] 集成测试：完整的 API 调用流程（tests/integration/api.test.ts）
+- [x] T021 [P] [US1] 单元测试：TushareClient 初始化和配置验证（tests/unit/client.test.ts）
 
 ### 实现 - User Story 1
 
