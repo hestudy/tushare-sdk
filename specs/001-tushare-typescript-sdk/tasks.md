@@ -143,7 +143,7 @@
 ### 测试 - User Story 3
 
 - [x] T054 [P] [US3] 集成测试：浏览器环境 API 调用（tests/integration/browser.test.ts，使用 jsdom）
-- [ ] T055 [P] [US3] 构建测试：验证打包体积 < 50KB gzipped（tests/build/bundle-size.test.ts）
+- [x] T055 [P] [US3] 构建测试：验证打包体积 < 50KB gzipped（tests/build/bundle-size.test.ts）
 
 ### 实现 - User Story 3
 
@@ -152,7 +152,7 @@
 - [x] T058 [US3] 添加浏览器环境检测和安全警告（packages/tushare-sdk/src/client/TushareClient.ts）
 - [x] T059 [US3] 确保 fetch API 在浏览器和 Node.js 中正确工作（packages/tushare-sdk/src/client/http.ts）
 - [x] T060 [US3] 优化打包配置以减小体积（packages/tushare-sdk/rslib.config.ts: tree-shaking, minify）
-- [ ] T061 [US3] 在 quickstart.md 中添加浏览器使用示例和安全警告
+- [x] T061 [US3] 在 quickstart.md 中添加浏览器使用示例和安全警告
 
 **Checkpoint**: SDK 可在浏览器和 Node.js 环境中正常工作
 
@@ -169,7 +169,7 @@
 - [x] T062 [P] [US5] 单元测试：MemoryCacheProvider 基本操作（tests/unit/services.test.ts）
 - [x] T063 [P] [US5] 单元测试：缓存过期机制（tests/unit/services.test.ts）
 - [x] T064 [P] [US5] 集成测试：缓存命中和未命中场景（tests/integration/api.test.ts）
-- [ ] T065 [P] [US5] 集成测试：自定义缓存提供者（tests/integration/cache.test.ts）
+- [x] T065 [P] [US5] 集成测试：自定义缓存提供者（tests/integration/cache.test.ts）
 
 ### 实现 - User Story 5
 
@@ -178,7 +178,7 @@
 - [x] T068 [US5] 在 TushareClient 中集成缓存逻辑（packages/tushare-sdk/src/client/TushareClient.ts）
 - [x] T069 [US5] 实现缓存配置选项（packages/tushare-sdk/src/types/config.ts: CacheConfig）
 - [x] T070 [US5] 添加缓存命中/未命中日志（packages/tushare-sdk/src/client/TushareClient.ts）
-- [ ] T071 [US5] 在 quickstart.md 中添加缓存使用示例（包括 Redis 集成示例）
+- [x] T071 [US5] 在 quickstart.md 中添加缓存使用示例（包括 Redis 集成示例）
 
 **Checkpoint**: 缓存机制完整，支持自定义缓存提供者
 
@@ -188,13 +188,13 @@
 
 **目的**: 影响多个用户故事的改进和文档完善
 
-- [ ] T072 [P] 实现并发控制逻辑（packages/tushare-sdk/src/services/concurrency.ts: 队列机制）
-- [ ] T073 [P] 在 TushareClient 中集成并发控制（packages/tushare-sdk/src/client/TushareClient.ts）
-- [ ] T074 [P] 添加 trade_cal API 方法（packages/tushare-sdk/src/api/calendar.ts）
-- [ ] T075 [P] 创建完整的 README.md（根目录和 packages/tushare-sdk/）
-- [ ] T076 [P] 创建 CHANGELOG.md（packages/tushare-sdk/CHANGELOG.md）
-- [ ] T077 [P] 创建 API 文档（docs/api.md）
-- [ ] T078 配置 vitest 覆盖率报告（packages/tushare-sdk/vitest.config.ts: coverage ≥ 80%）
+- [x] T072 [P] 实现并发控制逻辑（packages/tushare-sdk/src/services/concurrency.ts: 队列机制）
+- [x] T073 [P] 在 TushareClient 中集成并发控制（packages/tushare-sdk/src/client/TushareClient.ts）
+- [x] T074 [P] 添加 trade_cal API 方法（packages/tushare-sdk/src/api/calendar.ts）
+- [x] T075 [P] 创建完整的 README.md（根目录和 packages/tushare-sdk/）
+- [x] T076 [P] 创建 CHANGELOG.md（packages/tushare-sdk/CHANGELOG.md）
+- [x] T077 [P] 创建 API 文档（docs/api.md）
+- [x] T078 配置 vitest 覆盖率报告（packages/tushare-sdk/vitest.config.ts: coverage ≥ 80%）
 - [ ] T079 运行完整测试套件并验证覆盖率（pnpm test --coverage）
 - [ ] T080 运行 quickstart.md 中的所有示例验证（手动或自动化）
 - [ ] T081 性能优化：响应数据转换（使用 for 循环代替 forEach）

@@ -42,6 +42,11 @@ export type {
   FinancialParams,
 } from './models/financial.js';
 
+export type {
+  TradeCalItem,
+  TradeCalParams,
+} from './models/calendar.js';
+
 // 工具类
 export type { Logger } from './utils/logger.js';
 export { LogLevel, ConsoleLogger } from './utils/logger.js';
@@ -54,3 +59,4 @@ export { MemoryCacheProvider } from './services/cache.js';
 export { getStockBasic } from './api/stock.js';
 export { getDailyQuote } from './api/quote.js';
 export { getFinancialData } from './api/financial.js';
+export { getTradeCalendar } from './api/calendar.js';
