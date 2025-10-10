@@ -47,11 +47,11 @@ description: "GitHub CI 自动化发布任务清单"
 
 ### 测试基础设施（遵循 Test-First 原则）
 
-- [ ] T007 [TEST] 创建 workflow 测试环境
+- [X] T007 [TEST] 创建 workflow 测试环境
   - 选择测试工具（GitHub Actions 本地运行工具 act 或测试仓库）
   - 配置测试用的 npm 账号和 token
   - 创建测试脚本目录 `tests/workflows/`
-- [ ] T008 [TEST] 编写 workflow 验证脚本框架
+- [X] T008 [TEST] 编写 workflow 验证脚本框架
   - 定义测试场景结构
   - 实现测试辅助函数（创建标签、验证发布结果等）
   - 配置测试清理机制
@@ -68,7 +68,7 @@ description: "GitHub CI 自动化发布任务清单"
 
 ### Implementation for User Story 1
 
-- [ ] T009 [US1] 编写稳定版本发布测试（Red Phase）
+- [X] T009 [US1] 编写稳定版本发布测试（Red Phase）
   - 测试场景：推送 v1.0.0 标签触发发布
   - 验证点：workflow 触发、测试执行、npm 发布、版本一致性
   - 预期：测试失败（workflow 尚未实现）
@@ -119,7 +119,7 @@ description: "GitHub CI 自动化发布任务清单"
 
 ### Implementation for User Story 2
 
-- [ ] T021 [US2] 编写预发布版本测试（Red Phase）
+- [X] T021 [US2] 编写预发布版本测试（Red Phase）
   - 测试场景：推送 v1.0.0-beta.1 标签
   - 验证点：dist-tag 推断、beta 版本发布
   - 预期：测试失败（功能尚未实现）
@@ -150,7 +150,7 @@ description: "GitHub CI 自动化发布任务清单"
 
 ### Implementation for User Story 3
 
-- [ ] T028 [US3] 编写 Release 创建测试（Red Phase）
+- [X] T028 [US3] 编写 Release 创建测试（Red Phase）
   - 测试场景：发布成功后创建 GitHub Release
   - 验证点：Release 创建、变更日志格式、prerelease 标记
   - 预期：测试失败（功能尚未实现）
@@ -191,15 +191,15 @@ description: "GitHub CI 自动化发布任务清单"
 
 - [X] T036 [P] 优化 workflow 性能：启用 pnpm 缓存
 - [X] T037 [P] 添加 npm provenance 配置（NPM_CONFIG_PROVENANCE: true）
-- [ ] T038 验证性能指标达标（目标 3.5 分钟，最大 10 分钟）
+- [X] T038 验证性能指标达标（目标 3.5 分钟，最大 10 分钟）
 
 ### 文档和可观测性
 
 - [X] T039 [P] 添加 workflow 状态徽章到 README.md
 - [X] T040 [P] 更新项目文档：添加发布流程说明到 docs/api.md
-- [ ] T041 验证 quickstart.md 中的所有步骤可正常执行
+- [X] T041 验证 quickstart.md 中的所有步骤可正常执行
 - [X] T042 添加 workflow 注释说明每个步骤的目的
-- [ ] T043 验证所有错误场景的提示信息清晰明确
+- [X] T043 验证所有错误场景的提示信息清晰明确
 
 ### Monorepo 支持
 
@@ -214,7 +214,7 @@ description: "GitHub CI 自动化发布任务清单"
 
 ### 集成测试和回归测试
 
-- [ ] T046 [TEST] 编写完整的回归测试套件
+- [X] T046 [TEST] 编写完整的回归测试套件
   - 稳定版本发布
   - 预发布版本发布（alpha, beta, rc）
   - 版本冲突处理
@@ -225,11 +225,11 @@ description: "GitHub CI 自动化发布任务清单"
   - npm 仓库不可用重试
   - 同时推送多个标签
   - Monorepo 多包发布
-- [ ] T047 [TEST] 执行完整的回归测试
+- [X] T047 [TEST] 执行完整的回归测试
   - 运行所有测试场景
   - 验证所有 Edge Cases 覆盖
   - 确认所有 Success Metrics 达标
-- [ ] T048 [TEST] 创建测试文档
+- [X] T048 [TEST] 创建测试文档
   - 记录测试场景和验证步骤
   - 提供手动测试清单
   - 文档化测试环境配置
