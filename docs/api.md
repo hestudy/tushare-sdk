@@ -734,10 +734,49 @@ function processStocks(stocks: StockBasicItem[]) {
 
 ---
 
+## 发布流程
+
+本项目使用 GitHub Actions 自动化发布流程。当维护者推送版本标签时,系统会自动执行测试、构建和发布。
+
+### 发布稳定版本
+
+```bash
+# 创建并推送版本标签
+git tag v1.0.0
+git push origin v1.0.0
+```
+
+### 发布预览版本
+
+```bash
+# Beta 版本
+git tag v1.1.0-beta.1
+git push origin v1.1.0-beta.1
+
+# Alpha 版本
+git tag v1.1.0-alpha.1
+git push origin v1.1.0-alpha.1
+
+# RC 版本
+git tag v1.1.0-rc.1
+git push origin v1.1.0-rc.1
+```
+
+### 自动化流程
+
+1. **测试与构建**: 执行 lint、type-check、build、test
+2. **发布到 npm**: 自动推断 dist-tag 并发布
+3. **创建 GitHub Release**: 自动生成变更日志
+
+详细说明请参考 [发布指南](../specs/002-github-ci/quickstart.md)。
+
+---
+
 ## 更多资源
 
 - [快速开始指南](../specs/001-tushare-typescript-sdk/quickstart.md)
 - [数据模型文档](../specs/001-tushare-typescript-sdk/data-model.md)
 - [API 契约](../specs/001-tushare-typescript-sdk/contracts/)
 - [技术研究](../specs/001-tushare-typescript-sdk/research.md)
+- [发布指南](../specs/002-github-ci/quickstart.md)
 - [Tushare 官方文档](https://tushare.pro/document/2)

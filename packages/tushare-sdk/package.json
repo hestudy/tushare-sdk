@@ -52,11 +52,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/your-org/tushare-sdk.git",
+    "url": "https://github.com/hestudy/tushare-sdk",
     "directory": "packages/tushare-sdk"
   },
   "bugs": {
-    "url": "https://github.com/your-org/tushare-sdk/issues"
+    "url": "https://github.com/hestudy/tushare-sdk/issues"
   },
-  "homepage": "https://github.com/your-org/tushare-sdk#readme"
+  "homepage": "https://github.com/hestudy/tushare-sdk#readme"
 }
