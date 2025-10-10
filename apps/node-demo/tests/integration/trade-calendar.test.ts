@@ -7,6 +7,7 @@ import { TushareClient } from '@hestudy/tushare-sdk';
  */
 describe('交易日历 API 集成测试', () => {
   let client: TushareClient;
+  const hasToken = !!process.env.TUSHARE_TOKEN;
 
   beforeEach(() => {
     // 使用环境变量中的 Token,如果没有则使用 mock
@@ -14,12 +15,7 @@ describe('交易日历 API 集成测试', () => {
     client = new TushareClient({ token });
   });
 
-  it('应该成功查询交易日历', async () => {
-    // 如果没有真实 Token,跳过此测试
-    if (!process.env.TUSHARE_TOKEN) {
-      console.log('跳过: 需要真实 TUSHARE_TOKEN');
-      return;
-    }
+  it.skipIf(!hasToken)('应该成功查询交易日历', async () => {
 
     const result = await client.getTradeCalendar({
       exchange: 'SSE',
@@ -40,11 +36,7 @@ describe('交易日历 API 集成测试', () => {
     }
   });
 
-  it('应该支持查询上交所交易日历', async () => {
-    if (!process.env.TUSHARE_TOKEN) {
-      console.log('跳过: 需要真实 TUSHARE_TOKEN');
-      return;
-    }
+  it.skipIf(!hasToken)('应该支持查询上交所交易日历', async () => {
 
     const result = await client.getTradeCalendar({
       exchange: 'SSE',
@@ -63,11 +55,7 @@ describe('交易日历 API 集成测试', () => {
     }
   });
 
-  it('应该支持查询深交所交易日历', async () => {
-    if (!process.env.TUSHARE_TOKEN) {
-      console.log('跳过: 需要真实 TUSHARE_TOKEN');
-      return;
-    }
+  it.skipIf(!hasToken)('应该支持查询深交所交易日历', async () => {
 
     const result = await client.getTradeCalendar({
       exchange: 'SZSE',
@@ -86,11 +74,7 @@ describe('交易日历 API 集成测试', () => {
     }
   });
 
-  it('应该正确标识交易日和非交易日', async () => {
-    if (!process.env.TUSHARE_TOKEN) {
-      console.log('跳过: 需要真实 TUSHARE_TOKEN');
-      return;
-    }
+  it.skipIf(!hasToken)('应该正确标识交易日和非交易日', async () => {
 
     const result = await client.getTradeCalendar({
       exchange: 'SSE',
@@ -108,11 +92,7 @@ describe('交易日历 API 集成测试', () => {
     }
   });
 
-  it('应该支持查询特定日期', async () => {
-    if (!process.env.TUSHARE_TOKEN) {
-      console.log('跳过: 需要真实 TUSHARE_TOKEN');
-      return;
-    }
+  it.skipIf(!hasToken)('应该支持查询特定日期', async () => {
 
     const result = await client.getTradeCalendar({
       exchange: 'SSE',
@@ -130,11 +110,7 @@ describe('交易日历 API 集成测试', () => {
     }
   });
 
-  it('应该正确处理日期范围查询', async () => {
-    if (!process.env.TUSHARE_TOKEN) {
-      console.log('跳过: 需要真实 TUSHARE_TOKEN');
-      return;
-    }
+  it.skipIf(!hasToken)('应该正确处理日期范围查询', async () => {
 
     const result = await client.getTradeCalendar({
       exchange: 'SSE',
@@ -154,11 +130,7 @@ describe('交易日历 API 集成测试', () => {
     }
   });
 
-  it('应该返回包含交易日和非交易日的完整日历', async () => {
-    if (!process.env.TUSHARE_TOKEN) {
-      console.log('跳过: 需要真实 TUSHARE_TOKEN');
-      return;
-    }
+  it.skipIf(!hasToken)('应该返回包含交易日和非交易日的完整日历', async () => {
 
     const result = await client.getTradeCalendar({
       exchange: 'SSE',

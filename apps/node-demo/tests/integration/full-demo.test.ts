@@ -7,6 +7,7 @@ import { TushareClient } from '@hestudy/tushare-sdk';
  */
 describe('完整演示流程 E2E 测试', () => {
   let client: TushareClient;
+  const hasToken = !!process.env.TUSHARE_TOKEN;
 
   beforeEach(() => {
     // 使用环境变量中的 Token
@@ -14,12 +15,7 @@ describe('完整演示流程 E2E 测试', () => {
     client = new TushareClient({ token });
   });
 
-  it('应该成功执行完整的演示流程', async () => {
-    // 如果没有真实 Token,跳过此测试
-    if (!process.env.TUSHARE_TOKEN) {
-      console.log('跳过: 需要真实 TUSHARE_TOKEN');
-      return;
-    }
+  it.skipIf(!hasToken)('应该成功执行完整的演示流程', async () => {
 
     const results: Array<{
       name: string;
@@ -129,11 +125,7 @@ describe('完整演示流程 E2E 测试', () => {
     expect(results.every((r) => r.success)).toBe(true);
   });
 
-  it('应该在合理的时间内完成所有示例', async () => {
-    if (!process.env.TUSHARE_TOKEN) {
-      console.log('跳过: 需要真实 TUSHARE_TOKEN');
-      return;
-    }
+  it.skipIf(!hasToken)('应该在合理的时间内完成所有示例', async () => {
 
     const startTime = Date.now();
 
@@ -187,11 +179,7 @@ describe('完整演示流程 E2E 测试', () => {
     expect(results[0].error).toBeDefined();
   });
 
-  it('应该支持并发执行多个示例', async () => {
-    if (!process.env.TUSHARE_TOKEN) {
-      console.log('跳过: 需要真实 TUSHARE_TOKEN');
-      return;
-    }
+  it.skipIf(!hasToken)('应该支持并发执行多个示例', async () => {
 
     const startTime = Date.now();
 
