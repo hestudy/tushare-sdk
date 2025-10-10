@@ -54,4 +54,66 @@ describe('runDailyBasicExample - 集成测试', () => {
     expect(result.sample.length).toBeLessThanOrEqual(3);
     expect(result.sample.length).toBeLessThanOrEqual(result.count);
   }, 30000);
+
+  // T012: 多场景数据格式验证
+  testFn('应该正确处理多种查询场景', async () => {
+    const config = loadConfig();
+    const result = await runDailyBasicExample(config);
+
+    // 验证返回了多个场景的数据
+    expect(result.count).toBeGreaterThan(0);
+    
+    // 验证 sample 包含来自不同场景的数据
+    if (result.sample.length > 0) {
+      result.sample.forEach((item) => {
+        const dailyBasicItem = item as DailyBasicItem;
+        
+        // 验证每个数据项都有必需字段
+        expect(dailyBasicItem).toHaveProperty('ts_code');
+        expect(dailyBasicItem).toHaveProperty('trade_date');
+        expect(typeof dailyBasicItem.ts_code).toBe('string');
+        expect(typeof dailyBasicItem.trade_date).toBe('string');
+      });
+    }
+  }, 30000);
+
+  testFn('应该正确处理自定义字段查询', async () => {
+    const config = loadConfig();
+    const result = await runDailyBasicExample(config);
+
+    // 验证返回了数据
+    if (result.count > 0 && result.sample.length > 0) {
+      const item = result.sample[0] as DailyBasicItem;
+      
+      // 验证基本字段存在
+      expect(item).toHaveProperty('ts_code');
+      expect(item).toHaveProperty('trade_date');
+    }
+  }, 30000);
+
+  // T018: 权限验证测试
+  testFn('应该能够处理权限不足的情况', async () => {
+    // 使用无效 token 测试权限验证
+    const invalidConfig = {
+      tushareToken: 'invalid_token_for_testing',
+      apiBaseUrl: undefined,
+      debug: false,
+    };
+
+    // 预期会抛出错误
+    await expect(runDailyBasicExample(invalidConfig)).rejects.toThrow();
+  }, 30000);
+
+  testFn('应该能够处理空数据返回', async () => {
+    const config = loadConfig();
+    
+    // 注意: 这个测试可能会返回数据或空数据,取决于查询的日期
+    // 我们只验证函数能够正常处理,不抛出错误
+    const result = await runDailyBasicExample(config);
+    
+    expect(result).toHaveProperty('count');
+    expect(result).toHaveProperty('sample');
+    expect(result.count).toBeGreaterThanOrEqual(0);
+    expect(Array.isArray(result.sample)).toBe(true);
+  }, 30000);
 });

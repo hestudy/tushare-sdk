@@ -67,7 +67,7 @@ description: "Task list for Node Demo 每日指标演示 implementation"
 
 - [X] T009 [US1] 运行单元测试,验证测试通过
 
-- [ ] T010 [US1] 运行集成测试,验证 API 调用成功
+- [X] T010 [US1] 运行集成测试,验证 API 调用成功
 
 **Checkpoint**: User Story 1 完成 - 基本的每日指标示例可以独立运行和测试
 
@@ -85,7 +85,7 @@ description: "Task list for Node Demo 每日指标演示 implementation"
   - 测试场景 2: 按股票代码查询
   - 测试场景 3: 自定义返回字段
 
-- [ ] T012 [US2] 更新集成测试 `apps/node-demo/tests/integration/daily-basic.integration.test.ts`,验证多场景数据格式
+- [X] T012 [US2] 更新集成测试 `apps/node-demo/tests/integration/daily-basic.integration.test.ts`,验证多场景数据格式
 
 ### Implementation for User Story 2
 
@@ -100,7 +100,7 @@ description: "Task list for Node Demo 每日指标演示 implementation"
 
 - [X] T015 [US2] 运行单元测试,验证多场景测试通过
 
-- [ ] T016 [US2] 运行集成测试,验证多场景 API 调用成功
+- [X] T016 [US2] 运行集成测试,验证多场景 API 调用成功
 
 **Checkpoint**: User Story 2 完成 - 示例展示了 3 种查询方式,用户可以理解 API 的灵活性
 
@@ -118,7 +118,7 @@ description: "Task list for Node Demo 每日指标演示 implementation"
   - 测试无数据返回情况(空数组)
   - 测试错误抛出和传播
 
-- [ ] T018 [US3] 更新集成测试 `apps/node-demo/tests/integration/daily-basic.integration.test.ts`,添加权限验证测试
+- [X] T018 [US3] 更新集成测试 `apps/node-demo/tests/integration/daily-basic.integration.test.ts`,添加权限验证测试
 
 ### Implementation for User Story 3
 
@@ -130,7 +130,7 @@ description: "Task list for Node Demo 每日指标演示 implementation"
 
 - [X] T020 [US3] 运行单元测试,验证错误处理测试通过
 
-- [ ] T021 [US3] 运行集成测试,验证错误场景处理正确
+- [X] T021 [US3] 运行集成测试,验证错误场景处理正确
 
 **Checkpoint**: User Story 3 完成 - 示例包含完整的错误处理,代码健壮性达标
 
@@ -155,15 +155,26 @@ description: "Task list for Node Demo 每日指标演示 implementation"
   - 集成测试全部通过
   - 无测试失败或跳过
 
-- [ ] T025 E2E 测试:运行 `pnpm --filter node-demo start --example=daily-basic`,验证输出正确
+- [ ] T025 E2E 测试:运行 `pnpm --filter node-demo dev --example=daily-basic`,验证输出正确
+  - **注意**: 需要配置 .env 文件中的 TUSHARE_TOKEN
+  - **注意**: 需要 2000+ 积分
 
-- [ ] T026 E2E 测试:运行 `pnpm --filter node-demo start --example=all`,验证 daily-basic 包含在内
+- [ ] T026 E2E 测试:运行 `pnpm --filter node-demo dev --example=all`,验证 daily-basic 包含在内
+  - **注意**: 需要配置 .env 文件中的 TUSHARE_TOKEN
 
-- [ ] T027 E2E 测试:运行 `pnpm --filter node-demo start --example=daily-basic --format=json`,验证 JSON 输出
+- [ ] T027 E2E 测试:运行 `pnpm --filter node-demo dev --example=daily-basic --format=json`,验证 JSON 输出
+  - **注意**: 需要配置 .env 文件中的 TUSHARE_TOKEN
 
-- [ ] T028 E2E 测试:运行 `pnpm --filter node-demo start --example=daily-basic --verbose`,验证详细日志
+- [ ] T028 E2E 测试:运行 `pnpm --filter node-demo dev --example=daily-basic --verbose`,验证详细日志
+  - **注意**: 需要配置 .env 文件中的 TUSHARE_TOKEN
 
 - [ ] T029 验证 quickstart.md 中的所有命令和示例可以正常运行
+  - **注意**: 需要配置 .env 文件中的 TUSHARE_TOKEN
+
+**E2E 测试说明**: 
+- 这些测试需要有效的 Tushare Token 和网络连接
+- 请先配置 `apps/node-demo/.env` 文件(参考 .env.example)
+- 详细步骤请参考 `IMPLEMENTATION_STATUS.md`
 
 - [X] T030 最终代码审查,确保符合项目宪法的所有要求
   - ✅ Test-First Development
