@@ -9,7 +9,7 @@ import type { TushareConfig } from '../types/config.js';
  */
 export function validateConfig(config: TushareConfig): void {
   // 验证 token
-  if (!config.token || typeof config.token !== 'string') {
+  if (typeof config.token !== 'string') {
     throw new ApiError(
       ApiErrorType.VALIDATION_ERROR,
       'Token is required and must be a string'
