@@ -4,7 +4,7 @@
  * 演示如何使用 Tushare TypeScript SDK
  */
 
-import { TushareClient } from '@tushare/sdk';
+import { TushareClient } from '@hestudy/tushare-sdk';
 
 // 创建客户端实例
 const client = new TushareClient({

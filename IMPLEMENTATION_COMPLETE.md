@@ -200,14 +200,14 @@ tushare-sdk/
 
 ### 安装
 ```bash
-npm install @tushare/sdk
+npm install @hestudy/tushare-sdk
 # 或
-pnpm add @tushare/sdk
+pnpm add @hestudy/tushare-sdk
 ```
 
 ### 快速开始
 ```typescript
-import { TushareClient } from '@tushare/sdk';
+import { TushareClient } from '@hestudy/tushare-sdk';
 
 const client = new TushareClient({
   token: 'YOUR_TUSHARE_API_TOKEN',

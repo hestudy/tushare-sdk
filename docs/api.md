@@ -1,6 +1,6 @@
 # API 文档
 
-本文档详细介绍 @tushare/sdk 的所有公共 API。
+本文档详细介绍 @hestudy/tushare-sdk 的所有公共 API。
 
 ## 目录
 
@@ -420,7 +420,7 @@ import type {
   FinancialParams,
   TradeCalItem,
   TradeCalParams,
-} from '@tushare/sdk';
+} from '@hestudy/tushare-sdk';
 ```
 
 ---
@@ -482,7 +482,7 @@ enum ApiErrorType {
 **使用示例:**
 
 ```typescript
-import { ApiError, ApiErrorType } from '@tushare/sdk';
+import { ApiError, ApiErrorType } from '@hestudy/tushare-sdk';
 
 try {
   const stocks = await client.getStockBasic();
@@ -549,7 +549,7 @@ enum LogLevel {
 **使用示例:**
 
 ```typescript
-import { ConsoleLogger, LogLevel } from '@tushare/sdk';
+import { ConsoleLogger, LogLevel } from '@hestudy/tushare-sdk';
 
 const client = new TushareClient({
   token: 'YOUR_TOKEN',
@@ -583,7 +583,7 @@ class MemoryCacheProvider implements CacheProvider {
 **使用示例:**
 
 ```typescript
-import { MemoryCacheProvider } from '@tushare/sdk';
+import { MemoryCacheProvider } from '@hestudy/tushare-sdk';
 
 const cache = new MemoryCacheProvider(2000); // 最多缓存 2000 条
 
@@ -618,7 +618,7 @@ function isValidDateFormat(dateStr: string): boolean;
 **使用示例:**
 
 ```typescript
-import { formatDate, parseDate, isValidDateFormat } from '@tushare/sdk';
+import { formatDate, parseDate, isValidDateFormat } from '@hestudy/tushare-sdk';
 
 // 格式化日期
 const formatted = formatDate(new Date()); // '20231229'
@@ -663,10 +663,10 @@ import type {
   FinancialParams,
   TradeCalItem,
   TradeCalParams,
-} from '@tushare/sdk';
+} from '@hestudy/tushare-sdk';
 
 // 错误类型和枚举
-import { ApiError, ApiErrorType, LogLevel } from '@tushare/sdk';
+import { ApiError, ApiErrorType, LogLevel } from '@hestudy/tushare-sdk';
 ```
 
 ---
@@ -722,7 +722,7 @@ try {
 ### 5. 使用 TypeScript 类型
 
 ```typescript
-import type { StockBasicItem } from '@tushare/sdk';
+import type { StockBasicItem } from '@hestudy/tushare-sdk';
 
 function processStocks(stocks: StockBasicItem[]) {
   // TypeScript 会提供完整的类型检查和智能提示

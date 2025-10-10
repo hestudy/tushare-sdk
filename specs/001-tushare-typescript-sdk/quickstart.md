@@ -21,17 +21,17 @@
 
 ### 使用 npm
 ```bash
-npm install @tushare/sdk
+npm install @hestudy/tushare-sdk
 ```
 
 ### 使用 pnpm
 ```bash
-pnpm add @tushare/sdk
+pnpm add @hestudy/tushare-sdk
 ```
 
 ### 使用 yarn
 ```bash
-yarn add @tushare/sdk
+yarn add @hestudy/tushare-sdk
 ```
 
 ---
@@ -41,7 +41,7 @@ yarn add @tushare/sdk
 ### 1. 基础用法 (Node.js)
 
 ```typescript
-import { TushareClient } from '@tushare/sdk';
+import { TushareClient } from '@hestudy/tushare-sdk';
 
 // 创建客户端实例
 const client = new TushareClient({
@@ -87,7 +87,7 @@ getStocks();
 ### 2. 获取日线行情
 
 ```typescript
-import { TushareClient } from '@tushare/sdk';
+import { TushareClient } from '@hestudy/tushare-sdk';
 
 const client = new TushareClient({
   token: 'YOUR_TUSHARE_API_TOKEN',
@@ -211,7 +211,7 @@ const results = await Promise.all(
 ### 4. 自定义日志
 
 ```typescript
-import { TushareClient, LogLevel, ConsoleLogger } from '@tushare/sdk';
+import { TushareClient, LogLevel, ConsoleLogger } from '@hestudy/tushare-sdk';
 
 const client = new TushareClient({
   token: 'YOUR_TOKEN',
@@ -237,7 +237,7 @@ const client = new TushareClient({
 ### 5. 使用外部缓存 (Redis)
 
 ```typescript
-import { CacheProvider } from '@tushare/sdk';
+import { CacheProvider } from '@hestudy/tushare-sdk';
 import Redis from 'ioredis';
 
 // 实现 CacheProvider 接口
@@ -289,7 +289,7 @@ const client = new TushareClient({
 ### 捕获和处理错误
 
 ```typescript
-import { TushareClient, ApiError, ApiErrorType } from '@tushare/sdk';
+import { TushareClient, ApiError, ApiErrorType } from '@hestudy/tushare-sdk';
 
 const client = new TushareClient({ token: 'YOUR_TOKEN' });
 
@@ -355,7 +355,7 @@ async function getStocksViaProxy() {
 ```typescript
 // 后端代理 (Express.js)
 import express from 'express';
-import { TushareClient } from '@tushare/sdk';
+import { TushareClient } from '@hestudy/tushare-sdk';
 
 const app = express();
 const client = new TushareClient({
@@ -416,7 +416,7 @@ SDK 已内置自动重试机制。如果仍频繁遇到，请:
 ## 完整示例
 
 ```typescript
-import { TushareClient, LogLevel } from '@tushare/sdk';
+import { TushareClient, LogLevel } from '@hestudy/tushare-sdk';
 
 // 创建配置完善的客户端
 const client = new TushareClient({

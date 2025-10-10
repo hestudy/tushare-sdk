@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- Initial release of @tushare/sdk
+- Initial release of @hestudy/tushare-sdk
 - TypeScript SDK for Tushare Pro API
 - Complete TypeScript type definitions with strict mode
 - Automatic retry mechanism with exponential backoff
@@ -85,7 +85,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Version 1.0.0
 
-This is the first stable release of @tushare/sdk, providing a modern, type-safe way to access Tushare Pro API in TypeScript/JavaScript projects.
+This is the first stable release of @hestudy/tushare-sdk, providing a modern, type-safe way to access Tushare Pro API in TypeScript/JavaScript projects.
 
 **Key Highlights:**
 - 🎯 Complete TypeScript support with strict mode

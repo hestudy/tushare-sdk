@@ -141,7 +141,7 @@ pnpm build
 
 ### 使用示例
 ```typescript
-import { TushareClient } from '@tushare/sdk';
+import { TushareClient } from '@hestudy/tushare-sdk';
 
 const client = new TushareClient({
   token: 'YOUR_TOKEN',

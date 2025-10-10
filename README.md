@@ -1,6 +1,6 @@
 # Tushare TypeScript SDK
 
-[![npm version](https://img.shields.io/npm/v/@tushare/sdk.svg)](https://www.npmjs.com/package/@tushare/sdk)
+[![npm version](https://img.shields.io/npm/v/@hestudy/tushare-sdk.svg)](https://www.npmjs.com/package/@hestudy/tushare-sdk)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.3-blue.svg)](https://www.typescriptlang.org/)
 
@@ -21,19 +21,19 @@ TypeScript SDK for [Tushare Pro](https://tushare.pro) - 为 Node.js 和浏览器
 
 ```bash
 # 使用 pnpm (推荐)
-pnpm add @tushare/sdk
+pnpm add @hestudy/tushare-sdk
 
 # 使用 npm
-npm install @tushare/sdk
+npm install @hestudy/tushare-sdk
 
 # 使用 yarn
-yarn add @tushare/sdk
+yarn add @hestudy/tushare-sdk
 ```
 
 ## 🚀 快速开始
 
 ```typescript
-import { TushareClient } from '@tushare/sdk';
+import { TushareClient } from '@hestudy/tushare-sdk';
 
 // 创建客户端实例
 const client = new TushareClient({

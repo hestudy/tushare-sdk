@@ -263,7 +263,7 @@ CJS 格式:
 ### 基础用法
 
 ```typescript
-import { TushareClient } from '@tushare/sdk';
+import { TushareClient } from '@hestudy/tushare-sdk';
 
 // 创建客户端
 const client = new TushareClient({
