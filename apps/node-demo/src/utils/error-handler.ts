@@ -52,11 +52,12 @@ export function getErrorSuggestion(errorType: string): string {
  */
 export function formatError(error: unknown): FormattedError {
   if (error instanceof ApiError) {
+    const apiError = error as ApiError;
     return {
-      type: error.type,
-      message: error.message,
-      code: error.code?.toString(),
-      suggestion: getErrorSuggestion(error.type),
+      type: apiError.type,
+      message: apiError.message,
+      code: apiError.code?.toString(),
+      suggestion: getErrorSuggestion(apiError.type),
     };
   }
 
@@ -106,7 +107,8 @@ export function printError(error: unknown): void {
  */
 export function getExitCode(error: unknown): number {
   if (error instanceof ApiError) {
-    switch (error.type) {
+    const apiError = error as ApiError;
+    switch (apiError.type) {
       case ApiErrorType.AUTH_ERROR:
         return 2;
       case ApiErrorType.NETWORK_ERROR:
