@@ -92,8 +92,8 @@ description: "Node 应用演示示例任务列表"
 ### Tests for User Story 2 (TDD)
 
 - [X] T024 [P] [US2] 单元测试: 错误处理 `apps/node-demo/tests/unit/error-handling.test.ts`,测试各种错误类型的格式化
-- [ ] T025 [P] [US2] 集成测试: 认证错误 `apps/node-demo/tests/integration/auth-error.test.ts`,测试无效 Token 场景
-- [ ] T026 [P] [US2] 集成测试: 参数错误 `apps/node-demo/tests/integration/param-error.test.ts`,测试无效参数场景
+- [X] T025 [P] [US2] 集成测试: 认证错误 `apps/node-demo/tests/integration/auth-error.test.ts`,测试无效 Token 场景
+- [X] T026 [P] [US2] 集成测试: 参数错误 `apps/node-demo/tests/integration/param-error.test.ts`,测试无效参数场景
 
 ### Implementation for User Story 2
 
@@ -115,9 +115,9 @@ description: "Node 应用演示示例任务列表"
 
 ### Tests for User Story 3 (TDD)
 
-- [ ] T032 [P] [US3] 集成测试: 日线数据 API `apps/node-demo/tests/integration/daily-data.test.ts`,测试 getDailyQuote() 调用
-- [ ] T033 [P] [US3] 集成测试: 交易日历 API `apps/node-demo/tests/integration/trade-calendar.test.ts`,测试 getTradeCalendar() 调用
-- [ ] T034 [P] [US3] E2E 测试: 完整演示流程 `apps/node-demo/tests/integration/full-demo.test.ts`,测试所有示例顺序执行
+- [X] T032 [P] [US3] 集成测试: 日线数据 API `apps/node-demo/tests/integration/daily-data.test.ts`,测试 getDailyQuote() 调用
+- [X] T033 [P] [US3] 集成测试: 交易日历 API `apps/node-demo/tests/integration/trade-calendar.test.ts`,测试 getTradeCalendar() 调用
+- [X] T034 [P] [US3] E2E 测试: 完整演示流程 `apps/node-demo/tests/integration/full-demo.test.ts`,测试所有示例顺序执行
 
 ### Implementation for User Story 3
 
@@ -137,14 +137,14 @@ description: "Node 应用演示示例任务列表"
 **目的**: 影响多个用户故事的改进和完善
 
 - [X] T041 [P] 添加 JSDoc 注释到所有公共函数和接口,使用中文
-- [ ] T042 [P] 实现详细日志输出(--verbose 模式),展示 API 请求和响应详情
+- [X] T042 [P] 实现详细日志输出(--verbose 模式),展示 API 请求和响应详情
 - [X] T043 [P] 优化错误消息,确保所有错误都有清晰的建议
 - [X] T044 代码审查和重构,确保符合 TypeScript 严格模式和项目规范
 - [X] T045 [P] 更新 README.md,添加完整的使用示例和故障排除指南
-- [ ] T046 运行测试覆盖率检查,确保 ≥80% 单元测试覆盖率
-- [ ] T047 [P] 性能测试: 验证启动时间 < 2s, API 调用 < 5s
-- [ ] T048 按照 `quickstart.md` 验证完整的快速开始流程
-- [ ] T049 在 CI 环境中运行演示应用,验证自动化测试场景
+- [X] T046 运行测试覆盖率检查,确保 ≥80% 单元测试覆盖率
+- [X] T047 [P] 性能测试: 验证启动时间 < 2s, API 调用 < 5s
+- [X] T048 按照 `quickstart.md` 验证完整的快速开始流程
+- [X] T049 在 CI 环境中运行演示应用,验证自动化测试场景
 
 ---
 

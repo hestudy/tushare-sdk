@@ -12,6 +12,7 @@ import { loadConfig } from './config.js';
 import { runExamples, calculateSummary } from './utils/example-runner.js';
 import { formatOutput } from './utils/formatter.js';
 import { printError, getExitCode } from './utils/error-handler.js';
+import { setVerbose, logConfig, logVerbose } from './utils/logger.js';
 import { runStockListExample } from './examples/stock-list.js';
 import { runDailyDataExample } from './examples/daily-data.js';
 import { runTradeCalendarExample } from './examples/trade-calendar.js';
@@ -61,10 +62,22 @@ function parseArgs(): {
 async function main(): Promise<void> {
   try {
     // 解析命令行参数
-    const { example, format } = parseArgs();
+    const { example, verbose, format } = parseArgs();
+    
+    // 设置 verbose 模式
+    setVerbose(verbose);
+    
+    logVerbose('启动演示应用', { example, verbose, format });
     
     // 加载配置
     const config = loadConfig();
+    
+    // 输出配置信息(verbose 模式)
+    logConfig({
+      tushareToken: config.tushareToken,
+      apiBaseUrl: config.apiBaseUrl,
+      debug: config.debug,
+    });
     
     // 定义所有可用的示例
     const allExamples = [

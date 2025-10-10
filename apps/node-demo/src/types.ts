@@ -82,3 +82,18 @@ export type OutputFormat = 'console' | 'json';
  * 示例名称类型
  */
 export type ExampleName = 'stock-list' | 'daily-data' | 'trade-calendar' | 'all';
+
+/**
+ * 运行选项
+ */
+export interface RunOptions {
+  /**
+   * 是否启用详细输出
+   */
+  verbose?: boolean;
+  
+  /**
+   * 输出格式
+   */
+  format?: OutputFormat;
+}

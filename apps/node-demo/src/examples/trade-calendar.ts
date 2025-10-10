@@ -6,6 +6,7 @@
 
 import { TushareClient } from '@hestudy/tushare-sdk';
 import type { AppConfig } from '../config.js';
+import { logApiRequest, logApiResponse } from '../utils/logger.js';
 
 /**
  * 执行交易日历查询示例
@@ -23,12 +24,23 @@ export async function runTradeCalendarExample(config: AppConfig): Promise<{
     endpoint: config.apiBaseUrl,
   });
 
-  // 查询 2024 年的交易日历
-  const response = await client.query('trade_cal', {
+  // 查询参数
+  const params = {
     exchange: 'SSE',
     start_date: '20240101',
     end_date: '20241231',
-  });
+  };
+
+  // 记录 API 请求
+  logApiRequest('trade_cal', params);
+
+  // 查询 2024 年的交易日历
+  const startTime = Date.now();
+  const response = await client.query('trade_cal', params);
+  const duration = Date.now() - startTime;
+
+  // 记录 API 响应
+  logApiResponse('trade_cal', response, duration);
 
   // 返回结果统计
   return {
