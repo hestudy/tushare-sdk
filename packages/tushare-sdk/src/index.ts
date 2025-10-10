@@ -47,6 +47,11 @@ export type {
   TradeCalParams,
 } from './models/calendar.js';
 
+export type {
+  DailyBasicItem,
+  DailyBasicParams,
+} from './models/daily-basic.js';
+
 // 工具类
 export type { Logger } from './utils/logger.js';
 export { LogLevel, ConsoleLogger } from './utils/logger.js';
@@ -60,3 +65,4 @@ export { getStockBasic } from './api/stock.js';
 export { getDailyQuote } from './api/quote.js';
 export { getFinancialData } from './api/financial.js';
 export { getTradeCalendar } from './api/calendar.js';
+export { getDailyBasic } from './api/daily-basic.js';
