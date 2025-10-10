@@ -7,6 +7,7 @@ import { TushareClient } from '@hestudy/tushare-sdk';
  */
 describe('日线数据 API 集成测试', () => {
   let client: TushareClient;
+  const hasToken = !!process.env.TUSHARE_TOKEN;
 
   beforeEach(() => {
     // 使用环境变量中的 Token,如果没有则使用 mock
@@ -14,12 +15,7 @@ describe('日线数据 API 集成测试', () => {
     client = new TushareClient({ token });
   });
 
-  it('应该成功查询指定股票的日线数据', async () => {
-    // 如果没有真实 Token,跳过此测试
-    if (!process.env.TUSHARE_TOKEN) {
-      console.log('跳过: 需要真实 TUSHARE_TOKEN');
-      return;
-    }
+  it.skipIf(!hasToken)('应该成功查询指定股票的日线数据', async () => {
 
     const result = await client.getDailyQuote({
       ts_code: '000001.SZ',
@@ -45,11 +41,7 @@ describe('日线数据 API 集成测试', () => {
     }
   });
 
-  it('应该支持只传入股票代码查询', async () => {
-    if (!process.env.TUSHARE_TOKEN) {
-      console.log('跳过: 需要真实 TUSHARE_TOKEN');
-      return;
-    }
+  it.skipIf(!hasToken)('应该支持只传入股票代码查询', async () => {
 
     const result = await client.getDailyQuote({
       ts_code: '000001.SZ',
@@ -60,11 +52,7 @@ describe('日线数据 API 集成测试', () => {
     expect(Array.isArray(result)).toBe(true);
   });
 
-  it('应该支持日期范围查询', async () => {
-    if (!process.env.TUSHARE_TOKEN) {
-      console.log('跳过: 需要真实 TUSHARE_TOKEN');
-      return;
-    }
+  it.skipIf(!hasToken)('应该支持日期范围查询', async () => {
 
     const result = await client.getDailyQuote({
       ts_code: '600000.SH',
@@ -85,11 +73,7 @@ describe('日线数据 API 集成测试', () => {
     }
   });
 
-  it('应该正确处理不存在的股票代码', async () => {
-    if (!process.env.TUSHARE_TOKEN) {
-      console.log('跳过: 需要真实 TUSHARE_TOKEN');
-      return;
-    }
+  it.skipIf(!hasToken)('应该正确处理不存在的股票代码', async () => {
 
     // 使用不存在的股票代码
     const result = await client.getDailyQuote({
@@ -103,11 +87,7 @@ describe('日线数据 API 集成测试', () => {
     expect(result.length).toBe(0);
   });
 
-  it('应该正确处理非交易日期', async () => {
-    if (!process.env.TUSHARE_TOKEN) {
-      console.log('跳过: 需要真实 TUSHARE_TOKEN');
-      return;
-    }
+  it.skipIf(!hasToken)('应该正确处理非交易日期', async () => {
 
     // 查询周末或节假日
     const result = await client.getDailyQuote({

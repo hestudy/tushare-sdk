@@ -6,21 +6,17 @@ import { TushareClient } from '@hestudy/tushare-sdk';
  * 验证应用和 API 调用的性能指标
  */
 describe('性能测试', () => {
+  const hasToken = !!process.env.TUSHARE_TOKEN;
   it('应用启动时间应小于 2 秒', () => {
     // 这个测试在实际运行时由主程序计时
     // 这里只是占位符,实际性能通过手动测试验证
     expect(true).toBe(true);
   });
 
-  it('单个 API 调用应在 5 秒内完成', async () => {
-    // 如果没有真实 Token,跳过此测试
-    if (!process.env.TUSHARE_TOKEN) {
-      console.log('跳过: 需要真实 TUSHARE_TOKEN');
-      return;
-    }
+  it.skipIf(!hasToken)('单个 API 调用应在 5 秒内完成', async () => {
 
     const client = new TushareClient({
-      token: process.env.TUSHARE_TOKEN,
+      token: process.env.TUSHARE_TOKEN!,
     });
 
     const startTime = Date.now();
@@ -33,15 +29,10 @@ describe('性能测试', () => {
     expect(duration).toBeLessThan(5000);
   });
 
-  it('完整演示流程应在 15 秒内完成', async () => {
-    // 如果没有真实 Token,跳过此测试
-    if (!process.env.TUSHARE_TOKEN) {
-      console.log('跳过: 需要真实 TUSHARE_TOKEN');
-      return;
-    }
+  it.skipIf(!hasToken)('完整演示流程应在 15 秒内完成', async () => {
 
     const client = new TushareClient({
-      token: process.env.TUSHARE_TOKEN,
+      token: process.env.TUSHARE_TOKEN!,
     });
 
     const startTime = Date.now();

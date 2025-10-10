@@ -57,6 +57,7 @@ console.log(`共获取 ${stocks.length} 只股票`);
 - [API 文档](./specs/001-tushare-typescript-sdk/contracts/)
 - [数据模型](./specs/001-tushare-typescript-sdk/data-model.md)
 - [技术研究](./specs/001-tushare-typescript-sdk/research.md)
+- [测试指南](./docs/testing-guide.md)
 
 ## 🛠️ 开发
 
@@ -67,7 +68,7 @@ pnpm install
 # 构建
 pnpm build
 
-# 测试
+# 测试(需要配置 TUSHARE_TOKEN 环境变量)
 pnpm test
 
 # 测试覆盖率
@@ -79,6 +80,24 @@ pnpm lint
 # 格式化代码
 pnpm format
 ```
+
+### 测试说明
+
+本项目包含单元测试和集成测试:
+
+- **单元测试**: 不需要 API Token,始终运行
+- **集成测试**: 需要有效的 `TUSHARE_TOKEN` 环境变量,如果未配置会自动跳过
+
+配置环境变量:
+```bash
+# 复制环境变量模板
+cp apps/node-demo/.env.example apps/node-demo/.env
+
+# 编辑 .env 文件,填入你的 Tushare Token
+# TUSHARE_TOKEN=your_token_here
+```
+
+详细测试指南请参考 [测试指南](./docs/testing-guide.md)。
 
 ## 📄 许可证
 

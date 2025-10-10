@@ -45,6 +45,8 @@ jobs:
       - name: Test
         run: pnpm test:coverage
         env:
+          # 可选: 如果配置了 TUSHARE_TOKEN secret,集成测试将会运行
+          # 如果未配置,集成测试将被跳过,只运行单元测试
           TUSHARE_TOKEN: ${{ secrets.TUSHARE_TOKEN }}
       
       - name: Upload coverage to Codecov

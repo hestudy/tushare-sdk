@@ -7,6 +7,7 @@ import { TushareClient } from '@hestudy/tushare-sdk';
  */
 describe('参数错误集成测试', () => {
   let client: TushareClient;
+  const hasToken = !!process.env.TUSHARE_TOKEN;
 
   beforeEach(() => {
     // 使用测试 Token 创建客户端
@@ -15,7 +16,7 @@ describe('参数错误集成测试', () => {
     client = new TushareClient({ token });
   });
 
-  it('应该在使用无效股票代码时处理错误', async () => {
+  it.skipIf(!hasToken)('应该在使用无效股票代码时处理错误', async () => {
     // 使用明显无效的股票代码
     // Tushare API 通常返回空数组而不是抛出错误
     const result = await client.getDailyQuote({
@@ -52,7 +53,7 @@ describe('参数错误集成测试', () => {
     }).rejects.toThrow();
   });
 
-  it('应该在缺少必需参数时处理错误', async () => {
+  it.skipIf(!hasToken)('应该在缺少必需参数时处理错误', async () => {
     // 缺少必需的参数
     // Tushare API 的 daily 接口需要 ts_code 或 trade_date 之一
     // 如果都没有提供，API 可能返回空数组或错误
@@ -62,7 +63,7 @@ describe('参数错误集成测试', () => {
     expect(Array.isArray(result)).toBe(true);
   });
 
-  it('应该在交易所代码无效时处理错误', async () => {
+  it.skipIf(!hasToken)('应该在交易所代码无效时处理错误', async () => {
     // 使用无效的交易所代码
     // Tushare API 通常返回空数组而不是抛出错误
     const result = await client.getStockBasic({
