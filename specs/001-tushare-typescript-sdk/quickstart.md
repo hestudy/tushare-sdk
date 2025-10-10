@@ -409,7 +409,7 @@ SDK 已内置自动重试机制。如果仍频繁遇到，请:
 - 📖 阅读 [完整 API 文档](./contracts/tushare-api-contract.md)
 - 🔍 查看 [数据模型定义](./data-model.md)
 - 💡 参考 [最佳实践](./research.md#13-性能优化)
-- 🐛 遇到问题? [提交 Issue](https://github.com/your-org/tushare-sdk/issues)
+- 🐛 遇到问题? [提交 Issue](https://github.com/hestudy/tushare-sdk/issues)
 
 ---
 

@@ -83,7 +83,7 @@ pnpm build
 
 4. **验证发布结果**
    - 检查 [npm 包页面](https://www.npmjs.com/package/@hestudy/tushare-sdk)
-   - 检查 [GitHub Releases](https://github.com/your-org/tushare-sdk/releases)
+   - 检查 [GitHub Releases](https://github.com/hestudy/tushare-sdk/releases)
    - 验证安装: `npm install @hestudy/tushare-sdk@1.0.0`
 
 ---

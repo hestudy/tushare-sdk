@@ -34,7 +34,7 @@ git tag v0.0.1-test
 git push origin v0.0.1-test
 
 # 观察 workflow 执行
-# 访问: https://github.com/your-org/tushare-sdk/actions
+# 访问: https://github.com/hestudy/tushare-sdk/actions
 
 # 清理测试标签
 git tag -d v0.0.1-test

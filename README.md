@@ -1,8 +1,8 @@
 # Tushare TypeScript SDK
 
 [![npm version](https://img.shields.io/npm/v/@hestudy/tushare-sdk.svg)](https://www.npmjs.com/package/@hestudy/tushare-sdk)
-[![CI](https://github.com/your-org/tushare-sdk/workflows/CI/badge.svg)](https://github.com/your-org/tushare-sdk/actions/workflows/ci.yml)
-[![Publish](https://github.com/your-org/tushare-sdk/workflows/Publish%20to%20npm/badge.svg)](https://github.com/your-org/tushare-sdk/actions/workflows/publish.yml)
+[![CI](https://github.com/hestudy/tushare-sdk/workflows/CI/badge.svg)](https://github.com/hestudy/tushare-sdk/actions/workflows/ci.yml)
+[![Publish](https://github.com/hestudy/tushare-sdk/workflows/Publish%20to%20npm/badge.svg)](https://github.com/hestudy/tushare-sdk/actions/workflows/publish.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.3-blue.svg)](https://www.typescriptlang.org/)
 
@@ -110,4 +110,4 @@ MIT License - 详见 [LICENSE](./LICENSE) 文件
 ## 📧 联系方式
 
 - 官网: [https://tushare.pro](https://tushare.pro)
-- GitHub: [https://github.com/your-org/tushare-sdk](https://github.com/your-org/tushare-sdk)
+- GitHub: [https://github.com/hestudy/tushare-sdk](https://github.com/hestudy/tushare-sdk)

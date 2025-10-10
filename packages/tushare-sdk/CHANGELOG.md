@@ -125,6 +125,6 @@ We follow [Semantic Versioning](https://semver.org/):
 ## Support
 
 For questions, issues, or feature requests:
-- GitHub Issues: [Report an issue](https://github.com/your-org/tushare-sdk/issues)
+- GitHub Issues: [Report an issue](https://github.com/hestudy/tushare-sdk/issues)
 - Documentation: [Read the docs](../../specs/001-tushare-typescript-sdk/)
 - Tushare Official: [https://tushare.pro](https://tushare.pro)

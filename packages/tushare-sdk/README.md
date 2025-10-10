@@ -315,7 +315,7 @@ MIT License
 
 - 官网: [https://tushare.pro](https://tushare.pro)
 - 文档: [https://tushare.pro/document/2](https://tushare.pro/document/2)
-- GitHub Issues: [提交问题](https://github.com/your-org/tushare-sdk/issues)
+- GitHub Issues: [提交问题](https://github.com/hestudy/tushare-sdk/issues)
 
 ## 🙏 致谢
 
