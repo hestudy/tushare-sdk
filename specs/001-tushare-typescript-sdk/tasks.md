@@ -114,21 +114,21 @@
 
 ### 测试 - User Story 4
 
-- [ ] T042 [P] [US4] 单元测试：RetryService 指数退避逻辑（tests/unit/services.test.ts）
-- [ ] T043 [P] [US4] 单元测试：ApiError 错误分类和 retryable 判断（tests/unit/services.test.ts）
-- [ ] T044 [P] [US4] 集成测试：429 限流错误自动重试（tests/integration/retry.test.ts）
-- [ ] T045 [P] [US4] 集成测试：网络超时错误重试（tests/integration/retry.test.ts）
-- [ ] T046 [P] [US4] 集成测试：不可重试错误（401, 400）立即抛出（tests/integration/retry.test.ts）
+- [x] T042 [P] [US4] 单元测试：RetryService 指数退避逻辑（tests/unit/services.test.ts）
+- [x] T043 [P] [US4] 单元测试：ApiError 错误分类和 retryable 判断（tests/unit/services.test.ts）
+- [x] T044 [P] [US4] 集成测试：429 限流错误自动重试（tests/integration/retry.test.ts）
+- [x] T045 [P] [US4] 集成测试：网络超时错误重试（tests/integration/retry.test.ts）
+- [x] T046 [P] [US4] 集成测试：不可重试错误（401, 400）立即抛出（tests/integration/retry.test.ts）
 
 ### 实现 - User Story 4
 
-- [ ] T047 [US4] 完善 ApiError 类：添加 retryable 判断和 retryAfter 属性（packages/tushare-sdk/src/types/error.ts）
-- [ ] T048 [US4] 完善 RetryService：实现指数退避 + 抖动算法（packages/tushare-sdk/src/services/retry.ts）
-- [ ] T049 [US4] 在 HTTP 客户端中集成错误分类逻辑（packages/tushare-sdk/src/client/http.ts）
-- [ ] T050 [US4] 实现 429 错误的 Retry-After 响应头解析（packages/tushare-sdk/src/client/http.ts）
-- [ ] T051 [US4] 在 TushareClient 中集成 RetryService（packages/tushare-sdk/src/client/TushareClient.ts）
-- [ ] T052 [US4] 添加重试过程的详细日志记录（packages/tushare-sdk/src/services/retry.ts）
-- [ ] T053 [US4] 实现自定义重试策略配置（packages/tushare-sdk/src/types/config.ts: RetryConfig）
+- [x] T047 [US4] 完善 ApiError 类：添加 retryable 判断和 retryAfter 属性（packages/tushare-sdk/src/types/error.ts）
+- [x] T048 [US4] 完善 RetryService：实现指数退避 + 抖动算法（packages/tushare-sdk/src/services/retry.ts）
+- [x] T049 [US4] 在 HTTP 客户端中集成错误分类逻辑（packages/tushare-sdk/src/client/http.ts）
+- [x] T050 [US4] 实现 429 错误的 Retry-After 响应头解析（packages/tushare-sdk/src/client/http.ts）
+- [x] T051 [US4] 在 TushareClient 中集成 RetryService（packages/tushare-sdk/src/client/TushareClient.ts）
+- [x] T052 [US4] 添加重试过程的详细日志记录（packages/tushare-sdk/src/services/retry.ts）
+- [x] T053 [US4] 实现自定义重试策略配置（packages/tushare-sdk/src/types/config.ts: RetryConfig）
 
 **Checkpoint**: 错误处理机制完善，自动重试正常工作
 

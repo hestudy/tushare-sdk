@@ -111,17 +111,18 @@ describe.skipIf(!hasToken)('API 集成测试', () => {
       };
 
       // 第一次调用
-      const start1 = Date.now();
+      const start1 = performance.now();
       const result1 = await client.getStockBasic(params);
-      const time1 = Date.now() - start1;
+      const time1 = performance.now() - start1;
 
       // 第二次调用 (应该从缓存)
-      const start2 = Date.now();
+      const start2 = performance.now();
       const result2 = await client.getStockBasic(params);
-      const time2 = Date.now() - start2;
+      const time2 = performance.now() - start2;
 
       expect(result1).toEqual(result2);
-      expect(time2).toBeLessThan(time1); // 缓存应该更快
+      // 缓存应该显著更快 (至少快 50%)
+      expect(time2).toBeLessThan(time1 * 0.5);
     }, 60000);
   });
 });
