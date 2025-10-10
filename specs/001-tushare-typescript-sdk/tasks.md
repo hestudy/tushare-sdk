@@ -87,20 +87,20 @@
 
 ### 测试 - User Story 2
 
-- [ ] T031 [P] [US2] 类型测试：验证严格模式下无 any 类型泄漏（tests/unit/types.test.ts）
-- [ ] T032 [P] [US2] 类型测试：验证错误参数在编译时被捕获（tests/unit/types.test.ts）
+- [x] T031 [P] [US2] 类型测试：验证严格模式下无 any 类型泄漏（tests/unit/types.test.ts）
+- [x] T032 [P] [US2] 类型测试：验证错误参数在编译时被捕获（tests/unit/types.test.ts）
 
 ### 实现 - User Story 2
 
-- [ ] T033 [P] [US2] 为 TushareClient 添加完整 JSDoc 注释（packages/tushare-sdk/src/client/TushareClient.ts）
-- [ ] T034 [P] [US2] 为所有模型添加 JSDoc 注释（packages/tushare-sdk/src/models/*.ts）
-- [ ] T035 [P] [US2] 为所有 API 方法添加 JSDoc 注释（packages/tushare-sdk/src/api/*.ts）
-- [ ] T036 [P] [US2] 为配置类型添加详细 JSDoc（packages/tushare-sdk/src/types/config.ts）
-- [ ] T037 [P] [US2] 为错误类型添加详细 JSDoc（packages/tushare-sdk/src/types/error.ts）
-- [ ] T038 [US2] 定义财务数据模型和类型（packages/tushare-sdk/src/models/financial.ts: FinancialItem, FinancialParams）
-- [ ] T039 [US2] 实现 income API 方法（packages/tushare-sdk/src/api/financial.ts: getFinancialData）
-- [ ] T040 [US2] 配置 TypeScript 声明文件生成（packages/tushare-sdk/tsconfig.json: declaration: true）
-- [ ] T041 [US2] 验证所有导出类型在严格模式下编译通过（运行 tsc --noEmit）
+- [x] T033 [P] [US2] 为 TushareClient 添加完整 JSDoc 注释（packages/tushare-sdk/src/client/TushareClient.ts）
+- [x] T034 [P] [US2] 为所有模型添加 JSDoc 注释（packages/tushare-sdk/src/models/*.ts）
+- [x] T035 [P] [US2] 为所有 API 方法添加 JSDoc 注释（packages/tushare-sdk/src/api/*.ts）
+- [x] T036 [P] [US2] 为配置类型添加详细 JSDoc（packages/tushare-sdk/src/types/config.ts）
+- [x] T037 [P] [US2] 为错误类型添加详细 JSDoc（packages/tushare-sdk/src/types/error.ts）
+- [x] T038 [US2] 定义财务数据模型和类型（packages/tushare-sdk/src/models/financial.ts: FinancialItem, FinancialParams）
+- [x] T039 [US2] 实现 income API 方法（packages/tushare-sdk/src/api/financial.ts: getFinancialData）
+- [x] T040 [US2] 配置 TypeScript 声明文件生成（packages/tushare-sdk/tsconfig.json: declaration: true）
+- [x] T041 [US2] 验证所有导出类型在严格模式下编译通过（运行 tsc --noEmit）
 
 **Checkpoint**: 所有类型定义完整，IDE 提供完整智能提示
 

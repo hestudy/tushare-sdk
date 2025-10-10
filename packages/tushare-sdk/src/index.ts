@@ -37,6 +37,11 @@ export type {
   DailyQuoteParams,
 } from './models/quote.js';
 
+export type {
+  FinancialItem,
+  FinancialParams,
+} from './models/financial.js';
+
 // 工具类
 export type { Logger } from './utils/logger.js';
 export { LogLevel, ConsoleLogger } from './utils/logger.js';
@@ -48,3 +53,4 @@ export { MemoryCacheProvider } from './services/cache.js';
 // API 方法
 export { getStockBasic } from './api/stock.js';
 export { getDailyQuote } from './api/quote.js';
+export { getFinancialData } from './api/financial.js';
