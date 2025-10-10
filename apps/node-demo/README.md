@@ -58,6 +58,9 @@ pnpm dev -- --example=daily-data
 
 # 交易日历查询
 pnpm dev -- --example=trade-calendar
+
+# 每日指标查询
+pnpm dev -- --example=daily-basic
 ```
 
 ### 启用详细输出
@@ -84,7 +87,8 @@ apps/node-demo/
 │   ├── examples/             # API 调用示例
 │   │   ├── stock-list.ts     # 股票列表查询
 │   │   ├── daily-data.ts     # 日线数据查询
-│   │   └── trade-calendar.ts # 交易日历查询
+│   │   ├── trade-calendar.ts # 交易日历查询
+│   │   └── daily-basic.ts    # 每日指标查询
 │   └── utils/                # 工具函数
 │       ├── error-handler.ts  # 错误处理工具
 │       ├── formatter.ts      # 输出格式化
@@ -119,11 +123,66 @@ pnpm test:coverage
 pnpm type-check
 ```
 
+## 可用示例
+
+### 1. 股票列表查询 (stock-list)
+
+演示如何使用 `getStockBasic` API 获取股票基本信息。
+
+**运行命令**:
+```bash
+pnpm dev -- --example=stock-list
+```
+
+### 2. 日线数据查询 (daily-data)
+
+演示如何使用 `getDailyQuote` API 获取股票日线行情数据。
+
+**运行命令**:
+```bash
+pnpm dev -- --example=daily-data
+```
+
+### 3. 交易日历查询 (trade-calendar)
+
+演示如何使用 `getTradeCalendar` API 获取交易日历数据。
+
+**运行命令**:
+```bash
+pnpm dev -- --example=trade-calendar
+```
+
+### 4. 每日指标查询 (daily-basic)
+
+演示如何使用 `getDailyBasic` API 获取股票每日基本面指标数据。
+
+**运行命令**:
+```bash
+pnpm dev -- --example=daily-basic
+```
+
+**演示内容**:
+- 场景 1: 按交易日期查询全市场数据
+- 场景 2: 按股票代码查询历史数据
+- 场景 3: 自定义返回字段
+
+**关键字段**:
+- `ts_code`: 股票代码
+- `trade_date`: 交易日期
+- `pe`: 市盈率(动态)
+- `pb`: 市净率
+- `turnover_rate`: 换手率(%)
+- `total_mv`: 总市值(万元)
+
+**权限要求**: 需要 2000+ 积分
+
+---
+
 ## 功能特性
 
 - ✅ **基础 SDK 功能**: 演示客户端初始化和 API 调用
 - ✅ **错误处理**: 展示各种错误场景的处理方式
-- ✅ **多种 API**: 包含股票列表、日线数据、交易日历等示例
+- ✅ **多种 API**: 包含股票列表、日线数据、交易日历、每日指标等示例
 - ✅ **格式化输出**: 支持控制台和 JSON 两种输出格式
 - ✅ **完整测试**: 包含单元测试和集成测试
 

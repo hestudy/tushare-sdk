@@ -11,6 +11,7 @@ import type { TushareRequest } from '../types/response.js';
 import type { StockBasicItem, StockBasicParams } from '../models/stock.js';
 import type { DailyQuoteItem, DailyQuoteParams } from '../models/quote.js';
 import type { TradeCalItem, TradeCalParams } from '../models/calendar.js';
+import type { DailyBasicItem, DailyBasicParams } from '../models/daily-basic.js';
 
 /**
  * Tushare 客户端
@@ -225,6 +226,36 @@ export class TushareClient {
    */
   async getTradeCalendar(params?: TradeCalParams): Promise<TradeCalItem[]> {
     return this.query<TradeCalItem>('trade_cal', params as Record<string, unknown>);
+  }
+
+  /**
+   * 获取每日指标
+   * 
+   * 获取全部股票每日重要的基本面指标,可用于选股分析、报表展示等。
+   * 包括换手率、市盈率、市净率、市销率、股息率、总股本、流通股本、总市值、流通市值等。
+   * 
+   * **权限要求**: 至少 2000 积分
+   * 
+   * @param params - 查询参数
+   * @returns 每日指标数据列表
+   * 
+   * @example
+   * ```typescript
+   * // 获取指定日期所有股票的每日指标
+   * const data = await client.getDailyBasic({
+   *   trade_date: '20180726'
+   * });
+   * 
+   * // 获取指定股票的历史每日指标
+   * const stockData = await client.getDailyBasic({
+   *   ts_code: '000001.SZ',
+   *   start_date: '20240901',
+   *   end_date: '20241001'
+   * });
+   * ```
+   */
+  async getDailyBasic(params?: DailyBasicParams): Promise<DailyBasicItem[]> {
+    return this.query<DailyBasicItem>('daily_basic', params as Record<string, unknown>);
   }
 
   /**
