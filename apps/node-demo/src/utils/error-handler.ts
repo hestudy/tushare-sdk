@@ -30,10 +30,10 @@ export function getErrorSuggestion(errorType: string): string {
     case ApiErrorType.NETWORK_ERROR:
       return '请检查网络连接是否正常,或稍后重试';
     
-    case ApiErrorType.PARAM_ERROR:
+    case ApiErrorType.VALIDATION_ERROR:
       return '请检查 API 参数是否正确,参考文档: https://tushare.pro/document/2';
     
-    case ApiErrorType.RATE_LIMIT_ERROR:
+    case ApiErrorType.RATE_LIMIT:
       return '请求频率超限,请稍后重试或升级账户权限';
     
     case ApiErrorType.SERVER_ERROR:
@@ -55,7 +55,7 @@ export function formatError(error: unknown): FormattedError {
     return {
       type: error.type,
       message: error.message,
-      code: error.code,
+      code: error.code?.toString(),
       suggestion: getErrorSuggestion(error.type),
     };
   }
@@ -111,7 +111,7 @@ export function getExitCode(error: unknown): number {
         return 2;
       case ApiErrorType.NETWORK_ERROR:
         return 2;
-      case ApiErrorType.PARAM_ERROR:
+      case ApiErrorType.VALIDATION_ERROR:
         return 2;
       default:
         return 2;

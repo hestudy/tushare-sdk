@@ -17,7 +17,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "rslib build",
+    "build": "rslib build && tsc --emitDeclarationOnly",
     "dev": "rslib build --watch",
     "test": "vitest run",
     "test:watch": "vitest",

@@ -20,11 +20,11 @@ export async function runTradeCalendarExample(config: AppConfig): Promise<{
   // 创建 SDK 客户端
   const client = new TushareClient({
     token: config.tushareToken,
-    baseUrl: config.apiBaseUrl,
+    endpoint: config.apiBaseUrl,
   });
 
   // 查询 2024 年的交易日历
-  const response = await client.getTradeCalendar({
+  const response = await client.query('trade_cal', {
     exchange: 'SSE',
     start_date: '20240101',
     end_date: '20241231',
@@ -32,7 +32,7 @@ export async function runTradeCalendarExample(config: AppConfig): Promise<{
 
   // 返回结果统计
   return {
-    count: response.data.length,
-    sample: response.data.slice(0, 3), // 返回前 3 条作为示例
+    count: response.length,
+    sample: response.slice(0, 3), // 返回前 3 条作为示例
   };
 }

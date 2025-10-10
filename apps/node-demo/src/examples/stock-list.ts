@@ -20,7 +20,7 @@ export async function runStockListExample(config: AppConfig): Promise<{
   // 创建 SDK 客户端
   const client = new TushareClient({
     token: config.tushareToken,
-    baseUrl: config.apiBaseUrl,
+    endpoint: config.apiBaseUrl,
   });
 
   // 查询股票列表(上交所,上市状态)
@@ -31,7 +31,7 @@ export async function runStockListExample(config: AppConfig): Promise<{
 
   // 返回结果统计
   return {
-    count: response.data.length,
-    sample: response.data.slice(0, 3), // 返回前 3 条作为示例
+    count: response.length,
+    sample: response.slice(0, 3), // 返回前 3 条作为示例
   };
 }
