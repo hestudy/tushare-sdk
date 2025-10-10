@@ -2,8 +2,18 @@
 
 **Feature Branch**: `002-github-ci`  
 **Created**: 2025-10-10  
-**Status**: Ready for Planning  
+**Status**: Clarified  
 **Input**: User description: "配置github ci自动化发布，减少人工发布的操作"
+
+## Clarification Decisions *(recorded)*
+
+以下决策点已在澄清阶段确认:
+
+- **CD-001 (npm 认证机制)**: 使用 NPM_AUTOMATION_TOKEN (granular access token with automation scope),需在 GitHub Secrets 中配置
+- **CD-002 (失败通知策略)**: 仅使用 GitHub Actions 日志记录失败,无需额外的邮件/Slack/Issue 通知机制
+- **CD-003 (预发布 dist-tag 策略)**: 自动从版本号推断 dist-tag (v1.0.0-beta.1 → @beta, v1.0.0-alpha.1 → @alpha),稳定版使用 @latest
+- **CD-004 (Monorepo 发布策略)**: 支持发布所有变更的包,需实现变更检测逻辑(基于 pnpm workspace)
+- **CD-005 (Changelog 来源)**: 自动生成变更日志,基于 conventional commits 规范,集成到 GitHub Release 中
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -71,7 +81,9 @@
 - 当 npm 仓库暂时不可用时如何处理?系统应该记录错误并允许手动重试
 - 当标签名称不符合语义化版本规范时如何处理?系统应该拒绝发布并提示正确格式
 - 当包版本号已存在于 npm 时如何处理?系统应该检测冲突并阻止重复发布
-- 当 npm 认证令牌过期时如何处理?系统应该明确提示认证失败原因
+- 当 npm 认证令牌过期时如何处理?系统应该明确提示认证失败原因,提醒更新 GitHub Secrets 中的 NPM_AUTOMATION_TOKEN
+- 当 monorepo 中多个包同时变更时如何处理?系统应该按依赖顺序发布,确保依赖包先于依赖它的包发布
+- 当 commits 不符合 conventional commits 规范时如何处理?系统应该生成基础变更日志并在 Release 中标注格式警告
 - 当构建产物缺失或损坏时如何处理?系统应该在发布前验证构建完整性
 
 ## Requirements *(mandatory)*
@@ -87,12 +99,14 @@
 - **FR-002**: 系统必须在发布前执行完整的测试套件(lint、type-check、build、test)
 - **FR-003**: 系统必须验证标签名称符合语义化版本规范(如 v1.0.0、v1.0.0-beta.1)
 - **FR-004**: 系统必须在所有测试通过后才能执行发布操作
-- **FR-005**: 系统必须使用安全的认证方式连接到 npm 仓库
+- **FR-005**: 系统必须使用 NPM_AUTOMATION_TOKEN (granular access token) 进行 npm 认证,令牌存储在 GitHub Secrets 中
 - **FR-006**: 系统必须在发布失败时中止流程并记录详细错误信息
-- **FR-007**: 系统必须支持发布稳定版本(如 v1.0.0)和预发布版本(如 v1.0.0-beta.1)
-- **FR-008**: 系统必须在成功发布后创建 GitHub Release 记录
+- **FR-007**: 系统必须支持发布稳定版本(如 v1.0.0 使用 @latest)和预发布版本(如 v1.0.0-beta.1 使用 @beta),自动推断 dist-tag
+- **FR-008**: 系统必须在成功发布后创建 GitHub Release 记录,包含基于 conventional commits 自动生成的变更日志
 - **FR-009**: 系统必须防止重复发布已存在的版本号
-- **FR-010**: 系统必须记录每次发布的完整日志供审计和调试
+- **FR-010**: 系统必须记录每次发布的完整日志供审计和调试,失败信息仅记录在 GitHub Actions 日志中
+- **FR-011**: 系统必须支持 monorepo 场景,检测变更的包并批量发布(基于 pnpm workspace)
+- **FR-012**: 系统必须验证 conventional commits 格式以确保变更日志生成质量
 
 ### Key Entities
 
@@ -100,6 +114,8 @@
 - **发布工作流(Release Workflow)**: 代表一次完整的发布流程,包含触发条件、执行步骤、状态(进行中/成功/失败)、执行日志
 - **发布记录(Release Record)**: 代表已完成的发布,包含版本号、发布时间、变更日志、发布状态、npm 链接
 - **认证凭证(Authentication Credentials)**: 用于访问 npm 仓库的安全凭证,包含令牌、权限范围、过期时间
+- **变更日志(Changelog)**: 基于 conventional commits 自动生成的版本变更记录,包含功能、修复、破坏性变更等分类
+- **Dist Tag**: npm 包的发布标签,用于区分稳定版(@latest)和预发布版(@beta, @alpha 等)
 
 ## Success Criteria *(mandatory)*
 
