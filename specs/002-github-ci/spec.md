@@ -2,10 +2,10 @@
 
 **Feature Branch**: `002-github-ci`  
 **Created**: 2025-10-10  
-**Status**: Clarified  
+**Status**: Ready for Planning  
 **Input**: User description: "配置github ci自动化发布，减少人工发布的操作"
 
-## Clarification Decisions *(recorded)*
+## Clarification Decisions _(recorded)_
 
 以下决策点已在澄清阶段确认:
 
@@ -15,13 +15,13 @@
 - **CD-004 (Monorepo 发布策略)**: 支持发布所有变更的包,需实现变更检测逻辑(基于 pnpm workspace)
 - **CD-005 (Changelog 来源)**: 自动生成变更日志,基于 conventional commits 规范,集成到 GitHub Release 中
 
-## User Scenarios & Testing *(mandatory)*
+## User Scenarios & Testing _(mandatory)_
 
 <!--
   IMPORTANT: User stories should be PRIORITIZED as user journeys ordered by importance.
   Each user story/journey must be INDEPENDENTLY TESTABLE - meaning if you implement just ONE of them,
   you should still have a viable MVP (Minimum Viable Product) that delivers value.
-  
+
   Assign priorities (P1, P2, P3, etc.) to each story, where P1 is the most critical.
   Think of each story as a standalone slice of functionality that can be:
   - Developed independently
@@ -86,7 +86,7 @@
 - 当 commits 不符合 conventional commits 规范时如何处理?系统应该生成基础变更日志并在 Release 中标注格式警告
 - 当构建产物缺失或损坏时如何处理?系统应该在发布前验证构建完整性
 
-## Requirements *(mandatory)*
+## Requirements _(mandatory)_
 
 <!--
   ACTION REQUIRED: The content in this section represents placeholders.
@@ -117,7 +117,7 @@
 - **变更日志(Changelog)**: 基于 conventional commits 自动生成的版本变更记录,包含功能、修复、破坏性变更等分类
 - **Dist Tag**: npm 包的发布标签,用于区分稳定版(@latest)和预发布版(@beta, @alpha 等)
 
-## Success Criteria *(mandatory)*
+## Success Criteria _(mandatory)_
 
 <!--
   These must be technology-agnostic and measurable.
