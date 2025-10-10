@@ -27,9 +27,9 @@ description: "GitHub CI 自动化发布任务清单"
 
 **Purpose**: 项目初始化和基础配置
 
-- [ ] T001 验证现有 CI workflow 配置 `.github/workflows/ci.yml`
-- [ ] T002 验证 monorepo 结构和 pnpm workspace 配置
-- [ ] T003 验证现有测试套件（lint、type-check、build、test）可正常运行
+- [X] T001 验证现有 CI workflow 配置 `.github/workflows/ci.yml`
+- [X] T002 验证 monorepo 结构和 pnpm workspace 配置
+- [X] T003 验证现有测试套件（lint、type-check、build、test）可正常运行
 
 ---
 
@@ -41,9 +41,9 @@ description: "GitHub CI 自动化发布任务清单"
 
 ### 基础设施配置
 
-- [ ] T004 配置 npm 认证机制：在 GitHub Secrets 中添加 `NPM_AUTOMATION_TOKEN`
-- [ ] T005 验证 npm token 权限（Granular Access Token with automation scope）
-- [ ] T006 配置 package.json 发布设置（publishConfig, files, access）
+- [X] T004 配置 npm 认证机制：在 GitHub Secrets 中添加 `NPM_AUTOMATION_TOKEN`
+- [X] T005 验证 npm token 权限（Granular Access Token with automation scope）
+- [X] T006 配置 package.json 发布设置（publishConfig, files, access）
 
 ### 测试基础设施（遵循 Test-First 原则）
 
@@ -72,15 +72,15 @@ description: "GitHub CI 自动化发布任务清单"
   - 测试场景：推送 v1.0.0 标签触发发布
   - 验证点：workflow 触发、测试执行、npm 发布、版本一致性
   - 预期：测试失败（workflow 尚未实现）
-- [ ] T010 [US1] 创建发布 workflow 文件 `.github/workflows/publish.yml`
-- [ ] T011 [US1] 配置 workflow 触发条件（push tags: v*）
-- [ ] T012 [US1] 实现 Job 1: Test & Build
+- [X] T010 [US1] 创建发布 workflow 文件 `.github/workflows/publish.yml`
+- [X] T011 [US1] 配置 workflow 触发条件（push tags: v*）
+- [X] T012 [US1] 实现 Job 1: Test & Build
   - Checkout 代码
   - Setup Node.js 和 pnpm
   - 安装依赖
   - 执行 lint、type-check、build、test
   - 验证测试覆盖率 ≥ 80%
-- [ ] T013 [US1] 实现 Job 2: Publish（依赖 Test & Build 成功）
+- [X] T013 [US1] 实现 Job 2: Publish（依赖 Test & Build 成功）
   - 从标签提取版本号（去除 v 前缀）
   - 同步版本号到 package.json
   - 验证版本号一致性
@@ -88,16 +88,16 @@ description: "GitHub CI 自动化发布任务清单"
   - 检查版本冲突（npm view）
   - 验证构建产物完整性
   - 发布到 npm（使用 latest tag）
-- [ ] T014 [US1] 实现错误处理逻辑
+- [X] T014 [US1] 实现错误处理逻辑
   - 测试失败：中止发布，输出错误提示
   - 认证失败：明确提示更新 NPM_AUTOMATION_TOKEN
   - 版本冲突：提示使用新版本号
   - 标签格式错误：提示正确的 semver 格式
   - 构建产物缺失：中止发布并提示
-- [ ] T015 [US1] 配置 workflow 权限（contents: write, id-token: write）
-- [ ] T016 [US1] 配置并发控制（同一标签排队，不同标签并行）
-- [ ] T017 [US1] 添加详细日志输出（版本号、发布状态、npm URL）
-- [ ] T018 [US1] 配置超时设置（Test & Build: 10min, Publish: 5min）
+- [X] T015 [US1] 配置 workflow 权限（contents: write, id-token: write）
+- [X] T016 [US1] 配置并发控制（同一标签排队，不同标签并行）
+- [X] T017 [US1] 添加详细日志输出（版本号、发布状态、npm URL）
+- [X] T018 [US1] 配置超时设置（Test & Build: 10min, Publish: 5min）
 - [ ] T019 [US1] 运行稳定版本发布测试（Green Phase）
   - 推送测试标签验证完整流程
   - 验证所有测试点通过
@@ -123,16 +123,16 @@ description: "GitHub CI 自动化发布任务清单"
   - 测试场景：推送 v1.0.0-beta.1 标签
   - 验证点：dist-tag 推断、beta 版本发布
   - 预期：测试失败（功能尚未实现）
-- [ ] T022 [US2] 在 Publish job 中实现 dist-tag 自动推断逻辑
+- [X] T022 [US2] 在 Publish job 中实现 dist-tag 自动推断逻辑
   - 检测版本号是否包含 `-`
   - 提取预发布标识符（alpha, beta, rc, next）
   - 稳定版本使用 `latest` tag
-- [ ] T023 [US2] 更新发布命令支持动态 dist-tag
+- [X] T023 [US2] 更新发布命令支持动态 dist-tag
   - `pnpm publish --tag $DIST_TAG --no-git-checks --access public`
-- [ ] T024 [US2] 添加 dist-tag 验证逻辑
+- [X] T024 [US2] 添加 dist-tag 验证逻辑
   - 验证 dist-tag 为有效值（latest, alpha, beta, rc, next）
   - 处理边界情况（无标识符默认为 next）
-- [ ] T025 [US2] 更新日志输出显示 dist-tag 信息
+- [X] T025 [US2] 更新日志输出显示 dist-tag 信息
 - [ ] T026 [US2] 运行预发布版本测试（Green Phase）
   - 验证 alpha、beta、rc 版本发布
   - 确认 dist-tag 正确设置
@@ -154,26 +154,26 @@ description: "GitHub CI 自动化发布任务清单"
   - 测试场景：发布成功后创建 GitHub Release
   - 验证点：Release 创建、变更日志格式、prerelease 标记
   - 预期：测试失败（功能尚未实现）
-- [ ] T029 [US3] 实现 Job 3: Create Release（依赖 Publish 成功）
+- [X] T029 [US3] 实现 Job 3: Create Release（依赖 Publish 成功）
   - Setup 环境
   - 获取上一个版本标签
   - 生成 commit 列表（自上次发布以来）
-- [ ] T030 [US3] 实现变更日志生成逻辑
+- [X] T030 [US3] 实现变更日志生成逻辑
   - 基于 git log 提取 commits
   - 验证 conventional commits 格式（FR-012）
   - 按类型分组（feat, fix, docs, etc.）
   - 标注不符合规范的 commits
   - 格式化为 Markdown
   - 添加 Full Changelog 链接
-- [ ] T031 [US3] 实现 GitHub Release 创建
+- [X] T031 [US3] 实现 GitHub Release 创建
   - 使用 `actions/create-release@v1` 或 GitHub CLI
   - 设置 release name: `Release ${{ github.ref_name }}`
   - 设置 body: 生成的变更日志
   - 根据版本号设置 prerelease 标记
   - 如有格式警告，在 Release 中添加说明
-- [ ] T032 [US3] 添加 Release 创建成功的日志输出（Release URL）
-- [ ] T033 [US3] 配置 Release job 超时（3min）
-- [ ] T034 [US3] 处理 Release 创建失败场景（不影响 npm 发布结果）
+- [X] T032 [US3] 添加 Release 创建成功的日志输出（Release URL）
+- [X] T033 [US3] 配置 Release job 超时（3min）
+- [X] T034 [US3] 处理 Release 创建失败场景（不影响 npm 发布结果）
 - [ ] T035 [US3] 运行 Release 创建测试（Green Phase）
   - 验证 Release 成功创建
   - 检查变更日志格式
@@ -189,16 +189,16 @@ description: "GitHub CI 自动化发布任务清单"
 
 ### 性能优化
 
-- [ ] T036 [P] 优化 workflow 性能：启用 pnpm 缓存
-- [ ] T037 [P] 添加 npm provenance 配置（NPM_CONFIG_PROVENANCE: true）
+- [X] T036 [P] 优化 workflow 性能：启用 pnpm 缓存
+- [X] T037 [P] 添加 npm provenance 配置（NPM_CONFIG_PROVENANCE: true）
 - [ ] T038 验证性能指标达标（目标 3.5 分钟，最大 10 分钟）
 
 ### 文档和可观测性
 
-- [ ] T039 [P] 添加 workflow 状态徽章到 README.md
-- [ ] T040 [P] 更新项目文档：添加发布流程说明到 docs/api.md
+- [X] T039 [P] 添加 workflow 状态徽章到 README.md
+- [X] T040 [P] 更新项目文档：添加发布流程说明到 docs/api.md
 - [ ] T041 验证 quickstart.md 中的所有步骤可正常执行
-- [ ] T042 添加 workflow 注释说明每个步骤的目的
+- [X] T042 添加 workflow 注释说明每个步骤的目的
 - [ ] T043 验证所有错误场景的提示信息清晰明确
 
 ### Monorepo 支持
