@@ -215,8 +215,8 @@ export class TushareClient {
   private isBrowserEnvironment(): boolean {
     return (
       typeof globalThis !== 'undefined' &&
-      typeof (globalThis as any).window !== 'undefined' &&
-      typeof (globalThis as any).document !== 'undefined'
+      typeof (globalThis as typeof globalThis & { window?: unknown }).window !== 'undefined' &&
+      typeof (globalThis as typeof globalThis & { document?: unknown }).document !== 'undefined'
     );
   }
 }
