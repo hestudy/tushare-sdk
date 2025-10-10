@@ -28,14 +28,14 @@ description: "Node 应用演示示例任务列表"
 
 **目的**: 项目初始化和基本结构搭建
 
-- [ ] T001 创建演示应用目录结构 `apps/node-demo/` 及子目录 `src/`, `tests/unit/`, `tests/integration/`
-- [ ] T002 创建 `apps/node-demo/package.json`,配置依赖(workspace:* 引用本地 SDK, dotenv, tsx)
-- [ ] T003 [P] 创建 `apps/node-demo/tsconfig.json`,继承根配置,启用严格模式
-- [ ] T004 [P] 创建 `apps/node-demo/.env.example`,定义环境变量模板
-- [ ] T005 [P] 创建 `apps/node-demo/.gitignore`,排除 .env, node_modules, dist
-- [ ] T006 [P] 创建 `apps/node-demo/README.md`,提供运行说明和使用示例
-- [ ] T007 更新根目录 `pnpm-workspace.yaml`,添加 `'apps/*'` 到 packages 列表
-- [ ] T008 在根目录运行 `pnpm install`,安装所有依赖
+- [X] T001 创建演示应用目录结构 `apps/node-demo/` 及子目录 `src/`, `tests/unit/`, `tests/integration/`
+- [X] T002 创建 `apps/node-demo/package.json`,配置依赖(workspace:* 引用本地 SDK, dotenv, tsx)
+- [X] T003 [P] 创建 `apps/node-demo/tsconfig.json`,继承根配置,启用严格模式
+- [X] T004 [P] 创建 `apps/node-demo/.env.example`,定义环境变量模板
+- [X] T005 [P] 创建 `apps/node-demo/.gitignore`,排除 .env, node_modules, dist
+- [X] T006 [P] 创建 `apps/node-demo/README.md`,提供运行说明和使用示例
+- [X] T007 更新根目录 `pnpm-workspace.yaml`,添加 `'apps/*'` 到 packages 列表
+- [X] T008 在根目录运行 `pnpm install`,安装所有依赖
 
 ---
 
@@ -45,12 +45,12 @@ description: "Node 应用演示示例任务列表"
 
 **⚠️ 关键**: 此阶段完成前,任何用户故事都无法开始
 
-- [ ] T009 实现配置管理 `apps/node-demo/src/config.ts`,加载环境变量,定义 AppConfig 类型
-- [ ] T010 [P] 实现配置验证函数 `validateConfig()` 在 `src/config.ts`,验证 TUSHARE_TOKEN 非空
-- [ ] T011 [P] 实现数据模型类型定义 `apps/node-demo/src/types.ts`,定义 ExampleResult, DemoOutput 接口
-- [ ] T012 实现错误处理工具 `apps/node-demo/src/utils/error-handler.ts`,提供统一错误格式化函数
-- [ ] T013 [P] 实现输出格式化工具 `apps/node-demo/src/utils/formatter.ts`,支持 console 和 json 两种格式
-- [ ] T014 [P] 实现示例执行器基类 `apps/node-demo/src/utils/example-runner.ts`,提供计时和结果收集功能
+- [X] T009 实现配置管理 `apps/node-demo/src/config.ts`,加载环境变量,定义 AppConfig 类型
+- [X] T010 [P] 实现配置验证函数 `validateConfig()` 在 `src/config.ts`,验证 TUSHARE_TOKEN 非空
+- [X] T011 [P] 实现数据模型类型定义 `apps/node-demo/src/types.ts`,定义 ExampleResult, DemoOutput 接口
+- [X] T012 实现错误处理工具 `apps/node-demo/src/utils/error-handler.ts`,提供统一错误格式化函数
+- [X] T013 [P] 实现输出格式化工具 `apps/node-demo/src/utils/formatter.ts`,支持 console 和 json 两种格式
+- [X] T014 [P] 实现示例执行器基类 `apps/node-demo/src/utils/example-runner.ts`,提供计时和结果收集功能
 
 **Checkpoint**: 基础设施就绪 - 用户故事实现现在可以并行开始
 
@@ -66,17 +66,17 @@ description: "Node 应用演示示例任务列表"
 
 **注意: 先编写这些测试,确保它们失败后再实现功能**
 
-- [ ] T015 [P] [US1] 单元测试: 配置加载 `apps/node-demo/tests/unit/config.test.ts`,测试环境变量读取和验证
-- [ ] T016 [P] [US1] 单元测试: 示例执行器 `apps/node-demo/tests/unit/example-runner.test.ts`,测试计时和结果收集
-- [ ] T017 [P] [US1] 集成测试: SDK 初始化 `apps/node-demo/tests/integration/sdk-init.test.ts`,测试客户端创建(使用 mock)
-- [ ] T018 [P] [US1] 集成测试: 股票列表 API `apps/node-demo/tests/integration/stock-list.test.ts`,测试 API 调用(使用 mock)
+- [X] T015 [P] [US1] 单元测试: 配置加载 `apps/node-demo/tests/unit/config.test.ts`,测试环境变量读取和验证
+- [X] T016 [P] [US1] 单元测试: 示例执行器 `apps/node-demo/tests/unit/example-runner.test.ts`,测试计时和结果收集
+- [X] T017 [P] [US1] 集成测试: SDK 初始化 `apps/node-demo/tests/integration/sdk-init.test.ts`,测试客户端创建(使用 mock)
+- [X] T018 [P] [US1] 集成测试: 股票列表 API `apps/node-demo/tests/integration/stock-list.test.ts`,测试 API 调用(使用 mock)
 
 ### Implementation for User Story 1
 
-- [ ] T019 [P] [US1] 实现股票列表示例 `apps/node-demo/src/examples/stock-list.ts`,调用 SDK getStockBasic() 方法
-- [ ] T020 [US1] 实现主入口 `apps/node-demo/src/index.ts`,初始化配置,创建 SDK 客户端,执行示例
-- [ ] T021 [US1] 在 `src/index.ts` 中添加基本输出逻辑,展示示例执行结果和摘要
-- [ ] T022 [US1] 在 `package.json` 中添加脚本: `dev`, `build`, `start`
+- [X] T019 [P] [US1] 实现股票列表示例 `apps/node-demo/src/examples/stock-list.ts`,调用 SDK getStockBasic() 方法
+- [X] T020 [US1] 实现主入口 `apps/node-demo/src/index.ts`,初始化配置,创建 SDK 客户端,执行示例
+- [X] T021 [US1] 在 `src/index.ts` 中添加基本输出逻辑,展示示例执行结果和摘要
+- [X] T022 [US1] 在 `package.json` 中添加脚本: `dev`, `build`, `start`
 - [ ] T023 [US1] 手动测试: 使用真实 Token 运行 `pnpm dev`,验证股票列表查询成功
 
 **Checkpoint**: 此时 User Story 1 应完全功能正常且可独立测试
@@ -91,16 +91,16 @@ description: "Node 应用演示示例任务列表"
 
 ### Tests for User Story 2 (TDD)
 
-- [ ] T024 [P] [US2] 单元测试: 错误处理 `apps/node-demo/tests/unit/error-handling.test.ts`,测试各种错误类型的格式化
+- [X] T024 [P] [US2] 单元测试: 错误处理 `apps/node-demo/tests/unit/error-handling.test.ts`,测试各种错误类型的格式化
 - [ ] T025 [P] [US2] 集成测试: 认证错误 `apps/node-demo/tests/integration/auth-error.test.ts`,测试无效 Token 场景
 - [ ] T026 [P] [US2] 集成测试: 参数错误 `apps/node-demo/tests/integration/param-error.test.ts`,测试无效参数场景
 
 ### Implementation for User Story 2
 
-- [ ] T027 [US2] 实现错误处理演示 `apps/node-demo/src/error-handling.ts`,演示 3 种错误场景(认证、参数、网络)
-- [ ] T028 [US2] 在 `src/index.ts` 中集成错误处理,使用 try-catch 捕获并格式化错误
-- [ ] T029 [US2] 在 `src/utils/error-handler.ts` 中添加错误建议生成函数,为每种错误提供解决建议
-- [ ] T030 [US2] 实现退出码逻辑,根据错误类型返回正确的退出码(0, 1, 2, 3)
+- [X] T027 [US2] 实现错误处理演示 `apps/node-demo/src/error-handling.ts`,演示 3 种错误场景(认证、参数、网络)
+- [X] T028 [US2] 在 `src/index.ts` 中集成错误处理,使用 try-catch 捕获并格式化错误
+- [X] T029 [US2] 在 `src/utils/error-handler.ts` 中添加错误建议生成函数,为每种错误提供解决建议
+- [X] T030 [US2] 实现退出码逻辑,根据错误类型返回正确的退出码(0, 1, 2, 3)
 - [ ] T031 [US2] 手动测试: 使用无效 Token 运行应用,验证错误消息清晰且有帮助
 
 **Checkpoint**: 此时 User Stories 1 和 2 都应独立工作
@@ -121,11 +121,11 @@ description: "Node 应用演示示例任务列表"
 
 ### Implementation for User Story 3
 
-- [ ] T035 [P] [US3] 实现日线数据示例 `apps/node-demo/src/examples/daily-data.ts`,查询指定股票的日线数据
-- [ ] T036 [P] [US3] 实现交易日历示例 `apps/node-demo/src/examples/trade-calendar.ts`,查询交易日历信息
-- [ ] T037 [US3] 在 `src/index.ts` 中集成所有示例,按顺序执行 3 个 API 调用
-- [ ] T038 [US3] 实现命令行参数解析,支持 `--example`, `--verbose`, `--format` 参数
-- [ ] T039 [US3] 在 `src/utils/formatter.ts` 中实现表格输出,美化数据展示
+- [X] T035 [P] [US3] 实现日线数据示例 `apps/node-demo/src/examples/daily-data.ts`,查询指定股票的日线数据
+- [X] T036 [P] [US3] 实现交易日历示例 `apps/node-demo/src/examples/trade-calendar.ts`,查询交易日历信息
+- [X] T037 [US3] 在 `src/index.ts` 中集成所有示例,按顺序执行 3 个 API 调用
+- [X] T038 [US3] 实现命令行参数解析,支持 `--example`, `--verbose`, `--format` 参数
+- [X] T039 [US3] 在 `src/utils/formatter.ts` 中实现表格输出,美化数据展示
 - [ ] T040 [US3] 手动测试: 运行所有示例,验证输出格式正确且数据完整
 
 **Checkpoint**: 所有用户故事现在都应独立功能正常
@@ -136,11 +136,11 @@ description: "Node 应用演示示例任务列表"
 
 **目的**: 影响多个用户故事的改进和完善
 
-- [ ] T041 [P] 添加 JSDoc 注释到所有公共函数和接口,使用中文
+- [X] T041 [P] 添加 JSDoc 注释到所有公共函数和接口,使用中文
 - [ ] T042 [P] 实现详细日志输出(--verbose 模式),展示 API 请求和响应详情
-- [ ] T043 [P] 优化错误消息,确保所有错误都有清晰的建议
-- [ ] T044 代码审查和重构,确保符合 TypeScript 严格模式和项目规范
-- [ ] T045 [P] 更新 README.md,添加完整的使用示例和故障排除指南
+- [X] T043 [P] 优化错误消息,确保所有错误都有清晰的建议
+- [X] T044 代码审查和重构,确保符合 TypeScript 严格模式和项目规范
+- [X] T045 [P] 更新 README.md,添加完整的使用示例和故障排除指南
 - [ ] T046 运行测试覆盖率检查,确保 ≥80% 单元测试覆盖率
 - [ ] T047 [P] 性能测试: 验证启动时间 < 2s, API 调用 < 5s
 - [ ] T048 按照 `quickstart.md` 验证完整的快速开始流程
