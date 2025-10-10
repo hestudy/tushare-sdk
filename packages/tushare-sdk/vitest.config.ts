@@ -13,6 +13,7 @@ export default defineConfig({
         'tests/**',
         '**/*.test.ts',
         '**/*.config.ts',
+        'src/types/config.ts', // 纯类型定义文件，无需覆盖率
       ],
       thresholds: {
         lines: 80,
