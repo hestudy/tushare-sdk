@@ -4,6 +4,10 @@
 **Feature**: 002-github-ci  
 **Purpose**: 定义发布流程的核心实体、状态和关系
 
+> **重要说明**: 本文档定义的 TypeScript 接口为 **概念模型**，用于理解发布流程的数据结构和状态转换。  
+> 实际实现中，这些数据由 **GitHub Actions 运行时管理**，不需要显式编码。  
+> Workflow 配置使用 YAML 格式，不涉及 TypeScript 代码。
+
 ## 核心实体
 
 ### 1. Version Tag (版本标签)
@@ -222,6 +226,9 @@ interface Changelog {
   
   /** 是否符合 conventional commits */
   isConventional: boolean;
+  
+  /** 格式警告（如有不符合规范的 commits） */
+  formatWarnings?: string[];
 }
 
 interface CommitInfo {

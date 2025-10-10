@@ -7,7 +7,7 @@ description: "GitHub CI 自动化发布任务清单"
 **Input**: Design documents from `/specs/002-github-ci/`
 **Prerequisites**: plan.md, spec.md, research.md, data-model.md, contracts/workflow-contract.md, quickstart.md
 
-**Tests**: 本功能为 CI/CD workflow，不包含单元测试任务。Workflow 的正确性通过实际执行验证。
+**Tests**: Workflow 的正确性通过集成测试验证。测试任务分布在各个 Phase 中，使用测试仓库或 GitHub Actions 本地运行工具（如 act）进行验证。
 
 **Organization**: 任务按用户故事组织，每个故事可独立实现和测试。
 
@@ -39,9 +39,22 @@ description: "GitHub CI 自动化发布任务清单"
 
 **⚠️ CRITICAL**: 所有用户故事工作必须等待此阶段完成
 
+### 基础设施配置
+
 - [ ] T004 配置 npm 认证机制：在 GitHub Secrets 中添加 `NPM_AUTOMATION_TOKEN`
 - [ ] T005 验证 npm token 权限（Granular Access Token with automation scope）
 - [ ] T006 配置 package.json 发布设置（publishConfig, files, access）
+
+### 测试基础设施（遵循 Test-First 原则）
+
+- [ ] T007 [TEST] 创建 workflow 测试环境
+  - 选择测试工具（GitHub Actions 本地运行工具 act 或测试仓库）
+  - 配置测试用的 npm 账号和 token
+  - 创建测试脚本目录 `tests/workflows/`
+- [ ] T008 [TEST] 编写 workflow 验证脚本框架
+  - 定义测试场景结构
+  - 实现测试辅助函数（创建标签、验证发布结果等）
+  - 配置测试清理机制
 
 **Checkpoint**: 基础设施就绪 - 用户故事实现可以开始
 
@@ -55,28 +68,44 @@ description: "GitHub CI 自动化发布任务清单"
 
 ### Implementation for User Story 1
 
-- [ ] T007 [US1] 创建发布 workflow 文件 `.github/workflows/publish.yml`
-- [ ] T008 [US1] 配置 workflow 触发条件（push tags: v*）
-- [ ] T009 [US1] 实现 Job 1: Test & Build
+- [ ] T009 [US1] 编写稳定版本发布测试（Red Phase）
+  - 测试场景：推送 v1.0.0 标签触发发布
+  - 验证点：workflow 触发、测试执行、npm 发布、版本一致性
+  - 预期：测试失败（workflow 尚未实现）
+- [ ] T010 [US1] 创建发布 workflow 文件 `.github/workflows/publish.yml`
+- [ ] T011 [US1] 配置 workflow 触发条件（push tags: v*）
+- [ ] T012 [US1] 实现 Job 1: Test & Build
   - Checkout 代码
   - Setup Node.js 和 pnpm
   - 安装依赖
   - 执行 lint、type-check、build、test
   - 验证测试覆盖率 ≥ 80%
-- [ ] T010 [US1] 实现 Job 2: Publish（依赖 Test & Build 成功）
+- [ ] T013 [US1] 实现 Job 2: Publish（依赖 Test & Build 成功）
   - 从标签提取版本号（去除 v 前缀）
   - 同步版本号到 package.json
   - 验证版本号一致性
+  - 验证标签格式符合 semver 规范
   - 检查版本冲突（npm view）
+  - 验证构建产物完整性
   - 发布到 npm（使用 latest tag）
-- [ ] T011 [US1] 实现错误处理逻辑
+- [ ] T014 [US1] 实现错误处理逻辑
   - 测试失败：中止发布，输出错误提示
   - 认证失败：明确提示更新 NPM_AUTOMATION_TOKEN
   - 版本冲突：提示使用新版本号
-- [ ] T012 [US1] 配置 workflow 权限（contents: write, id-token: write）
-- [ ] T013 [US1] 配置并发控制（同一标签排队，不同标签并行）
-- [ ] T014 [US1] 添加详细日志输出（版本号、发布状态、npm URL）
-- [ ] T015 [US1] 配置超时设置（Test & Build: 10min, Publish: 5min）
+  - 标签格式错误：提示正确的 semver 格式
+  - 构建产物缺失：中止发布并提示
+- [ ] T015 [US1] 配置 workflow 权限（contents: write, id-token: write）
+- [ ] T016 [US1] 配置并发控制（同一标签排队，不同标签并行）
+- [ ] T017 [US1] 添加详细日志输出（版本号、发布状态、npm URL）
+- [ ] T018 [US1] 配置超时设置（Test & Build: 10min, Publish: 5min）
+- [ ] T019 [US1] 运行稳定版本发布测试（Green Phase）
+  - 推送测试标签验证完整流程
+  - 验证所有测试点通过
+  - 确认 npm 包成功发布
+- [ ] T020 [US1] 重构和优化（Refactor Phase）
+  - 优化 workflow 步骤
+  - 改进错误消息
+  - 添加代码注释
 
 **Checkpoint**: 此时用户故事 1 应完全可用，可独立测试稳定版本发布流程
 
@@ -90,17 +119,24 @@ description: "GitHub CI 自动化发布任务清单"
 
 ### Implementation for User Story 2
 
-- [ ] T016 [US2] 在 Publish job 中实现 dist-tag 自动推断逻辑
+- [ ] T021 [US2] 编写预发布版本测试（Red Phase）
+  - 测试场景：推送 v1.0.0-beta.1 标签
+  - 验证点：dist-tag 推断、beta 版本发布
+  - 预期：测试失败（功能尚未实现）
+- [ ] T022 [US2] 在 Publish job 中实现 dist-tag 自动推断逻辑
   - 检测版本号是否包含 `-`
   - 提取预发布标识符（alpha, beta, rc, next）
   - 稳定版本使用 `latest` tag
-- [ ] T017 [US2] 更新发布命令支持动态 dist-tag
+- [ ] T023 [US2] 更新发布命令支持动态 dist-tag
   - `pnpm publish --tag $DIST_TAG --no-git-checks --access public`
-- [ ] T018 [US2] 添加 dist-tag 验证逻辑
+- [ ] T024 [US2] 添加 dist-tag 验证逻辑
   - 验证 dist-tag 为有效值（latest, alpha, beta, rc, next）
   - 处理边界情况（无标识符默认为 next）
-- [ ] T019 [US2] 更新日志输出显示 dist-tag 信息
-- [ ] T020 [US2] 添加预发布版本测试场景到文档
+- [ ] T025 [US2] 更新日志输出显示 dist-tag 信息
+- [ ] T026 [US2] 运行预发布版本测试（Green Phase）
+  - 验证 alpha、beta、rc 版本发布
+  - 确认 dist-tag 正确设置
+- [ ] T027 [US2] 添加预发布版本测试场景到文档
 
 **Checkpoint**: 此时用户故事 1 和 2 都应独立可用，支持稳定版和预发布版
 
@@ -114,22 +150,34 @@ description: "GitHub CI 自动化发布任务清单"
 
 ### Implementation for User Story 3
 
-- [ ] T021 [US3] 实现 Job 3: Create Release（依赖 Publish 成功）
+- [ ] T028 [US3] 编写 Release 创建测试（Red Phase）
+  - 测试场景：发布成功后创建 GitHub Release
+  - 验证点：Release 创建、变更日志格式、prerelease 标记
+  - 预期：测试失败（功能尚未实现）
+- [ ] T029 [US3] 实现 Job 3: Create Release（依赖 Publish 成功）
   - Setup 环境
   - 获取上一个版本标签
   - 生成 commit 列表（自上次发布以来）
-- [ ] T022 [US3] 实现变更日志生成逻辑
+- [ ] T030 [US3] 实现变更日志生成逻辑
   - 基于 git log 提取 commits
+  - 验证 conventional commits 格式（FR-012）
+  - 按类型分组（feat, fix, docs, etc.）
+  - 标注不符合规范的 commits
   - 格式化为 Markdown
   - 添加 Full Changelog 链接
-- [ ] T023 [US3] 实现 GitHub Release 创建
+- [ ] T031 [US3] 实现 GitHub Release 创建
   - 使用 `actions/create-release@v1` 或 GitHub CLI
   - 设置 release name: `Release ${{ github.ref_name }}`
   - 设置 body: 生成的变更日志
   - 根据版本号设置 prerelease 标记
-- [ ] T024 [US3] 添加 Release 创建成功的日志输出（Release URL）
-- [ ] T025 [US3] 配置 Release job 超时（3min）
-- [ ] T026 [US3] 处理 Release 创建失败场景（不影响 npm 发布结果）
+  - 如有格式警告，在 Release 中添加说明
+- [ ] T032 [US3] 添加 Release 创建成功的日志输出（Release URL）
+- [ ] T033 [US3] 配置 Release job 超时（3min）
+- [ ] T034 [US3] 处理 Release 创建失败场景（不影响 npm 发布结果）
+- [ ] T035 [US3] 运行 Release 创建测试（Green Phase）
+  - 验证 Release 成功创建
+  - 检查变更日志格式
+  - 验证 conventional commits 验证逻辑
 
 **Checkpoint**: 所有用户故事应独立可用，完整的发布流程包含测试、发布和 Release 创建
 
@@ -139,15 +187,52 @@ description: "GitHub CI 自动化发布任务清单"
 
 **Purpose**: 跨用户故事的改进和优化
 
-- [ ] T027 [P] 优化 workflow 性能：启用 pnpm 缓存
-- [ ] T028 [P] 添加 workflow 状态徽章到 README.md
-- [ ] T029 [P] 更新项目文档：添加发布流程说明到 docs/api.md
-- [ ] T030 验证 quickstart.md 中的所有步骤可正常执行
-- [ ] T031 添加 workflow 注释说明每个步骤的目的
-- [ ] T032 验证所有错误场景的提示信息清晰明确
-- [ ] T033 测试完整的发布流程（稳定版 + 预发布版 + Release）
-- [ ] T034 [P] 添加 npm provenance 配置（NPM_CONFIG_PROVENANCE: true）
-- [ ] T035 验证 monorepo 场景下的发布流程
+### 性能优化
+
+- [ ] T036 [P] 优化 workflow 性能：启用 pnpm 缓存
+- [ ] T037 [P] 添加 npm provenance 配置（NPM_CONFIG_PROVENANCE: true）
+- [ ] T038 验证性能指标达标（目标 3.5 分钟，最大 10 分钟）
+
+### 文档和可观测性
+
+- [ ] T039 [P] 添加 workflow 状态徽章到 README.md
+- [ ] T040 [P] 更新项目文档：添加发布流程说明到 docs/api.md
+- [ ] T041 验证 quickstart.md 中的所有步骤可正常执行
+- [ ] T042 添加 workflow 注释说明每个步骤的目的
+- [ ] T043 验证所有错误场景的提示信息清晰明确
+
+### Monorepo 支持
+
+- [ ] T044 实现 monorepo 变更检测逻辑
+  - 基于 git diff 检测变更的包
+  - 或使用 pnpm --filter 参数
+  - 按依赖顺序发布包
+- [ ] T045 测试 monorepo 多包发布场景
+  - 模拟多个包同时变更
+  - 验证依赖顺序正确
+  - 确认只发布变更的包
+
+### 集成测试和回归测试
+
+- [ ] T046 [TEST] 编写完整的回归测试套件
+  - 稳定版本发布
+  - 预发布版本发布（alpha, beta, rc）
+  - 版本冲突处理
+  - 认证失败处理
+  - 测试失败处理
+  - 标签格式错误处理
+  - 构建产物验证
+  - npm 仓库不可用重试
+  - 同时推送多个标签
+  - Monorepo 多包发布
+- [ ] T047 [TEST] 执行完整的回归测试
+  - 运行所有测试场景
+  - 验证所有 Edge Cases 覆盖
+  - 确认所有 Success Metrics 达标
+- [ ] T048 [TEST] 创建测试文档
+  - 记录测试场景和验证步骤
+  - 提供手动测试清单
+  - 文档化测试环境配置
 
 ---
 

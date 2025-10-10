@@ -13,12 +13,6 @@
 
 ## Technical Context
 
-<!--
-  ACTION REQUIRED: Replace the content in this section with the technical details
-  for the project. The structure here is presented in advisory capacity to guide
-  the iteration process.
--->
-
 **Language/Version**: YAML (GitHub Actions workflow), Node.js 18+  
 **Primary Dependencies**: GitHub Actions (actions/checkout@v4, actions/setup-node@v4, pnpm/action-setup@v2, actions/create-release@v1), npm CLI, GitHub Release Notes (原生)  
 **Storage**: N/A (无状态 CI 流程)  
@@ -35,7 +29,12 @@
 
 ### ✅ I. Test-First Development
 **Status**: PASS  
-**Rationale**: CI/CD workflow 本身是声明式配置，不涉及业务逻辑代码。现有的测试套件（lint、type-check、test）已覆盖被发布的代码。workflow 的正确性将通过实际执行验证。
+**Rationale**: Workflow 的正确性通过集成测试验证，遵循 TDD 流程：
+- **Red Phase**: 为每个用户故事编写测试（验证 workflow 触发、发布流程、错误处理等）
+- **Green Phase**: 实现 workflow 配置使测试通过
+- **Refactor Phase**: 优化 workflow 步骤和错误消息
+- 测试使用测试仓库或 GitHub Actions 本地运行工具（如 act）执行
+- 现有的代码测试套件（lint、type-check、test）在 workflow 中强制执行，确保只有通过测试的代码才能发布
 
 ### ✅ II. TypeScript 技术栈
 **Status**: PASS  
@@ -70,12 +69,6 @@ specs/[###-feature]/
 ```
 
 ### Source Code (repository root)
-<!--
-  ACTION REQUIRED: Replace the placeholder tree below with the concrete layout
-  for this feature. Delete unused options and expand the chosen structure with
-  real paths (e.g., apps/admin, packages/something). The delivered plan must
-  not include Option labels.
--->
 
 ```
 # CI/CD Workflow Structure
@@ -111,7 +104,11 @@ pnpm-workspace.yaml         # workspace 配置
 
 ### ✅ I. Test-First Development
 **Status**: PASS  
-**Post-Design Rationale**: 设计确认 workflow 在发布前强制执行完整测试套件（lint、type-check、build、test），任何测试失败都会中止发布。这确保了只有通过测试的代码才能发布到 npm。
+**Post-Design Rationale**: 
+- Workflow 的正确性通过集成测试验证，tasks.md 中包含完整的测试任务（T007-T008, T009, T019-T020, T021, T026-T027, T028, T035, T046-T048）
+- 每个用户故事遵循 Red-Green-Refactor 循环
+- Workflow 在发布前强制执行完整测试套件（lint、type-check、build、test），任何测试失败都会中止发布
+- 这确保了只有通过测试的代码才能发布到 npm
 
 ### ✅ II. TypeScript 技术栈
 **Status**: PASS  
