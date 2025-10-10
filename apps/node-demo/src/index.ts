@@ -16,6 +16,7 @@ import { setVerbose, logConfig, logVerbose } from './utils/logger.js';
 import { runStockListExample } from './examples/stock-list.js';
 import { runDailyDataExample } from './examples/daily-data.js';
 import { runTradeCalendarExample } from './examples/trade-calendar.js';
+import { runDailyBasicExample } from './examples/daily-basic.js';
 import type { DemoOutput, OutputFormat, ExampleName } from './types.js';
 
 // 应用版本(从 package.json 读取)
@@ -40,7 +41,8 @@ function parseArgs(): {
     if (arg.startsWith('--example=')) {
       const exampleValue = arg.split('=')[1];
       if (exampleValue === 'stock-list' || exampleValue === 'daily-data' || 
-          exampleValue === 'trade-calendar' || exampleValue === 'all') {
+          exampleValue === 'trade-calendar' || exampleValue === 'daily-basic' || 
+          exampleValue === 'all') {
         example = exampleValue;
       }
     } else if (arg === '--verbose') {
@@ -95,6 +97,11 @@ async function main(): Promise<void> {
         name: '交易日历查询',
         key: 'trade-calendar' as const,
         fn: async () => runTradeCalendarExample(config),
+      },
+      {
+        name: '每日指标查询',
+        key: 'daily-basic' as const,
+        fn: async () => runDailyBasicExample(config),
       },
     ];
     
