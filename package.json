@@ -7,9 +7,13 @@
     "build": "turbo run build",
     "dev": "turbo run dev",
     "test": "turbo run test",
+    "test:coverage": "turbo run test:coverage",
     "lint": "turbo run lint",
+    "type-check": "turbo run type-check",
     "format": "prettier --write \"**/*.{ts,tsx,md,json}\"",
-    "clean": "turbo run clean && rm -rf node_modules"
+    "clean": "turbo run clean && rm -rf node_modules",
+    "prepublish": "pnpm build && pnpm test && pnpm type-check",
+    "publish:sdk": "cd packages/tushare-sdk && npm publish"
   },
   "devDependencies": {
     "@types/node": "^20.10.0",

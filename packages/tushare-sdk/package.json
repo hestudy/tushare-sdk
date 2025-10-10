@@ -22,6 +22,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
+    "type-check": "tsc --noEmit",
     "lint": "eslint src --ext .ts",
     "clean": "rm -rf dist .rslib node_modules"
   },
@@ -44,5 +45,18 @@
   },
   "engines": {
     "node": ">=18.0.0"
-  }
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-org/tushare-sdk.git",
+    "directory": "packages/tushare-sdk"
+  },
+  "bugs": {
+    "url": "https://github.com/your-org/tushare-sdk/issues"
+  },
+  "homepage": "https://github.com/your-org/tushare-sdk#readme"
 }

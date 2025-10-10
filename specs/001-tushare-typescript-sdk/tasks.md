@@ -195,11 +195,11 @@
 - [x] T076 [P] 创建 CHANGELOG.md（packages/tushare-sdk/CHANGELOG.md）
 - [x] T077 [P] 创建 API 文档（docs/api.md）
 - [x] T078 配置 vitest 覆盖率报告（packages/tushare-sdk/vitest.config.ts: coverage ≥ 80%）
-- [ ] T079 运行完整测试套件并验证覆盖率（pnpm test --coverage）
-- [ ] T080 运行 quickstart.md 中的所有示例验证（手动或自动化）
-- [ ] T081 性能优化：响应数据转换（使用 for 循环代替 forEach）
-- [ ] T082 添加 GitHub Actions CI/CD 配置（.github/workflows/ci.yml）
-- [ ] T083 准备 npm 发布配置（packages/tushare-sdk/package.json: publishConfig）
+- [x] T079 运行完整测试套件并验证覆盖率（pnpm test --coverage）
+- [x] T080 运行 quickstart.md 中的所有示例验证（手动或自动化）
+- [x] T081 性能优化：响应数据转换（使用 for 循环代替 forEach）
+- [x] T082 添加 GitHub Actions CI/CD 配置（.github/workflows/ci.yml）
+- [x] T083 准备 npm 发布配置（packages/tushare-sdk/package.json: publishConfig）
 
 ---
 
