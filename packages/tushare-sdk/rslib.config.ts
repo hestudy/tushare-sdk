@@ -5,7 +5,6 @@ export default defineConfig({
     {
       format: 'esm',
       syntax: 'es2020',
-      dts: true,
     },
     {
       format: 'cjs',
@@ -13,7 +12,7 @@ export default defineConfig({
     },
   ],
   output: {
-    target: 'node',
+    target: 'web',
     minify: true,
   },
   source: {

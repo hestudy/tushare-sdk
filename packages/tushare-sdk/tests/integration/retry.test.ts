@@ -262,11 +262,12 @@ describe('重试机制集成测试', () => {
       let callCount = 0;
       const mockPost = vi.fn().mockImplementation(async () => {
         callCount++;
-        return {
-          code: -1,
-          msg: 'Invalid API name',
-          data: null,
-        };
+        // HTTP 客户端会检查 code !== 0 并抛出 VALIDATION_ERROR
+        throw new ApiError(
+          ApiErrorType.VALIDATION_ERROR,
+          'Invalid API name',
+          -1
+        );
       });
 
       vi.spyOn(HttpClient.prototype, 'post').mockImplementation(mockPost);
@@ -285,8 +286,12 @@ describe('重试机制集成测试', () => {
         client.getStockBasic({ list_status: 'L' })
       ).rejects.toThrow(ApiError);
 
-      // 验证只调用了一次，没有重试
-      expect(callCount).toBe(1);
+      await expect(
+        client.getStockBasic({ list_status: 'L' })
+      ).rejects.toThrow('Invalid API name');
+
+      // 验证只调用了一次，没有重试（两次请求，每次都只调用一次）
+      expect(callCount).toBe(2);
 
       vi.restoreAllMocks();
     }, 30000);

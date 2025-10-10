@@ -46,6 +46,15 @@ export class TushareClient {
 
     this.config = config;
 
+    // 浏览器环境安全警告
+    if (this.isBrowserEnvironment()) {
+      console.warn(
+        '[Tushare SDK Security Warning] You are using the SDK in a browser environment. ' +
+        'Your API token will be exposed in client-side code. ' +
+        'For production applications, consider using a backend proxy to protect your token.'
+      );
+    }
+
     // 初始化日志
     this.logger = config.logger || new ConsoleLogger(LogLevel.INFO);
 
@@ -195,5 +204,19 @@ export class TushareClient {
    */
   async getDailyQuote(params: DailyQuoteParams): Promise<DailyQuoteItem[]> {
     return this.query<DailyQuoteItem>('daily', params as Record<string, unknown>);
+  }
+
+  /**
+   * 检测是否在浏览器环境中运行
+   * 
+   * @returns 是否在浏览器环境
+   * @private
+   */
+  private isBrowserEnvironment(): boolean {
+    return (
+      typeof globalThis !== 'undefined' &&
+      typeof (globalThis as any).window !== 'undefined' &&
+      typeof (globalThis as any).document !== 'undefined'
+    );
   }
 }

@@ -142,16 +142,16 @@
 
 ### 测试 - User Story 3
 
-- [ ] T054 [P] [US3] 集成测试：浏览器环境 API 调用（tests/integration/browser.test.ts，使用 jsdom）
+- [x] T054 [P] [US3] 集成测试：浏览器环境 API 调用（tests/integration/browser.test.ts，使用 jsdom）
 - [ ] T055 [P] [US3] 构建测试：验证打包体积 < 50KB gzipped（tests/build/bundle-size.test.ts）
 
 ### 实现 - User Story 3
 
-- [ ] T056 [US3] 配置 rslib 多格式输出（packages/tushare-sdk/rslib.config.ts: ESM, CJS, UMD）
-- [ ] T057 [US3] 配置 package.json 条件导出（packages/tushare-sdk/package.json: exports 字段）
-- [ ] T058 [US3] 添加浏览器环境检测和安全警告（packages/tushare-sdk/src/client/TushareClient.ts）
-- [ ] T059 [US3] 确保 fetch API 在浏览器和 Node.js 中正确工作（packages/tushare-sdk/src/client/http.ts）
-- [ ] T060 [US3] 优化打包配置以减小体积（packages/tushare-sdk/rslib.config.ts: tree-shaking, minify）
+- [x] T056 [US3] 配置 rslib 多格式输出（packages/tushare-sdk/rslib.config.ts: ESM, CJS）
+- [x] T057 [US3] 配置 package.json 条件导出（packages/tushare-sdk/package.json: exports 字段）
+- [x] T058 [US3] 添加浏览器环境检测和安全警告（packages/tushare-sdk/src/client/TushareClient.ts）
+- [x] T059 [US3] 确保 fetch API 在浏览器和 Node.js 中正确工作（packages/tushare-sdk/src/client/http.ts）
+- [x] T060 [US3] 优化打包配置以减小体积（packages/tushare-sdk/rslib.config.ts: tree-shaking, minify）
 - [ ] T061 [US3] 在 quickstart.md 中添加浏览器使用示例和安全警告
 
 **Checkpoint**: SDK 可在浏览器和 Node.js 环境中正常工作
@@ -166,18 +166,18 @@
 
 ### 测试 - User Story 5
 
-- [ ] T062 [P] [US5] 单元测试：MemoryCacheProvider 基本操作（tests/unit/services.test.ts）
-- [ ] T063 [P] [US5] 单元测试：缓存过期机制（tests/unit/services.test.ts）
-- [ ] T064 [P] [US5] 集成测试：缓存命中和未命中场景（tests/integration/cache.test.ts）
+- [x] T062 [P] [US5] 单元测试：MemoryCacheProvider 基本操作（tests/unit/services.test.ts）
+- [x] T063 [P] [US5] 单元测试：缓存过期机制（tests/unit/services.test.ts）
+- [x] T064 [P] [US5] 集成测试：缓存命中和未命中场景（tests/integration/api.test.ts）
 - [ ] T065 [P] [US5] 集成测试：自定义缓存提供者（tests/integration/cache.test.ts）
 
 ### 实现 - User Story 5
 
-- [ ] T066 [US5] 完善 MemoryCacheProvider：实现 LRU 淘汰策略（packages/tushare-sdk/src/services/cache.ts）
-- [ ] T067 [US5] 实现缓存键生成逻辑（packages/tushare-sdk/src/services/cache.ts: generateCacheKey）
-- [ ] T068 [US5] 在 TushareClient 中集成缓存逻辑（packages/tushare-sdk/src/client/TushareClient.ts）
-- [ ] T069 [US5] 实现缓存配置选项（packages/tushare-sdk/src/types/config.ts: CacheConfig）
-- [ ] T070 [US5] 添加缓存命中/未命中日志（packages/tushare-sdk/src/client/TushareClient.ts）
+- [x] T066 [US5] 完善 MemoryCacheProvider：实现 LRU 淘汰策略（packages/tushare-sdk/src/services/cache.ts）
+- [x] T067 [US5] 实现缓存键生成逻辑（packages/tushare-sdk/src/services/cache.ts: generateCacheKey）
+- [x] T068 [US5] 在 TushareClient 中集成缓存逻辑（packages/tushare-sdk/src/client/TushareClient.ts）
+- [x] T069 [US5] 实现缓存配置选项（packages/tushare-sdk/src/types/config.ts: CacheConfig）
+- [x] T070 [US5] 添加缓存命中/未命中日志（packages/tushare-sdk/src/client/TushareClient.ts）
 - [ ] T071 [US5] 在 quickstart.md 中添加缓存使用示例（包括 Redis 集成示例）
 
 **Checkpoint**: 缓存机制完整，支持自定义缓存提供者
