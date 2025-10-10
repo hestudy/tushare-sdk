@@ -32,7 +32,13 @@ describe('T054: 浏览器环境 API 调用', () => {
     // 设置浏览器环境
     (globalThis as any).window = dom.window;
     (globalThis as any).document = dom.window.document;
-    (globalThis as any).navigator = dom.window.navigator;
+    
+    // 使用 Object.defineProperty 设置只读属性
+    Object.defineProperty(globalThis, 'navigator', {
+      value: dom.window.navigator,
+      writable: true,
+      configurable: true,
+    });
 
     // 监听 console.warn
     consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
@@ -42,7 +48,15 @@ describe('T054: 浏览器环境 API 调用', () => {
     // 恢复原始环境
     (globalThis as any).window = originalWindow;
     (globalThis as any).document = originalDocument;
-    (globalThis as any).navigator = originalNavigator;
+    
+    // 使用 Object.defineProperty 恢复只读属性
+    if (originalNavigator !== undefined) {
+      Object.defineProperty(globalThis, 'navigator', {
+        value: originalNavigator,
+        writable: true,
+        configurable: true,
+      });
+    }
 
     // 恢复 console.warn
     consoleWarnSpy.mockRestore();
@@ -140,6 +154,9 @@ describe('T054: 浏览器环境 API 调用', () => {
 
     const client = new TushareClient({
       token: 'test_token',
+      retry: {
+        maxRetries: 0, // 禁用重试以避免超时
+      },
     });
 
     await expect(
