@@ -11,16 +11,13 @@ describe('认证错误集成测试', () => {
     vi.unstubAllEnvs();
   });
 
-  it('应该在使用空 Token 时抛出认证错误', async () => {
-    // 创建使用空 Token 的客户端
-    const client = new TushareClient({
-      token: '',
-    });
-
-    // 尝试调用 API,应该抛出错误
-    await expect(async () => {
-      await client.getStockBasic();
-    }).rejects.toThrow();
+  it('应该在使用空 Token 时抛出认证错误', () => {
+    // 创建使用空 Token 的客户端应该在构造函数中就抛出错误
+    expect(() => {
+      new TushareClient({
+        token: '',
+      });
+    }).toThrow('Token cannot be empty');
   });
 
   it('应该在使用无效 Token 时抛出认证错误', async () => {
