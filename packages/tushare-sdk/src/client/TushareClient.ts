@@ -10,6 +10,7 @@ import type { Logger } from '../utils/logger.js';
 import type { TushareRequest } from '../types/response.js';
 import type { StockBasicItem, StockBasicParams } from '../models/stock.js';
 import type { DailyQuoteItem, DailyQuoteParams } from '../models/quote.js';
+import type { TradeCalItem, TradeCalParams } from '../models/calendar.js';
 
 /**
  * Tushare 客户端
@@ -204,6 +205,26 @@ export class TushareClient {
    */
   async getDailyQuote(params: DailyQuoteParams): Promise<DailyQuoteItem[]> {
     return this.query<DailyQuoteItem>('daily', params as Record<string, unknown>);
+  }
+
+  /**
+   * 获取交易日历
+   * 
+   * @param params - 查询参数
+   * @returns 交易日历数据列表
+   * 
+   * @example
+   * ```typescript
+   * const calendar = await client.getTradeCalendar({
+   *   exchange: 'SSE',
+   *   start_date: '20230101',
+   *   end_date: '20231231',
+   *   is_open: '1' // 仅交易日
+   * });
+   * ```
+   */
+  async getTradeCalendar(params?: TradeCalParams): Promise<TradeCalItem[]> {
+    return this.query<TradeCalItem>('trade_cal', params as Record<string, unknown>);
   }
 
   /**

@@ -29,12 +29,12 @@ describe('日线数据 API 集成测试', () => {
 
     // 验证响应结构
     expect(result).toBeDefined();
-    expect(result.data).toBeDefined();
-    expect(Array.isArray(result.data)).toBe(true);
+    expect(result).toBeDefined();
+    expect(Array.isArray(result)).toBe(true);
 
     // 验证数据字段
-    if (result.data.length > 0) {
-      const firstItem = result.data[0];
+    if (result.length > 0) {
+      const firstItem = result[0];
       expect(firstItem).toHaveProperty('ts_code');
       expect(firstItem).toHaveProperty('trade_date');
       expect(firstItem).toHaveProperty('open');
@@ -56,8 +56,8 @@ describe('日线数据 API 集成测试', () => {
     });
 
     expect(result).toBeDefined();
-    expect(result.data).toBeDefined();
-    expect(Array.isArray(result.data)).toBe(true);
+    expect(result).toBeDefined();
+    expect(Array.isArray(result)).toBe(true);
   });
 
   it('应该支持日期范围查询', async () => {
@@ -73,11 +73,11 @@ describe('日线数据 API 集成测试', () => {
     });
 
     expect(result).toBeDefined();
-    expect(result.data).toBeDefined();
+    expect(result).toBeDefined();
 
     // 验证返回的数据在日期范围内
-    if (result.data.length > 0) {
-      result.data.forEach((item: any) => {
+    if (result.length > 0) {
+      result.forEach((item: any) => {
         const tradeDate = parseInt(item.trade_date);
         expect(tradeDate).toBeGreaterThanOrEqual(20240901);
         expect(tradeDate).toBeLessThanOrEqual(20240930);
@@ -99,8 +99,8 @@ describe('日线数据 API 集成测试', () => {
     });
 
     // 应该返回空数组而不是抛出错误
-    expect(result.data).toBeDefined();
-    expect(result.data.length).toBe(0);
+    expect(result).toBeDefined();
+    expect(result.length).toBe(0);
   });
 
   it('应该正确处理非交易日期', async () => {
@@ -116,8 +116,8 @@ describe('日线数据 API 集成测试', () => {
       end_date: '20240107',
     });
 
-    expect(result.data).toBeDefined();
+    expect(result).toBeDefined();
     // 非交易日应该返回空数组
-    expect(Array.isArray(result.data)).toBe(true);
+    expect(Array.isArray(result)).toBe(true);
   });
 });

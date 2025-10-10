@@ -42,9 +42,9 @@ describe('完整演示流程 E2E 测试', () => {
         duration: duration1,
       });
 
-      expect(stockList.data).toBeDefined();
-      expect(Array.isArray(stockList.data)).toBe(true);
-      expect(stockList.data.length).toBeGreaterThan(0);
+      expect(stockList).toBeDefined();
+      expect(Array.isArray(stockList)).toBe(true);
+      expect(stockList.length).toBeGreaterThan(0);
     } catch (error) {
       results.push({
         name: '股票列表查询',
@@ -70,8 +70,8 @@ describe('完整演示流程 E2E 测试', () => {
         duration: duration2,
       });
 
-      expect(dailyData.data).toBeDefined();
-      expect(Array.isArray(dailyData.data)).toBe(true);
+      expect(dailyData).toBeDefined();
+      expect(Array.isArray(dailyData)).toBe(true);
     } catch (error) {
       results.push({
         name: '日线数据查询',
@@ -97,8 +97,8 @@ describe('完整演示流程 E2E 测试', () => {
         duration: duration3,
       });
 
-      expect(calendar.data).toBeDefined();
-      expect(Array.isArray(calendar.data)).toBe(true);
+      expect(calendar).toBeDefined();
+      expect(Array.isArray(calendar)).toBe(true);
     } catch (error) {
       results.push({
         name: '交易日历查询',
@@ -213,9 +213,9 @@ describe('完整演示流程 E2E 测试', () => {
     const totalDuration = Date.now() - startTime;
 
     // 验证所有结果
-    expect(stockList.data).toBeDefined();
-    expect(dailyData.data).toBeDefined();
-    expect(calendar.data).toBeDefined();
+    expect(stockList).toBeDefined();
+    expect(dailyData).toBeDefined();
+    expect(calendar).toBeDefined();
 
     // 并发执行应该比顺序执行更快
     console.log(`\n并发执行耗时: ${totalDuration}ms`);

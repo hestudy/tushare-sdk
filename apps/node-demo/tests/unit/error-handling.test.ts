@@ -12,7 +12,7 @@ describe('错误处理', () => {
       const error = new ApiError(
         ApiErrorType.AUTH_ERROR,
         '认证失败',
-        '40001'
+        40001
       );
 
       const formatted = formatError(error);
@@ -55,7 +55,7 @@ describe('错误处理', () => {
     });
 
     it('应该为参数错误提供建议', () => {
-      const suggestion = getErrorSuggestion(ApiErrorType.PARAM_ERROR);
+      const suggestion = getErrorSuggestion(ApiErrorType.VALIDATION_ERROR);
       expect(suggestion).toContain('参数');
     });
 
