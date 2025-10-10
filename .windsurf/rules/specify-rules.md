@@ -6,6 +6,8 @@ Auto-generated from all feature plans. Last updated: 2025-10-09
 - TypeScript 5.x+, Node.js 18+ LTS + rslib (构建工具), vitest (测试框架), turborepo (monorepo 管理), axios/fetch (HTTP 客户端) (001-tushare-typescript-sdk)
 - YAML (GitHub Actions workflow), Node.js 18+ + GitHub Actions (actions/checkout@v4, actions/setup-node@v4, pnpm/action-setup@v2, actions/create-release@v1), npm CLI, GitHub Release Notes (原生) (002-github-ci)
 - N/A (无状态 CI 流程) (002-github-ci)
+- TypeScript 5.x+ / Node.js 18+ LTS + 本地 @tushare/sdk 包 (workspace 依赖), dotenv (环境变量管理) (003-apps-node-sdk)
+- N/A (演示应用不需要持久化存储) (003-apps-node-sdk)
 
 ## Project Structure
 ```
@@ -20,6 +22,7 @@ npm test [ONLY COMMANDS FOR ACTIVE TECHNOLOGIES][ONLY COMMANDS FOR ACTIVE TECHNO
 TypeScript 5.x+, Node.js 18+ LTS: Follow standard conventions
 
 ## Recent Changes
+- 003-apps-node-sdk: Added TypeScript 5.x+ / Node.js 18+ LTS + 本地 @tushare/sdk 包 (workspace 依赖), dotenv (环境变量管理)
 - 002-github-ci: Added YAML (GitHub Actions workflow), Node.js 18+ + GitHub Actions (actions/checkout@v4, actions/setup-node@v4, pnpm/action-setup@v2, actions/create-release@v1), npm CLI, GitHub Release Notes (原生)
 - 001-tushare-typescript-sdk: Added TypeScript 5.x+, Node.js 18+ LTS + rslib (构建工具), vitest (测试框架), turborepo (monorepo 管理), axios/fetch (HTTP 客户端)
 
