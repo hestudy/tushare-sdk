@@ -58,7 +58,7 @@
 
 ### API 文档更新任务 - 日线行情
 
-- [ ] T008 [US1] 更新 apps/docs/docs/api/stock/daily.md - 日线行情 API
+- [X] T008 [US1] 更新 apps/docs/docs/api/stock/daily.md - 日线行情 API
   - 纠正方法名为 getDailyQuote (而不是 getStockDaily)
   - 从 packages/tushare-sdk/src/client/TushareClient.ts 提取 getDailyQuote 方法
   - 从 packages/tushare-sdk/src/models/quote.ts 提取 DailyQuoteParams 和 DailyQuoteItem 类型定义
@@ -66,7 +66,7 @@
 
 ### API 文档创建任务 - 交易日历
 
-- [ ] T009 [US1] 创建 apps/docs/docs/api/calendar.md - 交易日历 API (新文档)
+- [X] T009 [US1] 创建 apps/docs/docs/api/calendar.md - 交易日历 API (新文档)
   - 从 packages/tushare-sdk/src/client/TushareClient.ts 提取 getTradeCalendar 方法
   - 从 packages/tushare-sdk/src/models/calendar.ts 提取 TradeCalParams 和 TradeCalItem 类型定义
   - 使用 contracts/api-page-structure.md 模板创建文档
@@ -74,7 +74,7 @@
 
 ### API 文档创建任务 - 每日指标
 
-- [ ] T010 [US1] 创建 apps/docs/docs/api/daily-basic.md - 每日指标 API (新文档)
+- [X] T010 [US1] 创建 apps/docs/docs/api/daily-basic.md - 每日指标 API (新文档)
   - 标注权限要求: 至少 2000 积分
   - 从 packages/tushare-sdk/src/client/TushareClient.ts 提取 getDailyBasic 方法
   - 从 packages/tushare-sdk/src/models/daily-basic.ts 提取 DailyBasicParams 和 DailyBasicItem 类型定义
@@ -84,8 +84,8 @@
 
 ### 验证和构建
 
-- [ ] T011 [US1] 运行 pnpm docs:build 验证所有 API 文档页面构建成功
-- [ ] T012 [US1] 使用 contracts/api-page-structure.md 中的 Validation Checklist 检查每个 API 文档
+- [X] T011 [US1] 运行 pnpm docs:build 验证所有 API 文档页面构建成功
+- [X] T012 [US1] 使用 contracts/api-page-structure.md 中的 Validation Checklist 检查每个 API 文档
 
 **Checkpoint**: User Story 1 完成 - 所有核心 API 方法都有完整的文档页面,类型定义与源代码一致
 
