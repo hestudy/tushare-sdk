@@ -92,6 +92,7 @@ export default {
             { text: '安装', link: '/guide/installation' },
             { text: '快速开始', link: '/guide/quick-start' },
             { text: '配置', link: '/guide/configuration' },
+            { text: '错误处理', link: '/guide/error-handling' },
           ],
         },
       ],
@@ -101,23 +102,32 @@ export default {
           items: [
             { text: '基础信息', link: '/api/stock/basic' },
             { text: '日线数据', link: '/api/stock/daily' },
-            { text: '实时数据', link: '/api/stock/realtime' },
+            // 注意: 以下 API 尚未在 SDK 中实现,文档为占位符
+            // { text: '实时数据', link: '/api/stock/realtime' },
           ],
         },
         {
-          text: '基金数据',
+          text: '交易相关',
           items: [
-            { text: '基础信息', link: '/api/fund/basic' },
-            { text: '净值数据', link: '/api/fund/nav' },
+            { text: '交易日历', link: '/api/calendar' },
+            { text: '每日指标', link: '/api/daily-basic' },
           ],
         },
-        {
-          text: '财务数据',
-          items: [
-            { text: '利润表', link: '/api/finance/income' },
-            { text: '资产负债表', link: '/api/finance/balance' },
-          ],
-        },
+        // 注意: 以下分类的 API 尚未在 SDK 中实现,文档为占位符
+        // {
+        //   text: '基金数据',
+        //   items: [
+        //     { text: '基础信息', link: '/api/fund/basic' },
+        //     { text: '净值数据', link: '/api/fund/nav' },
+        //   ],
+        // },
+        // {
+        //   text: '财务数据',
+        //   items: [
+        //     { text: '利润表', link: '/api/finance/income' },
+        //     { text: '资产负债表', link: '/api/finance/balance' },
+        //   ],
+        // },
       ],
     },
 

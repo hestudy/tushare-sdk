@@ -18,19 +18,19 @@ description: 学习如何安装 Tushare SDK 到你的项目中
 ## 使用 npm 安装
 
 ```bash
-npm install @hestudy/tushare-sdk
+npm install @tushare/sdk
 ```
 
 ## 使用 pnpm 安装
 
 ```bash
-pnpm add @hestudy/tushare-sdk
+pnpm add @tushare/sdk
 ```
 
 ## 使用 yarn 安装
 
 ```bash
-yarn add @hestudy/tushare-sdk
+yarn add @tushare/sdk
 ```
 
 ## 验证安装
@@ -38,9 +38,8 @@ yarn add @hestudy/tushare-sdk
 安装完成后,你可以通过以下方式验证安装是否成功:
 
 ```typescript
-import { TushareClient } from '@hestudy/tushare-sdk';
+import { getStockBasic } from '@tushare/sdk';
 
-const client = new TushareClient({ token: 'YOUR_TOKEN' });
 console.log('Tushare SDK 安装成功!');
 ```
 
@@ -73,10 +72,10 @@ A: 如果使用 npm 安装时遇到权限错误,可以尝试:
 
 ```bash
 # 使用 --legacy-peer-deps 标志
-npm install @hestudy/tushare-sdk --legacy-peer-deps
+npm install @tushare/sdk --legacy-peer-deps
 
 # 或者使用 sudo (不推荐)
-sudo npm install @hestudy/tushare-sdk
+sudo npm install @tushare/sdk
 ```
 
 推荐使用 pnpm 或配置 npm 的全局安装路径。
@@ -87,13 +86,13 @@ A: 使用以下命令更新到最新版本:
 
 ```bash
 # npm
-npm update @hestudy/tushare-sdk
+npm update @tushare/sdk
 
 # pnpm
-pnpm update @hestudy/tushare-sdk
+pnpm update @tushare/sdk
 
 # yarn
-yarn upgrade @hestudy/tushare-sdk
+yarn upgrade @tushare/sdk
 ```
 
 ### Q: 如何安装特定版本?
@@ -101,7 +100,7 @@ yarn upgrade @hestudy/tushare-sdk
 A: 在包名后指定版本号:
 
 ```bash
-npm install @hestudy/tushare-sdk@1.2.0
+npm install @tushare/sdk@1.2.0
 ```
 
 ## 下一步
