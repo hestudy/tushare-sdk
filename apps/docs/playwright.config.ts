@@ -20,8 +20,12 @@ export default defineConfig({
   // CI 环境使用单个 worker,本地使用默认
   workers: process.env.CI ? 1 : undefined,
   
-  // 测试报告
-  reporter: 'html',
+  // 测试报告配置
+  // 使用 list 报告器(终端输出)和 html 报告器(生成报告文件但不自动打开)
+  reporter: [
+    ['list'], // 终端输出测试结果
+    ['html', { open: 'never' }], // 生成 HTML 报告但不自动打开浏览器
+  ],
   
   // 共享配置
   use: {
