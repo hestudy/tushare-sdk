@@ -95,21 +95,21 @@
 
 ### Tests for User Story 2 (TDD - 先写测试)
 
-- [ ] T032 [P] [US2] E2E 测试:侧边栏显示分类目录 `apps/docs/tests/e2e/navigation.spec.ts` (场景 2.1)
-- [ ] T033 [P] [US2] E2E 测试:点击分类展开/收起 `apps/docs/tests/e2e/navigation.spec.ts` (场景 2.2)
-- [ ] T034 [P] [US2] E2E 测试:点击 API 链接跳转 `apps/docs/tests/e2e/navigation.spec.ts` (场景 2.3)
-- [ ] T035 [P] [US2] E2E 测试:面包屑导航显示 `apps/docs/tests/e2e/navigation.spec.ts` (场景 2.4)
+- [X] T032 [P] [US2] E2E 测试:侧边栏显示分类目录 `apps/docs/tests/e2e/navigation.spec.ts` (场景 2.1)
+- [X] T033 [P] [US2] E2E 测试:点击分类展开/收起 `apps/docs/tests/e2e/navigation.spec.ts` (场景 2.2)
+- [X] T034 [P] [US2] E2E 测试:点击 API 链接跳转 `apps/docs/tests/e2e/navigation.spec.ts` (场景 2.3)
+- [X] T035 [P] [US2] E2E 测试:面包屑导航显示 `apps/docs/tests/e2e/navigation.spec.ts` (场景 2.4)
 
 ### Implementation for User Story 2
 
-- [ ] T036 [P] [US2] 创建基金数据分类配置:`apps/docs/docs/api/fund/_meta.json` (基础信息、净值数据)
-- [ ] T037 [P] [US2] 创建财务数据分类配置:`apps/docs/docs/api/finance/_meta.json` (利润表、资产负债表)
-- [ ] T038 [P] [US2] 创建基金基础信息 API 文档:`apps/docs/docs/api/fund/basic.md`
-- [ ] T039 [P] [US2] 创建基金净值数据 API 文档:`apps/docs/docs/api/fund/nav.md`
-- [ ] T040 [P] [US2] 创建利润表 API 文档:`apps/docs/docs/api/finance/income.md`
-- [ ] T041 [P] [US2] 创建资产负债表 API 文档:`apps/docs/docs/api/finance/balance.md`
-- [ ] T042 [US2] 验证侧边栏导航自动生成(基于 _meta.json 和文件结构)
-- [ ] T043 [US2] 验证面包屑导航自动显示当前页面位置
+- [X] T036 [P] [US2] 创建基金数据分类配置:`apps/docs/docs/api/fund/_meta.json` (基础信息、净值数据)
+- [X] T037 [P] [US2] 创建财务数据分类配置:`apps/docs/docs/api/finance/_meta.json` (利润表、资产负债表)
+- [X] T038 [P] [US2] 创建基金基础信息 API 文档:`apps/docs/docs/api/fund/basic.md`
+- [X] T039 [P] [US2] 创建基金净值数据 API 文档:`apps/docs/docs/api/fund/nav.md`
+- [X] T040 [P] [US2] 创建利润表 API 文档:`apps/docs/docs/api/finance/income.md`
+- [X] T041 [P] [US2] 创建资产负债表 API 文档:`apps/docs/docs/api/finance/balance.md`
+- [X] T042 [US2] 验证侧边栏导航自动生成(基于 _meta.json 和文件结构)
+- [X] T043 [US2] 验证面包屑导航自动显示当前页面位置
 
 **Checkpoint**: 用户故事 1 和 2 都独立可用 - 开发者可以通过搜索或分类浏览 API
 
@@ -123,18 +123,18 @@
 
 ### Tests for User Story 3 (TDD - 先写测试)
 
-- [ ] T044 [P] [US3] E2E 测试:访问快速入门页面 `apps/docs/tests/e2e/quick-start.spec.ts` (场景 3.1)
-- [ ] T045 [P] [US3] E2E 测试:快速入门页面包含完整内容 `apps/docs/tests/e2e/quick-start.spec.ts` (场景 3.2)
-- [ ] T046 [P] [US3] E2E 测试:引导到 API 文档 `apps/docs/tests/e2e/quick-start.spec.ts` (场景 3.3)
+- [X] T044 [P] [US3] E2E 测试:访问快速入门页面 `apps/docs/tests/e2e/quick-start.spec.ts` (场景 3.1)
+- [X] T045 [P] [US3] E2E 测试:快速入门页面包含完整内容 `apps/docs/tests/e2e/quick-start.spec.ts` (场景 3.2)
+- [X] T046 [P] [US3] E2E 测试:引导到 API 文档 `apps/docs/tests/e2e/quick-start.spec.ts` (场景 3.3)
 
 ### Implementation for User Story 3
 
-- [ ] T047 [P] [US3] 创建指南分类配置:`apps/docs/docs/guide/_meta.json` (安装、快速开始、配置)
-- [ ] T048 [P] [US3] 创建安装指南:`apps/docs/docs/guide/installation.md` (npm/pnpm 安装步骤,系统要求)
-- [ ] T049 [P] [US3] 创建快速开始指南:`apps/docs/docs/guide/quick-start.md` (第一个示例程序,常见用法)
-- [ ] T050 [P] [US3] 创建配置说明:`apps/docs/docs/guide/configuration.md` (API Token 配置,环境变量,配置选项)
-- [ ] T051 [US3] 在快速开始指南中添加"下一步"链接,引导用户查看 API 文档
-- [ ] T052 [US3] 在首页添加"快速开始"按钮,链接到快速开始指南
+- [X] T047 [P] [US3] 创建指南分类配置:`apps/docs/docs/guide/_meta.json` (安装、快速开始、配置)
+- [X] T048 [P] [US3] 创建安装指南:`apps/docs/docs/guide/installation.md` (npm/pnpm 安装步骤,系统要求)
+- [X] T049 [P] [US3] 创建快速开始指南:`apps/docs/docs/guide/quick-start.md` (第一个示例程序,常见用法)
+- [X] T050 [P] [US3] 创建配置说明:`apps/docs/docs/guide/configuration.md` (API Token 配置,环境变量,配置选项)
+- [X] T051 [US3] 在快速开始指南中添加"下一步"链接,引导用户查看 API 文档
+- [X] T052 [US3] 在首页添加"快速开始"按钮,链接到快速开始指南
 
 **Checkpoint**: 用户故事 1, 2, 3 都独立可用 - 新用户可以快速上手,老用户可以查阅 API
 
@@ -148,17 +148,17 @@
 
 ### Tests for User Story 4 (TDD - 先写测试)
 
-- [ ] T053 [P] [US4] E2E 测试:访问更新日志页面 `apps/docs/tests/e2e/changelog.spec.ts` (场景 4.1)
-- [ ] T054 [P] [US4] E2E 测试:更新日志按版本倒序显示 `apps/docs/tests/e2e/changelog.spec.ts` (场景 4.2)
-- [ ] T055 [P] [US4] E2E 测试:更新内容包含分类说明 `apps/docs/tests/e2e/changelog.spec.ts` (场景 4.3)
-- [ ] T056 [P] [US4] E2E 测试:破坏性变更包含迁移指南 `apps/docs/tests/e2e/changelog.spec.ts` (场景 4.4)
+- [X] T053 [P] [US4] E2E 测试:访问更新日志页面 `apps/docs/tests/e2e/changelog.spec.ts` (场景 4.1)
+- [X] T054 [P] [US4] E2E 测试:更新日志按版本倒序显示 `apps/docs/tests/e2e/changelog.spec.ts` (场景 4.2)
+- [X] T055 [P] [US4] E2E 测试:更新内容包含分类说明 `apps/docs/tests/e2e/changelog.spec.ts` (场景 4.3)
+- [X] T056 [P] [US4] E2E 测试:破坏性变更包含迁移指南 `apps/docs/tests/e2e/changelog.spec.ts` (场景 4.4)
 
 ### Implementation for User Story 4
 
-- [ ] T057 [US4] 创建更新日志页面:`apps/docs/docs/changelog/index.md` (按版本倒序,包含 v1.2.0, v1.1.0, v1.0.0 示例)
-- [ ] T058 [US4] 为每个版本添加分类说明:新增功能、Bug 修复、破坏性变更、性能优化、文档更新
-- [ ] T059 [US4] 为破坏性变更添加迁移指南和代码示例
-- [ ] T060 [US4] 在导航栏添加"更新日志"链接
+- [X] T057 [US4] 创建更新日志页面:`apps/docs/docs/changelog/index.md` (按版本倒序,包含 v1.2.0, v1.1.0, v1.0.0 示例)
+- [X] T058 [US4] 为每个版本添加分类说明:新增功能、Bug 修复、破坏性变更、性能优化、文档更新
+- [X] T059 [US4] 为破坏性变更添加迁移指南和代码示例
+- [X] T060 [US4] 在导航栏添加"更新日志"链接
 
 **Checkpoint**: 所有用户故事(P1-P4)都独立可用 - 文档站核心功能完整
 

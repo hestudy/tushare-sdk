@@ -1,0 +1,10 @@
+{
+  "income": {
+    "title": "利润表",
+    "order": 1
+  },
+  "balance": {
+    "title": "资产负债表",
+    "order": 2
+  }
+}
