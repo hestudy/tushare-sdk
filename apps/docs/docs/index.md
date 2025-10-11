@@ -31,15 +31,15 @@ keywords: [Tushare, SDK, TypeScript, 股票数据, 基金数据, API文档, 金�
 
 ```bash
 # 安装
-npm install @tushare/sdk
+npm install @hestudy/tushare-sdk
 
 # 或使用 pnpm
-pnpm add @tushare/sdk
+pnpm add @hestudy/tushare-sdk
 ```
 
 ```typescript
 // 使用示例
-import { getStockBasic } from '@tushare/sdk';
+import { getStockBasic } from '@hestudy/tushare-sdk';
 
 // 获取所有上市股票
 const stocks = await getStockBasic({ list_status: 'L' });

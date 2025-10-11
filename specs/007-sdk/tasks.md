@@ -22,9 +22,9 @@
 
 **Purpose**: 准备文档更新所需的基础环境
 
-- [ ] T001 验证 rspress 文档站可以正常构建 (运行 `pnpm docs:build`)
-- [ ] T002 验证 SDK 源代码类型检查通过 (运行 `pnpm --filter @hestudy/tushare-sdk type-check`)
-- [ ] T003 [P] 备份现有文档文件 (apps/docs/docs/guide/ 和 apps/docs/docs/api/)
+- [X] T001 验证 rspress 文档站可以正常构建 (运行 `pnpm docs:build`)
+- [X] T002 验证 SDK 源代码类型检查通过 (运行 `pnpm --filter @hestudy/tushare-sdk type-check`)
+- [X] T003 [P] 备份现有文档文件 (apps/docs/docs/guide/ 和 apps/docs/docs/api/)
 
 ---
 
@@ -34,11 +34,11 @@
 
 **⚠️ CRITICAL**: 必须完成本阶段,才能开始任何用户故事的文档更新
 
-- [ ] T004 检查 rspress.config.ts 中的导航配置,移除或标注指向未实现 API 的链接 (如 fund/basic, finance/income)
-- [ ] T005 [P] 更新 apps/docs/docs/guide/installation.md - 纠正包名为 `@hestudy/tushare-sdk`
-- [ ] T006 [P] 检查现有文档中所有 import 语句,批量替换错误的包名引用
+- [X] T004 检查 rspress.config.ts 中的导航配置,移除或标注指向未实现 API 的链接 (如 fund/basic, finance/income)
+- [X] T005 [P] 更新 apps/docs/docs/guide/installation.md - 纠正包名为 `@hestudy/tushare-sdk`
+- [X] T006 [P] 检查现有文档中所有 import 语句,批量替换错误的包名引用
 
-**Checkpoint**: 基础配置纠正完成 - 可以开始各用户故事的文档更新
+**Checkpoint**: ✅ 基础配置纠正完成 - 可以开始各用户故事的文档更新
 
 ---
 
@@ -50,7 +50,7 @@
 
 ### API 文档更新任务 - 股票基础信息
 
-- [ ] T007 [US1] 更新 apps/docs/docs/api/stock/basic.md - 股票基础信息 API
+- [X] T007 [US1] 更新 apps/docs/docs/api/stock/basic.md - 股票基础信息 API
   - 从 packages/tushare-sdk/src/client/TushareClient.ts 提取 getStockBasic 方法签名和 JSDoc
   - 从 packages/tushare-sdk/src/models/stock.ts 提取 StockBasicParams 和 StockBasicItem 类型定义
   - 使用 contracts/api-page-structure.md 模板更新文档

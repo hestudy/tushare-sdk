@@ -22,7 +22,7 @@ TUSHARE_TOKEN=your_api_token_here
 然后在代码中使用:
 
 ```typescript
-import { configure } from '@hestudy/tushare-sdk';
+import { configure } from '@tushare/sdk';
 
 // SDK 会自动读取环境变量 TUSHARE_TOKEN
 configure();
@@ -36,7 +36,7 @@ configure();
 ### 方式 2: 代码中直接配置
 
 ```typescript
-import { configure } from '@hestudy/tushare-sdk';
+import { configure } from '@tushare/sdk';
 
 configure({
   token: 'your_api_token_here'
@@ -60,7 +60,7 @@ module.exports = {
 然后在代码中加载:
 
 ```typescript
-import { configure } from '@hestudy/tushare-sdk';
+import { configure } from '@tushare/sdk';
 import config from './tushare.config.js';
 
 configure(config);
@@ -80,7 +80,7 @@ configure(config);
 ### 完整配置示例
 
 ```typescript
-import { configure } from '@hestudy/tushare-sdk';
+import { configure } from '@tushare/sdk';
 
 configure({
   // API Token (必填)
@@ -197,7 +197,7 @@ TUSHARE_TIMEOUT=30000
 ### 在代码中使用
 
 ```typescript
-import { configure } from '@hestudy/tushare-sdk';
+import { configure } from '@tushare/sdk';
 
 configure({
   token: process.env.TUSHARE_TOKEN!,
@@ -211,7 +211,7 @@ configure({
 配置完成后,可以通过以下代码验证配置是否正确:
 
 ```typescript
-import { configure, getStockBasic } from '@hestudy/tushare-sdk';
+import { configure, getStockBasic } from '@tushare/sdk';
 
 async function testConfig() {
   try {
@@ -267,7 +267,7 @@ npm install dotenv
 
 ```typescript
 import dotenv from 'dotenv';
-import { configure } from '@hestudy/tushare-sdk';
+import { configure } from '@tushare/sdk';
 
 // 根据环境加载不同的配置文件
 const envFile = process.env.NODE_ENV === 'production' 
@@ -287,14 +287,14 @@ A: 不需要。只需在应用入口文件(如 `index.ts` 或 `app.ts`)配置一
 
 ```typescript
 // index.ts (入口文件)
-import { configure } from '@hestudy/tushare-sdk';
+import { configure } from '@tushare/sdk';
 
 configure({
   token: process.env.TUSHARE_TOKEN!
 });
 
 // 其他文件可以直接使用,无需重复配置
-import { getStockBasic } from '@hestudy/tushare-sdk';
+import { getStockBasic } from '@tushare/sdk';
 
 const stocks = await getStockBasic();
 ```

@@ -20,7 +20,7 @@ description: 通过简单的示例快速上手 Tushare SDK
 让我们从最简单的示例开始 - 获取所有上市股票的列表:
 
 ```typescript
-import { getStockBasic } from '@hestudy/tushare-sdk';
+import { getStockBasic } from '@tushare/sdk';
 
 async function main() {
   try {
@@ -58,7 +58,7 @@ main();
 获取指定股票的历史日线数据:
 
 ```typescript
-import { getStockDaily } from '@hestudy/tushare-sdk';
+import { getStockDaily } from '@tushare/sdk';
 
 async function main() {
   try {
@@ -88,7 +88,7 @@ main();
 获取指定基金的净值数据:
 
 ```typescript
-import { getFundNav } from '@hestudy/tushare-sdk';
+import { getFundNav } from '@tushare/sdk';
 
 async function main() {
   try {
@@ -117,7 +117,7 @@ main();
 获取上市公司的利润表数据:
 
 ```typescript
-import { getIncome } from '@hestudy/tushare-sdk';
+import { getIncome } from '@tushare/sdk';
 
 async function main() {
   try {
@@ -145,7 +145,7 @@ main();
 SDK 会抛出不同类型的错误,建议使用 try-catch 进行错误处理:
 
 ```typescript
-import { getStockBasic, ApiError, ValidationError } from '@hestudy/tushare-sdk';
+import { getStockBasic, ApiError, ValidationError } from '@tushare/sdk';
 
 async function main() {
   try {
@@ -190,7 +190,7 @@ function fetchData() {
 如果需要批量获取多个股票的数据,可以使用 `Promise.all`:
 
 ```typescript
-import { getStockDaily } from '@hestudy/tushare-sdk';
+import { getStockDaily } from '@tushare/sdk';
 
 async function main() {
   const stockCodes = ['000001.SZ', '000002.SZ', '600000.SH'];

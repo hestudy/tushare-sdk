@@ -1,0 +1,10 @@
+{
+  "basic": {
+    "title": "基础信息",
+    "order": 1
+  },
+  "nav": {
+    "title": "净值数据",
+    "order": 2
+  }
+}

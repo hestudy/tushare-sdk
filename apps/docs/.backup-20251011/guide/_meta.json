@@ -1,0 +1,14 @@
+{
+  "installation": {
+    "title": "安装",
+    "order": 1
+  },
+  "quick-start": {
+    "title": "快速开始",
+    "order": 2
+  },
+  "configuration": {
+    "title": "配置",
+    "order": 3
+  }
+}
