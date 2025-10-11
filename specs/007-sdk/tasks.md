@@ -99,7 +99,7 @@
 
 ### 配置指南更新任务
 
-- [ ] T013 [US2] 更新 apps/docs/docs/guide/configuration.md - 配置指南
+- [X] T013 [US2] 更新 apps/docs/docs/guide/configuration.md - 配置指南
   - 从 packages/tushare-sdk/src/types/config.ts 提取所有配置接口定义
   - 包含 TushareConfig 主配置(7个属性)
   - 包含 RetryConfig 重试配置(4个属性) + 延迟计算公式说明
@@ -110,7 +110,7 @@
 
 ### 快速开始指南更新任务
 
-- [ ] T014 [US2] 更新 apps/docs/docs/guide/quick-start.md - 快速开始指南
+- [X] T014 [US2] 更新 apps/docs/docs/guide/quick-start.md - 快速开始指南
   - 纠正所有方法名 (确保使用 getStockBasic, getDailyQuote 等实际存在的方法)
   - 纠正所有包名引用为 `@hestudy/tushare-sdk`
   - 更新完整示例代码,确保可直接运行
@@ -119,8 +119,8 @@
 
 ### 验证
 
-- [ ] T015 [US2] 运行 pnpm docs:build 验证配置指南和快速开始页面构建成功
-- [ ] T016 [US2] 使用 contracts/guide-page-structure.md 中的 Validation Checklist 检查指南文档
+- [X] T015 [US2] 运行 pnpm docs:build 验证配置指南和快速开始页面构建成功
+- [X] T016 [US2] 使用 contracts/guide-page-structure.md 中的 Validation Checklist 检查指南文档
 
 **Checkpoint**: User Story 2 完成 - 用户可以查看完整的配置选项说明和高级特性应用指南
 
@@ -134,7 +134,7 @@
 
 ### 错误处理指南创建任务
 
-- [ ] T017 [US3] 创建 apps/docs/docs/guide/error-handling.md - 错误处理指南 (新文档)
+- [X] T017 [US3] 创建 apps/docs/docs/guide/error-handling.md - 错误处理指南 (新文档)
   - 从 packages/tushare-sdk/src/types/error.ts 提取 ApiErrorType 枚举(7个值)
   - 从 packages/tushare-sdk/src/types/error.ts 提取 ApiError 类属性
   - 包含错误类型表格(错误类型、说明、可重试性)
@@ -154,8 +154,8 @@
 
 ### 验证
 
-- [ ] T019 [US3] 运行 pnpm docs:build 验证错误处理指南构建成功
-- [ ] T020 [US3] 使用 contracts/guide-page-structure.md 中的 Validation Checklist 检查错误处理指南
+- [X] T019 [US3] 运行 pnpm docs:build 验证错误处理指南构建成功
+- [X] T020 [US3] 使用 contracts/guide-page-structure.md 中的 Validation Checklist 检查错误处理指南
 
 **Checkpoint**: User Story 3 完成 - 用户可以查看完整的错误处理机制和类型系统说明
 

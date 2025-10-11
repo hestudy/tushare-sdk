@@ -92,6 +92,7 @@ export default {
             { text: '安装', link: '/guide/installation' },
             { text: '快速开始', link: '/guide/quick-start' },
             { text: '配置', link: '/guide/configuration' },
+            { text: '错误处理', link: '/guide/error-handling' },
           ],
         },
       ],
