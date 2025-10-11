@@ -16,29 +16,29 @@ test.describe('搜索功能测试', () => {
     await page.goto('/');
     
     // When: 在搜索框输入 API 名称
-    // rspress 使用内置搜索,通常通过快捷键或搜索按钮触发
-    await page.click('[data-search-button]');
-    await page.fill('[data-search-input]', 'get_stock_basic');
+    // rspress 使用内置搜索,通过搜索按钮触发
+    await page.click('.rspress-nav-search-button');
+    await page.fill('.rspress-search-panel-input', 'stock');
     
     // Then: 显示相关搜索结果
-    const results = page.locator('[data-search-result]');
+    const results = page.locator('.rspress-search-suggest-item');
     await expect(results.first()).toBeVisible({ timeout: 5000 });
-    await expect(results.first()).toContainText('get_stock_basic');
+    await expect(results.first()).toContainText('Stock');
   });
 
   test('应该能够点击搜索结果跳转到 API 详情页', async ({ page }) => {
     // Given: 已显示搜索结果
     await page.goto('/');
-    await page.click('[data-search-button]');
-    await page.fill('[data-search-input]', 'get_stock_basic');
-    await page.waitForSelector('[data-search-result]', { timeout: 5000 });
+    await page.click('.rspress-nav-search-button');
+    await page.fill('.rspress-search-panel-input', 'getStockBasic');
+    await page.waitForSelector('.rspress-search-suggest-item', { timeout: 5000 });
     
     // When: 点击第一个搜索结果
-    await page.click('[data-search-result]:first-child');
+    await page.click('.rspress-search-suggest-item >> nth=0');
     
     // Then: 跳转到 API 详情页
     await expect(page).toHaveURL(/\/api\/stock\/basic/);
-    await expect(page.locator('h1')).toContainText('get_stock_basic');
+    await expect(page.locator('h1')).toContainText('getStockBasic');
   });
 
   test('API 详情页应该显示完整的 API 信息', async ({ page }) => {
@@ -62,12 +62,12 @@ test.describe('搜索功能测试', () => {
     await page.goto('/');
     
     // When: 搜索不存在的 API
-    await page.click('[data-search-button]');
-    await page.fill('[data-search-input]', 'nonexistent_api_xyz_12345');
+    await page.click('.rspress-nav-search-button');
+    await page.fill('.rspress-search-panel-input', 'nonexistent_api_xyz_12345');
     await page.waitForTimeout(1000); // 等待搜索完成
     
     // Then: 显示无结果提示或没有结果
-    const hasResults = await page.locator('[data-search-result]').count();
+    const hasResults = await page.locator('.rspress-search-suggest-item').count();
     expect(hasResults).toBe(0);
   });
 });
