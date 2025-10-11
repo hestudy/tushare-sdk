@@ -1,0 +1,103 @@
+/* 版本标签组件样式 */
+
+.version-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.375rem 0.75rem;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+/* 版本号 */
+.version-badge__version {
+  font-family: 'Monaco', 'Menlo', 'Courier New', monospace;
+  font-weight: 600;
+}
+
+/* 状态文本 */
+.version-badge__status {
+  font-size: 0.75rem;
+  padding: 0.125rem 0.5rem;
+  border-radius: 0.25rem;
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* 最新版本样式 */
+.version-badge--latest {
+  background-color: #10b981;
+  color: #ffffff;
+}
+
+.version-badge--latest:hover {
+  background-color: #059669;
+}
+
+/* 稳定版本样式 */
+.version-badge--stable {
+  background-color: #3b82f6;
+  color: #ffffff;
+}
+
+.version-badge--stable:hover {
+  background-color: #2563eb;
+}
+
+/* 已废弃版本样式 */
+.version-badge--deprecated {
+  background-color: #ef4444;
+  color: #ffffff;
+}
+
+.version-badge--deprecated:hover {
+  background-color: #dc2626;
+}
+
+/* 链接样式 */
+a.version-badge {
+  cursor: pointer;
+}
+
+a.version-badge:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* 非链接样式 */
+span.version-badge {
+  cursor: default;
+}
+
+/* 暗色主题支持 */
+@media (prefers-color-scheme: dark) {
+  .version-badge__status {
+    background-color: rgba(0, 0, 0, 0.2);
+  }
+
+  .version-badge--latest {
+    background-color: #059669;
+  }
+
+  .version-badge--latest:hover {
+    background-color: #047857;
+  }
+
+  .version-badge--stable {
+    background-color: #2563eb;
+  }
+
+  .version-badge--stable:hover {
+    background-color: #1d4ed8;
+  }
+
+  .version-badge--deprecated {
+    background-color: #dc2626;
+  }
+
+  .version-badge--deprecated:hover {
+    background-color: #b91c1c;
+  }
+}

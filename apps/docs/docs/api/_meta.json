@@ -1,0 +1,14 @@
+{
+  "stock": {
+    "title": "股票数据",
+    "order": 1
+  },
+  "fund": {
+    "title": "基金数据",
+    "order": 2
+  },
+  "finance": {
+    "title": "财务数据",
+    "order": 3
+  }
+}

@@ -1,0 +1,138 @@
+/* API 卡片组件样式 */
+
+.api-card {
+  display: block;
+  padding: 1.5rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  background-color: #ffffff;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.api-card:hover {
+  border-color: #3b82f6;
+  box-shadow: 0 4px 6px rgba(59, 130, 246, 0.1);
+  transform: translateY(-2px);
+}
+
+.api-card--deprecated {
+  opacity: 0.7;
+  border-color: #fbbf24;
+  background-color: #fffbeb;
+}
+
+.api-card--deprecated:hover {
+  border-color: #f59e0b;
+}
+
+/* 卡片头部 */
+.api-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.75rem;
+}
+
+.api-card__name {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #111827;
+  font-family: 'Monaco', 'Menlo', 'Courier New', monospace;
+}
+
+/* 标记徽章 */
+.api-card__badges {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.api-card__badge {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border-radius: 0.25rem;
+  white-space: nowrap;
+}
+
+.api-card__badge--new {
+  background-color: #dbeafe;
+  color: #1e40af;
+}
+
+.api-card__badge--deprecated {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+/* 描述 */
+.api-card__description {
+  margin: 0 0 1rem 0;
+  color: #6b7280;
+  line-height: 1.6;
+}
+
+/* 废弃说明 */
+.api-card__deprecation {
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  background-color: #fef3c7;
+  border-left: 3px solid #f59e0b;
+  border-radius: 0.25rem;
+  font-size: 0.875rem;
+  color: #92400e;
+}
+
+.api-card__deprecation strong {
+  font-weight: 600;
+}
+
+/* 标签 */
+.api-card__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.api-card__tag {
+  padding: 0.25rem 0.75rem;
+  background-color: #f3f4f6;
+  color: #374151;
+  font-size: 0.875rem;
+  border-radius: 9999px;
+}
+
+/* 暗色主题支持 */
+@media (prefers-color-scheme: dark) {
+  .api-card {
+    background-color: #1f2937;
+    border-color: #374151;
+    color: #f9fafb;
+  }
+
+  .api-card:hover {
+    border-color: #60a5fa;
+    box-shadow: 0 4px 6px rgba(96, 165, 250, 0.1);
+  }
+
+  .api-card--deprecated {
+    background-color: #422006;
+    border-color: #f59e0b;
+  }
+
+  .api-card__name {
+    color: #f9fafb;
+  }
+
+  .api-card__description {
+    color: #d1d5db;
+  }
+
+  .api-card__tag {
+    background-color: #374151;
+    color: #d1d5db;
+  }
+}

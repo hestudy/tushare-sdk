@@ -1,0 +1,147 @@
+name: Docs CI/CD
+
+on:
+  push:
+    branches:
+      - main
+      - 006-sdk
+    paths:
+      - 'apps/docs/**'
+      - 'packages/tushare-sdk/**'
+      - '.github/workflows/docs.yml'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'apps/docs/**'
+      - 'packages/tushare-sdk/**'
+
+jobs:
+  # 构建和测试
+  build-and-test:
+    name: Build and Test Docs
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'pnpm'
+      
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      
+      - name: Build docs
+        run: pnpm --filter @tushare/docs build
+      
+      - name: Check build output
+        run: |
+          if [ ! -d "apps/docs/dist" ]; then
+            echo "Build failed: dist directory not found"
+            exit 1
+          fi
+          echo "Build successful"
+      
+      - name: Install Playwright browsers
+        run: pnpm --filter @tushare/docs exec playwright install --with-deps chromium
+      
+      - name: Run E2E tests
+        run: pnpm --filter @tushare/docs test:e2e
+        continue-on-error: true
+      
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: apps/docs/playwright-report/
+          retention-days: 30
+      
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: docs-dist
+          path: apps/docs/dist/
+          retention-days: 7
+
+  # 部署到 GitHub Pages (仅在 main 分支)
+  deploy-github-pages:
+    name: Deploy to GitHub Pages
+    needs: build-and-test
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    
+    steps:
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: docs-dist
+          path: dist
+      
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+      
+      - name: Upload to GitHub Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+      
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+  # 性能检查 (可选)
+  performance-check:
+    name: Performance Check
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: docs-dist
+          path: dist
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+      
+      - name: Install Lighthouse CI
+        run: npm install -g @lhci/cli
+      
+      - name: Run Lighthouse CI
+        run: |
+          lhci autorun --config=lighthouserc.json || echo "Lighthouse CI completed"
+        continue-on-error: true
+      
+      - name: Upload Lighthouse results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-results
+          path: .lighthouseci/
+          retention-days: 7

@@ -11,6 +11,8 @@ Auto-generated from all feature plans. Last updated: 2025-10-09
 - TypeScript 5.x+ (严格模式) + 无新增依赖,使用现有 TushareClien (004-sdk)
 - N/A (API 客户端,无本地存储) (004-sdk)
 - TypeScript 5.x+ / Node.js 18+ LTS + @hestudy/tushare-sdk (本地 workspace 依赖), 现有 node-demo 工具函数 (005-node-demo)
+- TypeScript 5.x+ / Node.js 18+ LTS + rspress (静态站点生成器), @rspress/plugin-* (官方插件) (006-sdk)
+- 静态文件(Markdown/MDX 文档源文件) (006-sdk)
 
 ## Project Structure
 ```
@@ -25,9 +27,9 @@ npm test [ONLY COMMANDS FOR ACTIVE TECHNOLOGIES][ONLY COMMANDS FOR ACTIVE TECHNO
 TypeScript 5.x+, Node.js 18+ LTS: Follow standard conventions
 
 ## Recent Changes
+- 006-sdk: Added TypeScript 5.x+ / Node.js 18+ LTS + rspress (静态站点生成器), @rspress/plugin-* (官方插件)
 - 005-node-demo: Added TypeScript 5.x+ / Node.js 18+ LTS + @hestudy/tushare-sdk (本地 workspace 依赖), 现有 node-demo 工具函数
 - 004-sdk: Added TypeScript 5.x+ (严格模式) + 无新增依赖,使用现有 TushareClien
-- 003-apps-node-sdk: Added TypeScript 5.x+ / Node.js 18+ LTS + 本地 @tushare/sdk 包 (workspace 依赖), dotenv (环境变量管理)
 
 <!-- MANUAL ADDITIONS START -->
 <!-- MANUAL ADDITIONS END -->

@@ -1,0 +1,140 @@
+/* 代码标签页组件样式 */
+
+.code-tabs {
+  margin: 1.5rem 0;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  background-color: #ffffff;
+}
+
+/* 标签页头部 */
+.code-tabs__header {
+  display: flex;
+  border-bottom: 1px solid #e5e7eb;
+  background-color: #f9fafb;
+}
+
+/* 标签按钮 */
+.code-tabs__tab {
+  flex: 1;
+  padding: 0.75rem 1.5rem;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #6b7280;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.code-tabs__tab:hover {
+  color: #374151;
+  background-color: #f3f4f6;
+}
+
+.code-tabs__tab--active {
+  color: #3b82f6;
+  border-bottom-color: #3b82f6;
+  background-color: #ffffff;
+}
+
+/* 标签页内容 */
+.code-tabs__content {
+  padding: 0;
+}
+
+/* 描述 */
+.code-tabs__description {
+  padding: 1rem 1.5rem;
+  background-color: #f9fafb;
+  border-bottom: 1px solid #e5e7eb;
+  color: #6b7280;
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+/* 代码块 */
+.code-tabs__code {
+  margin: 0;
+  padding: 1.5rem;
+  background-color: #1f2937;
+  color: #f9fafb;
+  font-family: 'Monaco', 'Menlo', 'Courier New', monospace;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  overflow-x: auto;
+}
+
+.code-tabs__code code {
+  background: none;
+  padding: 0;
+  color: inherit;
+  font-size: inherit;
+  font-family: inherit;
+}
+
+/* 空状态 */
+.code-tabs-empty {
+  padding: 2rem;
+  text-align: center;
+  color: #9ca3af;
+  font-style: italic;
+}
+
+/* 响应式设计 */
+@media (max-width: 640px) {
+  .code-tabs__tab {
+    padding: 0.5rem 1rem;
+    font-size: 0.8125rem;
+  }
+
+  .code-tabs__code {
+    padding: 1rem;
+    font-size: 0.8125rem;
+  }
+}
+
+/* 暗色主题支持 */
+@media (prefers-color-scheme: dark) {
+  .code-tabs {
+    background-color: #1f2937;
+    border-color: #374151;
+  }
+
+  .code-tabs__header {
+    background-color: #111827;
+    border-bottom-color: #374151;
+  }
+
+  .code-tabs__tab {
+    color: #9ca3af;
+  }
+
+  .code-tabs__tab:hover {
+    color: #d1d5db;
+    background-color: #1f2937;
+  }
+
+  .code-tabs__tab--active {
+    color: #60a5fa;
+    border-bottom-color: #60a5fa;
+    background-color: #1f2937;
+  }
+
+  .code-tabs__description {
+    background-color: #111827;
+    border-bottom-color: #374151;
+    color: #9ca3af;
+  }
+
+  .code-tabs__code {
+    background-color: #0f172a;
+    color: #e2e8f0;
+  }
+
+  .code-tabs-empty {
+    color: #6b7280;
+  }
+}
