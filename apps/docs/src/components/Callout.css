@@ -1,0 +1,178 @@
+/* 提示框组件样式 */
+
+.callout {
+  margin: 1.5rem 0;
+  border-radius: 0.5rem;
+  border-left: 4px solid;
+  overflow: hidden;
+  transition: all 0.2s ease;
+}
+
+/* 提示框头部 */
+.callout__header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  font-weight: 600;
+}
+
+.callout__header--collapsible {
+  cursor: pointer;
+  user-select: none;
+}
+
+.callout__header--collapsible:hover {
+  opacity: 0.9;
+}
+
+/* 图标 */
+.callout__icon {
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+/* 标题 */
+.callout__title {
+  flex: 1;
+  font-size: 1rem;
+}
+
+/* 折叠按钮 */
+.callout__toggle {
+  font-size: 0.75rem;
+  transition: transform 0.2s ease;
+}
+
+.callout__toggle--open {
+  transform: rotate(180deg);
+}
+
+/* 内容 */
+.callout__content {
+  padding: 0 1rem 1rem 1rem;
+  line-height: 1.6;
+}
+
+.callout__content > *:first-child {
+  margin-top: 0;
+}
+
+.callout__content > *:last-child {
+  margin-bottom: 0;
+}
+
+/* Info 类型 */
+.callout--info {
+  background-color: #eff6ff;
+  border-left-color: #3b82f6;
+}
+
+.callout--info .callout__header {
+  color: #1e40af;
+}
+
+.callout--info .callout__content {
+  color: #1e3a8a;
+}
+
+/* Warning 类型 */
+.callout--warning {
+  background-color: #fffbeb;
+  border-left-color: #f59e0b;
+}
+
+.callout--warning .callout__header {
+  color: #92400e;
+}
+
+.callout--warning .callout__content {
+  color: #78350f;
+}
+
+/* Danger 类型 */
+.callout--danger {
+  background-color: #fef2f2;
+  border-left-color: #ef4444;
+}
+
+.callout--danger .callout__header {
+  color: #991b1b;
+}
+
+.callout--danger .callout__content {
+  color: #7f1d1d;
+}
+
+/* Success 类型 */
+.callout--success {
+  background-color: #f0fdf4;
+  border-left-color: #10b981;
+}
+
+.callout--success .callout__header {
+  color: #065f46;
+}
+
+.callout--success .callout__content {
+  color: #064e3b;
+}
+
+/* 暗色主题支持 */
+@media (prefers-color-scheme: dark) {
+  /* Info 类型 */
+  .callout--info {
+    background-color: #1e3a8a;
+    border-left-color: #60a5fa;
+  }
+
+  .callout--info .callout__header {
+    color: #dbeafe;
+  }
+
+  .callout--info .callout__content {
+    color: #bfdbfe;
+  }
+
+  /* Warning 类型 */
+  .callout--warning {
+    background-color: #78350f;
+    border-left-color: #fbbf24;
+  }
+
+  .callout--warning .callout__header {
+    color: #fef3c7;
+  }
+
+  .callout--warning .callout__content {
+    color: #fde68a;
+  }
+
+  /* Danger 类型 */
+  .callout--danger {
+    background-color: #7f1d1d;
+    border-left-color: #f87171;
+  }
+
+  .callout--danger .callout__header {
+    color: #fee2e2;
+  }
+
+  .callout--danger .callout__content {
+    color: #fecaca;
+  }
+
+  /* Success 类型 */
+  .callout--success {
+    background-color: #064e3b;
+    border-left-color: #34d399;
+  }
+
+  .callout--success .callout__header {
+    color: #d1fae5;
+  }
+
+  .callout--success .callout__content {
+    color: #a7f3d0;
+  }
+}

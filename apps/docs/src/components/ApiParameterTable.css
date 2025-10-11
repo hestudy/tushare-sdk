@@ -1,0 +1,183 @@
+/* API 参数表格组件样式 */
+
+.api-parameter-table-wrapper {
+  overflow-x: auto;
+  margin: 1.5rem 0;
+}
+
+.api-parameter-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+}
+
+/* 表头 */
+.api-parameter-table thead {
+  background-color: #f9fafb;
+}
+
+.api-parameter-table th {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  font-weight: 600;
+  color: #374151;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.api-parameter-table th:first-child {
+  border-top-left-radius: 0.5rem;
+}
+
+.api-parameter-table th:last-child {
+  border-top-right-radius: 0.5rem;
+}
+
+/* 表格行 */
+.api-parameter-table tbody tr {
+  border-bottom: 1px solid #e5e7eb;
+  transition: background-color 0.15s ease;
+}
+
+.api-parameter-table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.api-parameter-table tbody tr:hover {
+  background-color: #f9fafb;
+}
+
+/* 表格单元格 */
+.api-parameter-table td {
+  padding: 0.75rem 1rem;
+  color: #6b7280;
+  vertical-align: top;
+}
+
+/* 参数名 */
+.api-parameter-table__name code {
+  font-family: 'Monaco', 'Menlo', 'Courier New', monospace;
+  font-size: 0.875rem;
+  color: #3b82f6;
+  background-color: #eff6ff;
+  padding: 0.125rem 0.375rem;
+  border-radius: 0.25rem;
+}
+
+/* 类型 */
+.api-parameter-table__type code {
+  font-family: 'Monaco', 'Menlo', 'Courier New', monospace;
+  font-size: 0.875rem;
+  color: #059669;
+  background-color: #d1fae5;
+  padding: 0.125rem 0.375rem;
+  border-radius: 0.25rem;
+}
+
+/* 必填标记 */
+.api-parameter-table__required {
+  text-align: center;
+}
+
+.api-parameter-table__badge {
+  display: inline-block;
+  padding: 0.125rem 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border-radius: 0.25rem;
+}
+
+.api-parameter-table__badge--required {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+.api-parameter-table__badge--optional {
+  background-color: #e5e7eb;
+  color: #6b7280;
+}
+
+/* 描述 */
+.api-parameter-table__description {
+  line-height: 1.6;
+  color: #374151;
+}
+
+/* 默认值和示例 */
+.api-parameter-table__default code,
+.api-parameter-table__example code {
+  font-family: 'Monaco', 'Menlo', 'Courier New', monospace;
+  font-size: 0.875rem;
+  color: #6b7280;
+  background-color: #f3f4f6;
+  padding: 0.125rem 0.375rem;
+  border-radius: 0.25rem;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .api-parameter-table {
+    font-size: 0.8125rem;
+  }
+
+  .api-parameter-table th,
+  .api-parameter-table td {
+    padding: 0.5rem 0.75rem;
+  }
+}
+
+/* 暗色主题支持 */
+@media (prefers-color-scheme: dark) {
+  .api-parameter-table {
+    background-color: #1f2937;
+    border-color: #374151;
+  }
+
+  .api-parameter-table thead {
+    background-color: #111827;
+  }
+
+  .api-parameter-table th {
+    color: #f9fafb;
+    border-bottom-color: #374151;
+  }
+
+  .api-parameter-table tbody tr {
+    border-bottom-color: #374151;
+  }
+
+  .api-parameter-table tbody tr:hover {
+    background-color: #111827;
+  }
+
+  .api-parameter-table td {
+    color: #d1d5db;
+  }
+
+  .api-parameter-table__name code {
+    color: #60a5fa;
+    background-color: #1e3a8a;
+  }
+
+  .api-parameter-table__type code {
+    color: #34d399;
+    background-color: #064e3b;
+  }
+
+  .api-parameter-table__description {
+    color: #f3f4f6;
+  }
+
+  .api-parameter-table__default code,
+  .api-parameter-table__example code {
+    color: #d1d5db;
+    background-color: #374151;
+  }
+
+  .api-parameter-table__badge--optional {
+    background-color: #374151;
+    color: #d1d5db;
+  }
+}

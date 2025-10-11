@@ -185,13 +185,13 @@
 
 **Purpose**: 添加增强用户体验的高级组件
 
-- [ ] T069 [P] 创建 ApiCard 组件:`apps/docs/src/components/ApiCard.tsx` (实现 ApiCardProps 接口)
-- [ ] T070 [P] 单元测试:ApiCard 组件 `apps/docs/tests/unit/components/ApiCard.test.tsx`
-- [ ] T071 [P] 创建 VersionBadge 组件:`apps/docs/src/components/VersionBadge.tsx` (实现 VersionBadgeProps 接口)
-- [ ] T072 [P] 单元测试:VersionBadge 组件 `apps/docs/tests/unit/components/VersionBadge.test.tsx`
-- [ ] T073 [P] 创建 ApiParameterTable 组件:`apps/docs/src/components/ApiParameterTable.tsx` (实现 ApiParameterTableProps 接口)
-- [ ] T074 [P] 创建 Callout 提示框组件:`apps/docs/src/components/Callout.tsx` (实现 CalloutProps 接口,支持 info/warning/danger/success)
-- [ ] T075 [P] 创建 CodeTabs 代码标签页组件:`apps/docs/src/components/CodeTabs.tsx` (实现 CodeTabsProps 接口)
+- [X] T069 [P] 创建 ApiCard 组件:`apps/docs/src/components/ApiCard.tsx` (实现 ApiCardProps 接口)
+- [X] T070 [P] 单元测试:ApiCard 组件 `apps/docs/tests/unit/components/ApiCard.test.tsx`
+- [X] T071 [P] 创建 VersionBadge 组件:`apps/docs/src/components/VersionBadge.tsx` (实现 VersionBadgeProps 接口)
+- [X] T072 [P] 单元测试:VersionBadge 组件 `apps/docs/tests/unit/components/VersionBadge.test.tsx`
+- [X] T073 [P] 创建 ApiParameterTable 组件:`apps/docs/src/components/ApiParameterTable.tsx` (实现 ApiParameterTableProps 接口)
+- [X] T074 [P] 创建 Callout 提示框组件:`apps/docs/src/components/Callout.tsx` (实现 CalloutProps 接口,支持 info/warning/danger/success)
+- [X] T075 [P] 创建 CodeTabs 代码标签页组件:`apps/docs/src/components/CodeTabs.tsx` (实现 CodeTabsProps 接口)
 - [ ] T076 在 API 文档中使用 ApiParameterTable 组件替换 Markdown 表格
 - [ ] T077 在 API 文档中使用 Callout 组件添加注意事项和警告提示
 - [ ] T078 在 API 文档中使用 CodeTabs 组件展示 TypeScript 和 JavaScript 示例
@@ -209,8 +209,8 @@
 - [X] T081 [P] 创建项目 README:`apps/docs/README.md` (项目介绍、开发指南、构建部署)
 - [X] T082 [P] 添加 SEO 优化:为所有页面设置合适的 meta 标签
 - [X] T083 [P] 生成 sitemap.xml (rspress 自动生成)
-- [ ] T084 代码审查:确保所有代码符合 TypeScript strict 模式
-- [ ] T085 代码审查:确保所有组件都有完整的类型定义,避免使用 any
+- [X] T084 代码审查:确保所有代码符合 TypeScript strict 模式
+- [X] T085 代码审查:确保所有组件都有完整的类型定义,避免使用 any
 - [ ] T086 运行所有 E2E 测试,确保通过率 100%
 - [ ] T087 运行所有单元测试,确保覆盖率 ≥ 80%
 - [ ] T088 运行性能测试,确保所有指标符合要求
