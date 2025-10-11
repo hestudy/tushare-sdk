@@ -15,6 +15,13 @@ export default defineConfig({
     // 全局测试设置
     globals: true,
     
+    // 测试设置文件
+    setupFiles: ['./tests/setup.ts'],
+    
+    // 只包含单元测试,排除 E2E 和性能测试
+    include: ['tests/unit/**/*.test.{ts,tsx}'],
+    exclude: ['tests/e2e/**', 'tests/performance/**', 'node_modules/**'],
+    
     // 覆盖率配置
     coverage: {
       provider: 'v8',
