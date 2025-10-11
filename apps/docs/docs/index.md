@@ -39,10 +39,12 @@ pnpm add @hestudy/tushare-sdk
 
 ```typescript
 // 使用示例
-import { getStockBasic } from '@hestudy/tushare-sdk';
+import { TushareClient } from '@hestudy/tushare-sdk';
+
+const client = new TushareClient({ token: 'YOUR_TOKEN' });
 
 // 获取所有上市股票
-const stocks = await getStockBasic({ list_status: 'L' });
+const stocks = await client.getStockBasic({ list_status: 'L' });
 console.log(stocks);
 ```
 
