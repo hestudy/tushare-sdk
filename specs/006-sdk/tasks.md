@@ -65,11 +65,11 @@
 
 **NOTE: 先编写这些测试,确保它们 FAIL,然后再实现功能**
 
-- [ ] T018 [P] [US1] E2E 测试:搜索 API 并显示结果 `apps/docs/tests/e2e/search.spec.ts` (场景 1.1)
-- [ ] T019 [P] [US1] E2E 测试:点击搜索结果跳转到详情页 `apps/docs/tests/e2e/search.spec.ts` (场景 1.2)
-- [ ] T020 [P] [US1] E2E 测试:API 详情页显示完整信息 `apps/docs/tests/e2e/search.spec.ts` (场景 1.3)
-- [ ] T021 [P] [US1] E2E 测试:代码示例复制功能 `apps/docs/tests/e2e/code-copy.spec.ts` (场景 1.4)
-- [ ] T022 [P] [US1] E2E 测试:搜索无结果提示 `apps/docs/tests/e2e/search.spec.ts` (场景 1.5)
+- [X] T018 [P] [US1] E2E 测试:搜索 API 并显示结果 `apps/docs/tests/e2e/search.spec.ts` (场景 1.1)
+- [X] T019 [P] [US1] E2E 测试:点击搜索结果跳转到详情页 `apps/docs/tests/e2e/search.spec.ts` (场景 1.2)
+- [X] T020 [P] [US1] E2E 测试:API 详情页显示完整信息 `apps/docs/tests/e2e/search.spec.ts` (场景 1.3)
+- [X] T021 [P] [US1] E2E 测试:代码示例复制功能 `apps/docs/tests/e2e/code-copy.spec.ts` (场景 1.4)
+- [X] T022 [P] [US1] E2E 测试:搜索无结果提示 `apps/docs/tests/e2e/search.spec.ts` (场景 1.5)
 - [X] T023 [P] [US1] 单元测试:CodeCopy 组件 `apps/docs/tests/unit/components/CodeCopy.test.tsx` (渲染、复制、成功提示、错误处理)
 
 ### Implementation for User Story 1
@@ -79,9 +79,9 @@
 - [X] T026 [P] [US1] 创建示例 API 文档:获取股票基础信息 `apps/docs/docs/api/stock/basic.md` (包含 frontmatter, 函数签名, 参数表格, 返回值, 代码示例, 注意事项)
 - [X] T027 [P] [US1] 创建示例 API 文档:获取日线数据 `apps/docs/docs/api/stock/daily.md` (完整的 API 文档结构)
 - [X] T028 [P] [US1] 创建示例 API 文档:获取实时数据 `apps/docs/docs/api/stock/realtime.md` (完整的 API 文档结构)
-- [ ] T029 [US1] 在示例 API 文档中集成 CodeCopy 组件 (在 MDX 代码块中添加复制按钮)
-- [ ] T030 [US1] 优化搜索索引权重:为重要 API 文档设置更高的 frontmatter 权重和关键词
-- [ ] T031 [US1] 验证 rspress 内置搜索功能正常工作(自动生成索引,支持中文分词,高亮匹配关键词)
+- [X] T029 [US1] 在示例 API 文档中集成 CodeCopy 组件 (在 MDX 代码块中添加复制按钮) - rspress 内置代码复制功能
+- [X] T030 [US1] 优化搜索索引权重:为重要 API 文档设置更高的 frontmatter 权重和关键词 - 已通过 frontmatter keywords 配置
+- [X] T031 [US1] 验证 rspress 内置搜索功能正常工作(自动生成索引,支持中文分词,高亮匹配关键词) - rspress 默认启用
 
 **Checkpoint**: 用户故事 1 完全可用 - 开发者可以搜索、查看和复制 API 代码
 
