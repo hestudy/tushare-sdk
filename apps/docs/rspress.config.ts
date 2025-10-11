@@ -46,6 +46,15 @@ export default {
   outDir: 'dist',
 
   /**
+   * 开发服务器配置
+   * 注意: rspress 默认使用端口 3000
+   * 如需修改,可通过命令行参数: rspress dev --port 5173
+   */
+  // server: {
+  //   port: 3000,
+  // },
+
+  /**
    * 主题配置
    */
   themeConfig: {

@@ -25,8 +25,8 @@ export default defineConfig({
   
   // 共享配置
   use: {
-    // 基础 URL
-    baseURL: 'http://localhost:5173',
+    // 基础 URL (rspress 默认端口 3000)
+    baseURL: 'http://localhost:3000',
     
     // 失败时记录追踪
     trace: 'on-first-retry',
@@ -53,8 +53,10 @@ export default defineConfig({
   // 开发服务器配置
   webServer: {
     command: 'pnpm dev',
-    url: 'http://localhost:5173',
+    url: 'http://localhost:3000', // rspress 默认端口
     reuseExistingServer: !process.env.CI,
     timeout: 120 * 1000, // 2 分钟超时
+    stdout: 'pipe', // 显示服务器输出
+    stderr: 'pipe', // 显示错误输出
   },
 });
