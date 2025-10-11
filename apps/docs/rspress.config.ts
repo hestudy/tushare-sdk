@@ -1,10 +1,8 @@
-import { defineConfig } from '@rspress/core';
-
 /**
  * rspress 配置文件
  * 定义文档站的核心配置,包括站点信息、主题、导航、侧边栏等
  */
-export default defineConfig({
+export default {
   /**
    * 站点根路径
    * 如果部署在子路径下,需要设置此项
@@ -213,4 +211,4 @@ export default defineConfig({
      */
     exclude: ['**/fragments/**', '**/_*.md'],
   },
-});
+};
