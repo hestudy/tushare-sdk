@@ -22,15 +22,15 @@
 
 **Purpose**: 创建文档站项目基础结构
 
-- [ ] T001 在 `apps/` 目录下使用 rspress CLI 创建文档站项目 `apps/docs/`
-- [ ] T002 安装核心依赖:rspress, @rspress/core, @rspress/plugin-* 在 `apps/docs/package.json`
-- [ ] T003 [P] 安装测试依赖:vitest, @vitest/ui, @testing-library/react, @playwright/test 在 `apps/docs/package.json`
-- [ ] T004 [P] 创建项目目录结构:`docs/`, `docs/api/`, `docs/guide/`, `docs/changelog/`, `src/components/`, `src/theme/`, `tests/e2e/`, `tests/unit/components/`, `public/`
-- [ ] T005 [P] 配置 TypeScript:`apps/docs/tsconfig.json` (启用 strict 模式)
-- [ ] T006 [P] 配置 Vitest:`apps/docs/vitest.config.ts` (jsdom 环境,覆盖率配置)
-- [ ] T007 [P] 配置 Playwright:`apps/docs/playwright.config.ts` (E2E 测试配置,支持 Chrome 和 Mobile Chrome)
-- [ ] T008 更新根目录 `package.json` 添加文档站脚本:docs:dev, docs:build, docs:preview, docs:test, docs:test:e2e
-- [ ] T009 [P] 更新 `turbo.json` 添加文档站构建管道配置
+- [X] T001 在 `apps/` 目录下使用 rspress CLI 创建文档站项目 `apps/docs/`
+- [X] T002 安装核心依赖:rspress, @rspress/core, @rspress/plugin-* 在 `apps/docs/package.json`
+- [X] T003 [P] 安装测试依赖:vitest, @vitest/ui, @testing-library/react, @playwright/test 在 `apps/docs/package.json`
+- [X] T004 [P] 创建项目目录结构:`docs/`, `docs/api/`, `docs/guide/`, `docs/changelog/`, `src/components/`, `src/theme/`, `tests/e2e/`, `tests/unit/components/`, `public/`
+- [X] T005 [P] 配置 TypeScript:`apps/docs/tsconfig.json` (启用 strict 模式)
+- [X] T006 [P] 配置 Vitest:`apps/docs/vitest.config.ts` (jsdom 环境,覆盖率配置)
+- [X] T007 [P] 配置 Playwright:`apps/docs/playwright.config.ts` (E2E 测试配置,支持 Chrome 和 Mobile Chrome)
+- [X] T008 更新根目录 `package.json` 添加文档站脚本:docs:dev, docs:build, docs:preview, docs:test, docs:test:e2e
+- [X] T009 [P] 更新 `turbo.json` 添加文档站构建管道配置
 
 **Checkpoint**: 项目结构就绪,可以开始开发
 
@@ -42,14 +42,14 @@
 
 **⚠️ CRITICAL**: 此阶段完成前,用户故事无法开始
 
-- [ ] T010 配置 rspress 主站点信息:`apps/docs/rspress.config.ts` (title, description, icon, logo, base, root, outDir)
-- [ ] T011 配置 rspress 主题:`apps/docs/rspress.config.ts` (nav, sidebar, socialLinks, footer, lastUpdated, editLink, outline)
-- [ ] T012 配置 Markdown 选项:`apps/docs/rspress.config.ts` (theme, showLineNumbers, defaultWrapCode)
-- [ ] T013 配置构建优化:`apps/docs/rspress.config.ts` (builderConfig: sourceMap, performance, chunkSplit)
-- [ ] T014 [P] 创建首页:`apps/docs/docs/index.md` (pageType: home, 特性介绍, 快速开始示例)
-- [ ] T015 [P] 添加站点 Logo 和 Favicon:`apps/docs/public/logo.svg`, `apps/docs/public/logo-dark.svg`, `apps/docs/public/favicon.ico`
-- [ ] T016 [P] 创建基础 API 分类配置:`apps/docs/docs/api/_meta.json` (股票数据、基金数据、财务数据)
-- [ ] T017 [P] 创建股票数据子分类配置:`apps/docs/docs/api/stock/_meta.json` (基础信息、日线数据、实时数据)
+- [X] T010 配置 rspress 主站点信息:`apps/docs/rspress.config.ts` (title, description, icon, logo, base, root, outDir)
+- [X] T011 配置 rspress 主题:`apps/docs/rspress.config.ts` (nav, sidebar, socialLinks, footer, lastUpdated, editLink, outline)
+- [X] T012 配置 Markdown 选项:`apps/docs/rspress.config.ts` (theme, showLineNumbers, defaultWrapCode)
+- [X] T013 配置构建优化:`apps/docs/rspress.config.ts` (builderConfig: sourceMap, performance, chunkSplit)
+- [X] T014 [P] 创建首页:`apps/docs/docs/index.md` (pageType: home, 特性介绍, 快速开始示例)
+- [X] T015 [P] 添加站点 Logo 和 Favicon:`apps/docs/public/logo.svg`, `apps/docs/public/logo-dark.svg`, `apps/docs/public/favicon.ico`
+- [X] T016 [P] 创建基础 API 分类配置:`apps/docs/docs/api/_meta.json` (股票数据、基金数据、财务数据)
+- [X] T017 [P] 创建股票数据子分类配置:`apps/docs/docs/api/stock/_meta.json` (基础信息、日线数据、实时数据)
 
 **Checkpoint**: 基础设施就绪,用户故事实现可以并行开始
 
@@ -70,15 +70,15 @@
 - [ ] T020 [P] [US1] E2E 测试:API 详情页显示完整信息 `apps/docs/tests/e2e/search.spec.ts` (场景 1.3)
 - [ ] T021 [P] [US1] E2E 测试:代码示例复制功能 `apps/docs/tests/e2e/code-copy.spec.ts` (场景 1.4)
 - [ ] T022 [P] [US1] E2E 测试:搜索无结果提示 `apps/docs/tests/e2e/search.spec.ts` (场景 1.5)
-- [ ] T023 [P] [US1] 单元测试:CodeCopy 组件 `apps/docs/tests/unit/components/CodeCopy.test.tsx` (渲染、复制、成功提示、错误处理)
+- [X] T023 [P] [US1] 单元测试:CodeCopy 组件 `apps/docs/tests/unit/components/CodeCopy.test.tsx` (渲染、复制、成功提示、错误处理)
 
 ### Implementation for User Story 1
 
-- [ ] T024 [P] [US1] 创建 CodeCopy 组件:`apps/docs/src/components/CodeCopy.tsx` (实现 CodeCopyProps 接口,使用 navigator.clipboard API)
-- [ ] T025 [P] [US1] 创建 CodeCopy 样式:`apps/docs/src/components/CodeCopy.css` (按钮样式,hover 和 active 状态)
-- [ ] T026 [P] [US1] 创建示例 API 文档:获取股票基础信息 `apps/docs/docs/api/stock/basic.md` (包含 frontmatter, 函数签名, 参数表格, 返回值, 代码示例, 注意事项)
-- [ ] T027 [P] [US1] 创建示例 API 文档:获取日线数据 `apps/docs/docs/api/stock/daily.md` (完整的 API 文档结构)
-- [ ] T028 [P] [US1] 创建示例 API 文档:获取实时数据 `apps/docs/docs/api/stock/realtime.md` (完整的 API 文档结构)
+- [X] T024 [P] [US1] 创建 CodeCopy 组件:`apps/docs/src/components/CodeCopy.tsx` (实现 CodeCopyProps 接口,使用 navigator.clipboard API)
+- [X] T025 [P] [US1] 创建 CodeCopy 样式:`apps/docs/src/components/CodeCopy.css` (按钮样式,hover 和 active 状态)
+- [X] T026 [P] [US1] 创建示例 API 文档:获取股票基础信息 `apps/docs/docs/api/stock/basic.md` (包含 frontmatter, 函数签名, 参数表格, 返回值, 代码示例, 注意事项)
+- [X] T027 [P] [US1] 创建示例 API 文档:获取日线数据 `apps/docs/docs/api/stock/daily.md` (完整的 API 文档结构)
+- [X] T028 [P] [US1] 创建示例 API 文档:获取实时数据 `apps/docs/docs/api/stock/realtime.md` (完整的 API 文档结构)
 - [ ] T029 [US1] 在示例 API 文档中集成 CodeCopy 组件 (在 MDX 代码块中添加复制按钮)
 - [ ] T030 [US1] 优化搜索索引权重:为重要 API 文档设置更高的 frontmatter 权重和关键词
 - [ ] T031 [US1] 验证 rspress 内置搜索功能正常工作(自动生成索引,支持中文分词,高亮匹配关键词)

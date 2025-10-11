@@ -1,0 +1,14 @@
+{
+  "basic": {
+    "title": "基础信息",
+    "order": 1
+  },
+  "daily": {
+    "title": "日线数据",
+    "order": 2
+  },
+  "realtime": {
+    "title": "实时数据",
+    "order": 3
+  }
+}

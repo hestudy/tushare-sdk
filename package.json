@@ -13,7 +13,12 @@
     "format": "prettier --write \"**/*.{ts,tsx,md,json}\"",
     "clean": "turbo run clean && rm -rf node_modules",
     "prepublish": "pnpm build && pnpm test && pnpm type-check",
-    "publish:sdk": "cd packages/tushare-sdk && npm publish"
+    "publish:sdk": "cd packages/tushare-sdk && npm publish",
+    "docs:dev": "pnpm --filter @tushare/docs dev",
+    "docs:build": "pnpm --filter @tushare/docs build",
+    "docs:preview": "pnpm --filter @tushare/docs preview",
+    "docs:test": "pnpm --filter @tushare/docs test",
+    "docs:test:e2e": "pnpm --filter @tushare/docs test:e2e"
   },
   "devDependencies": {
     "@types/node": "^20.10.0",

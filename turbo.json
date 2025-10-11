@@ -4,7 +4,7 @@
   "pipeline": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": ["dist/**", ".rslib/**"]
+      "outputs": ["dist/**", ".rslib/**", ".rspress/**"]
     },
     "test": {
       "dependsOn": ["build"],
@@ -27,6 +27,20 @@
     },
     "clean": {
       "cache": false
+    },
+    "docs:dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "docs:build": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**"]
+    },
+    "docs:test": {
+      "dependsOn": ["^build"]
+    },
+    "docs:test:e2e": {
+      "dependsOn": ["^build"]
     }
   }
 }
