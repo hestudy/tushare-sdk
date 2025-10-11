@@ -1,6 +1,9 @@
 /**
  * rspress 配置文件
+ * 
  * 定义文档站的核心配置,包括站点信息、主题、导航、侧边栏等
+ * 
+ * @see https://rspress.dev/api/config/config-basic.html
  */
 export default {
   /**

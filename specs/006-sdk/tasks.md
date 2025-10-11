@@ -168,14 +168,14 @@
 
 **Purpose**: 确保文档站在移动设备上正常工作,并优化性能
 
-- [ ] T061 [P] E2E 测试:移动端侧边栏折叠 `apps/docs/tests/e2e/responsive.spec.ts` (场景 5.1)
-- [ ] T062 [P] E2E 测试:移动端代码块横向滚动 `apps/docs/tests/e2e/responsive.spec.ts` (场景 5.2)
-- [ ] T063 [P] 性能测试:首页加载时间 `apps/docs/tests/performance/page-load.spec.ts` (< 2s)
-- [ ] T064 [P] 性能测试:API 详情页加载时间 `apps/docs/tests/performance/page-load.spec.ts` (< 2s)
-- [ ] T065 [P] 性能测试:搜索响应时间 `apps/docs/tests/performance/search.spec.ts` (< 500ms)
-- [ ] T066 验证响应式布局在移动设备上正常工作(使用 Playwright Mobile Chrome 配置)
-- [ ] T067 优化图片:转换为 WebP 格式,启用懒加载
-- [ ] T068 配置缓存策略:静态资源长期缓存,HTML 短期缓存
+- [X] T061 [P] E2E 测试:移动端侧边栏折叠 `apps/docs/tests/e2e/responsive.spec.ts` (场景 5.1)
+- [X] T062 [P] E2E 测试:移动端代码块横向滚动 `apps/docs/tests/e2e/responsive.spec.ts` (场景 5.2)
+- [X] T063 [P] 性能测试:首页加载时间 `apps/docs/tests/performance/page-load.spec.ts` (< 2s)
+- [X] T064 [P] 性能测试:API 详情页加载时间 `apps/docs/tests/performance/page-load.spec.ts` (< 2s)
+- [X] T065 [P] 性能测试:搜索响应时间 `apps/docs/tests/performance/search.spec.ts` (< 500ms)
+- [X] T066 验证响应式布局在移动设备上正常工作(使用 Playwright Mobile Chrome 配置)
+- [X] T067 优化图片:转换为 WebP 格式,启用懒加载
+- [X] T068 配置缓存策略:静态资源长期缓存,HTML 短期缓存
 
 **Checkpoint**: 文档站在所有设备上性能良好
 
@@ -204,18 +204,18 @@
 
 **Purpose**: 跨用户故事的改进和优化
 
-- [ ] T079 [P] 为所有自定义组件添加完整的 JSDoc 注释
-- [ ] T080 [P] 为 rspress.config.ts 添加详细的配置注释
-- [ ] T081 [P] 创建项目 README:`apps/docs/README.md` (项目介绍、开发指南、构建部署)
-- [ ] T082 [P] 添加 SEO 优化:为所有页面设置合适的 meta 标签
-- [ ] T083 [P] 生成 sitemap.xml (rspress 自动生成)
+- [X] T079 [P] 为所有自定义组件添加完整的 JSDoc 注释
+- [X] T080 [P] 为 rspress.config.ts 添加详细的配置注释
+- [X] T081 [P] 创建项目 README:`apps/docs/README.md` (项目介绍、开发指南、构建部署)
+- [X] T082 [P] 添加 SEO 优化:为所有页面设置合适的 meta 标签
+- [X] T083 [P] 生成 sitemap.xml (rspress 自动生成)
 - [ ] T084 代码审查:确保所有代码符合 TypeScript strict 模式
 - [ ] T085 代码审查:确保所有组件都有完整的类型定义,避免使用 any
 - [ ] T086 运行所有 E2E 测试,确保通过率 100%
 - [ ] T087 运行所有单元测试,确保覆盖率 ≥ 80%
 - [ ] T088 运行性能测试,确保所有指标符合要求
-- [ ] T089 [P] 配置 CI/CD:添加文档站构建和测试到 GitHub Actions
-- [ ] T090 [P] 配置部署:创建 Vercel/Netlify 配置文件
+- [X] T089 [P] 配置 CI/CD:添加文档站构建和测试到 GitHub Actions
+- [X] T090 [P] 配置部署:创建 Vercel/Netlify 配置文件
 - [ ] T091 执行 quickstart.md 验证:按照快速入门指南完整走一遍流程
 
 **Checkpoint**: 文档站生产就绪

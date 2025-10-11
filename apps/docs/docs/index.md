@@ -1,5 +1,8 @@
 ---
 pageType: home
+title: Tushare SDK - 快速、类型安全的 Tushare 数据接口 SDK
+description: Tushare SDK 官方文档,提供完整的 TypeScript 类型定义,支持全文搜索、响应式设计,帮助开发者快速查阅 API 用法
+keywords: [Tushare, SDK, TypeScript, 股票数据, 基金数据, API文档, 金融数据]
 ---
 
 # Tushare SDK
