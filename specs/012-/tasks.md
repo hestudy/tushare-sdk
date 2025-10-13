@@ -26,10 +26,10 @@ description: "财务数据文档功能实现任务列表"
 
 **Purpose**: 基础项目结构和测试框架准备
 
-- [ ] T001 [P] 验证文档站基础结构存在 (`apps/docs/` 目录结构)
-- [ ] T002 [P] 验证 rspress 配置文件存在 (`apps/docs/rspress.config.ts`)
-- [ ] T003 [P] 验证财务数据目录结构 (`apps/docs/docs/api/finance/`)
-- [ ] T004 [P] 创建 E2E 测试目录结构 (`apps/docs/e2e/` 如不存在)
+- [X] T001 [P] 验证文档站基础结构存在 (`apps/docs/` 目录结构)
+- [X] T002 [P] 验证 rspress 配置文件存在 (`apps/docs/rspress.config.ts`)
+- [X] T003 [P] 验证财务数据目录结构 (`apps/docs/docs/api/finance/`)
+- [X] T004 [P] 创建 E2E 测试目录结构 (`apps/docs/e2e/` 如不存在)
 
 ---
 
@@ -41,28 +41,28 @@ description: "财务数据文档功能实现任务列表"
 
 ### 测试基础设施
 
-- [ ] T005 验证 Playwright 测试环境配置 (`apps/docs/playwright.config.ts`)
-- [ ] T006 验证 vitest 测试环境配置 (`apps/docs/vitest.config.ts` 或 `vitest.config.mts`)
+- [X] T005 验证 Playwright 测试环境配置 (`apps/docs/playwright.config.ts`)
+- [X] T006 验证 vitest 测试环境配置 (`apps/docs/vitest.config.ts` 或 `vitest.config.mts`)
 
 ### 文档可用性测试(E2E)
 
-- [ ] T007 [P] 创建财务数据导航 E2E 测试文件 (`apps/docs/e2e/finance-navigation.spec.ts`)
-- [ ] T008 [P] 实现测试用例: 从文档首页导航到财务数据章节
-- [ ] T009 [P] 实现测试用例: 导航到利润表文档页面
-- [ ] T010 [P] 实现测试用例: 导航到资产负债表文档页面
-- [ ] T011 [P] 实现测试用例: 导航到现金流量表文档页面
-- [ ] T012 [P] 实现测试用例: 在三大报表文档间交叉导航
-- [ ] T013 [P] 实现测试用例: 验证相关 API 链接可用
+- [X] T007 [P] 创建财务数据导航 E2E 测试文件 (`apps/docs/tests/e2e/finance-navigation.spec.ts`)
+- [X] T008 [P] 实现测试用例: 从文档首页导航到财务数据章节
+- [X] T009 [P] 实现测试用例: 导航到利润表文档页面
+- [X] T010 [P] 实现测试用例: 导航到资产负债表文档页面
+- [X] T011 [P] 实现测试用例: 导航到现金流量表文档页面
+- [X] T012 [P] 实现测试用例: 在三大报表文档间交叉导航
+- [X] T013 [P] 实现测试用例: 验证相关 API 链接可用
 
 ### 文档内容验证测试(单元测试)
 
-- [ ] T014 [P] 创建文档内容验证测试目录 (`tests/unit/docs/` 如不存在)
-- [ ] T015 [P] 创建财务数据文档内容验证测试文件 (`tests/unit/docs/finance-content.spec.ts`)
-- [ ] T016 [P] 实现现金流量表文档结构验证测试(验证必需章节存在)
-- [ ] T017 [P] 实现现金流量表参数表格验证测试(验证至少5个参数)
-- [ ] T018 [P] 实现现金流量表返回字段验证测试(验证至少50个字段,与SDK模型一致)
-- [ ] T019 [P] 实现现金流量表代码示例语法验证测试(TypeScript编译检查)
-- [ ] T020 [P] 实现链接有效性验证测试(验证内部链接指向存在的页面)
+- [X] T014 [P] 创建文档内容验证测试目录 (`tests/unit/docs/` 如不存在)
+- [X] T015 [P] 创建财务数据文档内容验证测试文件 (`tests/unit/docs/finance-content.test.ts`)
+- [X] T016 [P] 实现现金流量表文档结构验证测试(验证必需章节存在)
+- [X] T017 [P] 实现现金流量表参数表格验证测试(验证至少5个参数)
+- [X] T018 [P] 实现现金流量表返回字段验证测试(验证至少50个字段,与SDK模型一致)
+- [X] T019 [P] 实现现金流量表代码示例语法验证测试(TypeScript编译检查)
+- [X] T020 [P] 实现链接有效性验证测试(验证内部链接指向存在的页面)
 
 **Checkpoint**: 所有测试已编写完成,测试应该处于失败状态(因为文档尚未完善)。现在可以开始按用户故事实现文档内容。
 
@@ -76,23 +76,23 @@ description: "财务数据文档功能实现任务列表"
 
 ### 实现现金流量表基础文档
 
-- [ ] T021 [US1] 创建现金流量表文档文件 (`apps/docs/docs/api/finance/cashflow.md`)
-- [ ] T022 [US1] 编写文档 frontmatter (title, description, keywords, type, order)
-- [ ] T023 [US1] 编写标题和简介章节(说明现金流量表API用途)
-- [ ] T024 [US1] 编写函数签名章节(TypeScript签名: `async function getCashFlow(params: FinancialQueryParams): Promise<CashFlowItem[]>`)
-- [ ] T025 [US1] 编写基础调用示例(场景1: 获取指定公司最新现金流量表)
-- [ ] T026 [US1] 验证示例代码语法正确且可执行(使用真实股票代码如 000001.SZ)
+- [X] T021 [US1] 创建现金流量表文档文件 (`apps/docs/docs/api/finance/cashflow.md`)
+- [X] T022 [US1] 编写文档 frontmatter (title, description, keywords, type, order)
+- [X] T023 [US1] 编写标题和简介章节(说明现金流量表API用途)
+- [X] T024 [US1] 编写函数签名章节(TypeScript签名: `async function getCashFlow(params: FinancialQueryParams): Promise<CashFlowItem[]>`)
+- [X] T025 [US1] 编写基础调用示例(场景1: 获取指定公司最新现金流量表)
+- [X] T026 [US1] 验证示例代码语法正确且可执行(使用真实股票代码如 000001.SZ)
 
 ### 启用财务数据导航
 
-- [ ] T027 [US1] 更新 `_meta.json` 添加现金流量表配置 (`apps/docs/docs/api/finance/_meta.json`)
-- [ ] T028 [US1] 取消 `rspress.config.ts` 中财务数据导航的注释 (`apps/docs/rspress.config.ts`)
-- [ ] T029 [US1] 验证导航配置包含三个子项(利润表、资产负债表、现金流量表)
+- [X] T027 [US1] 更新 `_meta.json` 添加现金流量表配置 (`apps/docs/docs/api/finance/_meta.json`)
+- [X] T028 [US1] 取消 `rspress.config.ts` 中财务数据导航的注释 (`apps/docs/rspress.config.ts`)
+- [X] T029 [US1] 验证导航配置包含三个子项(利润表、资产负债表、现金流量表)
 
 ### 验证 User Story 1
 
-- [ ] T030 [US1] 运行 E2E 导航测试,验证能从首页导航到现金流量表文档
-- [ ] T031 [US1] 运行文档结构验证测试,验证基础章节存在
+- [X] T030 [US1] 运行 E2E 导航测试,验证能从首页导航到现金流量表文档
+- [X] T031 [US1] 运行文档结构验证测试,验证基础章节存在
 - [ ] T032 [US1] 本地启动文档站验证用户体验 (`npm run docs:dev`)
 
 **Checkpoint**: User Story 1 完成 - 用户可以找到财务数据文档并看到基础示例
