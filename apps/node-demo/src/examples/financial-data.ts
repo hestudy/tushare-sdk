@@ -25,6 +25,10 @@ async function queryIncomeStatement() {
 
     if (data.length > 0) {
       const income = data[0];
+      if (!income) {
+        console.log('未查询到数据');
+        return;
+      }
       console.log(`股票代码: ${income.ts_code}`);
       console.log(`报告期: ${income.end_date}`);
       console.log(`公告日期: ${income.ann_date}`);
@@ -65,6 +69,10 @@ async function queryBalanceSheet() {
 
     if (data.length > 0) {
       const balance = data[0];
+      if (!balance) {
+        console.log('未查询到数据');
+        return;
+      }
       console.log(`股票代码: ${balance.ts_code}`);
       console.log(`报告期: ${balance.end_date}`);
       console.log(`总资产: ${balance.total_assets?.toLocaleString()} 元`);
@@ -162,7 +170,12 @@ async function comprehensiveFinancialAnalysis() {
 
     const income = incomeData[0];
     const balance = balanceData[0];
-    const cashflow = cashflowData[0] || {};
+    const cashflow = cashflowData[0];
+
+    if (!income || !balance) {
+      console.log('未找到完整的财务数据');
+      return;
+    }
 
     console.log('一、盈利能力指标');
     console.log('─'.repeat(50));
@@ -195,10 +208,10 @@ async function comprehensiveFinancialAnalysis() {
 
     console.log('\n三、现金流指标');
     console.log('─'.repeat(50));
-    console.log(`经营活动现金流: ${cashflow.n_cashflow_act?.toLocaleString() || 'N/A'} 元`);
-    console.log(`投资活动现金流: ${cashflow.n_cashflow_inv_act?.toLocaleString() || 'N/A'} 元`);
-    console.log(`筹资活动现金流: ${cashflow.n_cash_flows_fnc_act?.toLocaleString() || 'N/A'} 元`);
-    if (cashflow.free_cashflow !== undefined) {
+    console.log(`经营活动现金流: ${cashflow?.n_cashflow_act?.toLocaleString() || 'N/A'} 元`);
+    console.log(`投资活动现金流: ${cashflow?.n_cashflow_inv_act?.toLocaleString() || 'N/A'} 元`);
+    console.log(`筹资活动现金流: ${cashflow?.n_cash_flows_fnc_act?.toLocaleString() || 'N/A'} 元`);
+    if (cashflow?.free_cashflow !== undefined && cashflow?.free_cashflow !== null) {
       console.log(`自由现金流: ${cashflow.free_cashflow.toLocaleString()} 元`);
     }
 
@@ -239,6 +252,7 @@ async function multiPeriodComparison() {
 
       if (data.length > 0) {
         const income = data[0];
+        if (!income) continue;
         const year = period.substring(0, 4);
         const revenue = income.total_revenue ? (income.total_revenue / 100000000).toFixed(2) : 'N/A';
         const profit = income.n_income_attr_p ? (income.n_income_attr_p / 100000000).toFixed(2) : 'N/A';
