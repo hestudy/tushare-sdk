@@ -97,15 +97,22 @@ test.describe('导航功能测试', () => {
     const guidePage = new GuidePage(page);
     await guidePage.gotoInstallation();
 
-    // When: 检查页面内容
-    const hasInstallation = await guidePage.contentContains('安装');
-    const hasQuickStart = await guidePage.contentContains('快速') ||
-                          await guidePage.contentContains('入门');
-    const hasConfiguration = await guidePage.contentContains('配置');
-    const hasErrorHandling = await guidePage.contentContains('错误');
+    // When/Then: 验证侧边栏包含所有链接
+    // 使用 locator 直接验证链接是否可见
+    const sidebar = page.locator('aside nav, aside.rspress-sidebar nav, complementary nav');
 
-    // Then: 验证侧边栏包含这些链接
-    expect(hasInstallation || hasQuickStart || hasConfiguration || hasErrorHandling).toBeTruthy();
+    // 验证包含 "安装" 链接
+    await expect(sidebar.locator('a:has-text("安装")')).toBeVisible();
+
+    // 验证包含 "快速开始" 或 "快速入门" 链接
+    const quickStartLink = sidebar.locator('a').filter({ hasText: /快速(开始|入门)/ });
+    await expect(quickStartLink.first()).toBeVisible();
+
+    // 验证包含 "配置" 链接
+    await expect(sidebar.locator('a:has-text("配置")')).toBeVisible();
+
+    // 验证包含 "错误处理" 链接
+    await expect(sidebar.locator('a:has-text("错误处理")')).toBeVisible();
   });
 
   test('在 /guide/installation 页点击侧边栏 "快速开始" 链接,验证跳转到 /guide/quick-start', async ({
