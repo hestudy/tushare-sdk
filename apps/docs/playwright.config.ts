@@ -31,15 +31,18 @@ export default defineConfig({
   use: {
     // 基础 URL (rspress 默认端口 3000)
     baseURL: 'http://localhost:3000',
-    
+
     // 失败时记录追踪
     trace: 'on-first-retry',
-    
+
     // 截图配置
     screenshot: 'only-on-failure',
-    
+
     // 视频配置
     video: 'retain-on-failure',
+
+    // 剪贴板权限
+    permissions: ['clipboard-read', 'clipboard-write'],
   },
 
   // 测试项目配置

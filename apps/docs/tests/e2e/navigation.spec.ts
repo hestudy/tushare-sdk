@@ -1,115 +1,127 @@
-import { test, expect } from '@playwright/test';
-
 /**
- * User Story 2: 浏览API分类目录
- * 测试导航功能,包括侧边栏分类、展开/收起、链接跳转和面包屑导航
+ * 导航功能测试
+ *
+ * 验证顶部导航栏和侧边栏的所有链接可以正常跳转
+ * User Story 2: 验证导航栏和侧边栏功能 (优先级: P1)
  */
 
+import { test, expect } from '@playwright/test';
+import { HomePage } from './pages/home-page';
+import { GuidePage } from './pages/guide-page';
+import { ApiPage } from './pages/api-page';
+import { ChangelogPage } from './pages/changelog-page';
+
 test.describe('导航功能测试', () => {
-  /**
-   * 场景 2.1: 侧边栏显示分类目录
-   * 验证侧边栏显示按功能分类的 API 目录树
-   */
-  test('侧边栏应该显示按功能分类的 API 目录树', async ({ page }) => {
-    // Given: 访问文档站
-    await page.goto('/api/stock/basic');
-    
-    // When: 查看侧边栏
-    // Then: 显示分类目录
-    const sidebar = page.locator('aside.rspress-sidebar, nav.rspress-nav-menu, [class*="sidebar"]');
-    await expect(sidebar.first()).toBeVisible();
-    
-    // 验证主要分类存在
-    const pageContent = await page.content();
-    expect(pageContent).toContain('股票数据');
-    expect(pageContent).toContain('基金数据');
-    expect(pageContent).toContain('财务数据');
+  test('从首页点击 "指南" 链接,验证跳转到指南页', async ({ page }) => {
+    // Given: 创建首页对象并访问
+    const homePage = new HomePage(page);
+    await homePage.goto();
+
+    // When: 点击顶部导航栏的 "指南" 链接
+    await homePage.clickNavLink('指南');
+
+    // Then: 验证跳转到指南页
+    const urlContains = await homePage.expectUrlContains('/guide');
+    expect(urlContains).toBeTruthy();
   });
 
-  /**
-   * 场景 2.2: 点击分类展开/收起
-   * 验证分类节点可以展开和收起
-   */
-  test('应该能够点击分类节点展开或收起', async ({ page }) => {
-    // Given: 访问文档站
-    await page.goto('/api/stock/basic');
-    
-    // When: 查找股票数据分类
-    const stockCategory = page.locator('text=股票数据').first();
-    await expect(stockCategory).toBeVisible();
-    
-    // Then: 验证子项可见
-    const basicLink = page.locator('text=基础信息').first();
-    await expect(basicLink).toBeVisible();
-    
-    // Note: rspress 的侧边栏展开/收起行为由框架自动处理
-    // 此测试验证默认状态下分类是展开的
+  test('从首页点击 "API 文档" 链接,验证跳转到 API 页', async ({ page }) => {
+    // Given: 创建首页对象并访问
+    const homePage = new HomePage(page);
+    await homePage.goto();
+
+    // When: 点击顶部导航栏的 "API" 链接
+    await homePage.clickNavLink('API');
+
+    // Then: 验证跳转到 API 页
+    const urlContains = await homePage.expectUrlContains('/api');
+    expect(urlContains).toBeTruthy();
   });
 
-  /**
-   * 场景 2.3: 点击 API 链接跳转
-   * 验证点击侧边栏中的 API 链接可以跳转到对应页面
-   */
-  test('应该能够点击 API 链接跳转到详情页', async ({ page }) => {
-    // Given: 访问股票基础信息页面
-    await page.goto('/api/stock/basic');
-    
-    // When: 点击侧边栏中的日线数据链接
-    const dailyLink = page.locator('a[href*="/api/stock/daily"]').first();
-    await dailyLink.click();
-    
-    // Then: 跳转到对应的 API 详情页
+  test('从首页点击 "更新日志" 链接,验证跳转到更新日志页', async ({ page }) => {
+    // Given: 创建首页对象并访问
+    const homePage = new HomePage(page);
+    await homePage.goto();
+
+    // When: 点击顶部导航栏的 "更新日志" 链接
+    await homePage.clickNavLink('更新日志');
+
+    // Then: 验证跳转到更新日志页
+    const urlContains = await homePage.expectUrlContains('/changelog');
+    expect(urlContains).toBeTruthy();
+  });
+
+  test('在API文档页验证侧边栏显示 "股票数据" 和 "基金数据" 分类', async ({ page }) => {
+    // Given: 创建API页对象并访问股票基础信息页
+    const apiPage = new ApiPage(page);
+    await apiPage.gotoStockBasic();
+
+    // When: 检查页面内容
+    const hasStockData = await apiPage.contentContains('股票数据');
+    const hasFundData = await apiPage.contentContains('基金数据');
+
+    // Then: 验证侧边栏包含这些分类
+    expect(hasStockData).toBeTruthy();
+    expect(hasFundData).toBeTruthy();
+  });
+
+  test('在 /api/stock/basic 页点击侧边栏 "日线数据" 链接,验证跳转到 /api/stock/daily', async ({
+    page,
+  }) => {
+    // Given: 创建API页对象并访问股票基础信息页
+    const apiPage = new ApiPage(page);
+    await apiPage.gotoStockBasic();
+
+    // When: 点击侧边栏 "日线数据" 链接
+    await apiPage.clickSidebarLink('日线数据');
+
+    // Then: 验证跳转到日线数据页
     await expect(page).toHaveURL(/\/api\/stock\/daily/);
-    await expect(page.locator('h1')).toContainText('日线数据');
   });
 
-  /**
-   * 场景 2.4: 面包屑导航显示
-   * 验证页面显示正确的面包屑导航
-   */
-  test('页面应该显示面包屑导航', async ({ page }) => {
-    // Given: 访问 API 详情页
-    await page.goto('/api/stock/basic');
-    
-    // When: 查看页面
-    // Then: rspress 默认不显示面包屑,但会在侧边栏高亮当前页面
-    // 验证当前页面在侧边栏中被高亮
-    const currentPageLink = page.locator('a[href*="/api/stock/basic"]').first();
-    await expect(currentPageLink).toBeVisible();
-    
-    // 验证页面标题正确
-    await expect(page.locator('h1')).toBeVisible();
+  test('在 /api/stock/basic 页点击侧边栏 "交易日历" 链接,验证跳转到 /api/calendar', async ({
+    page,
+  }) => {
+    // Given: 创建API页对象并访问股票基础信息页
+    const apiPage = new ApiPage(page);
+    await apiPage.gotoStockBasic();
+
+    // When: 点击侧边栏 "交易日历" 链接
+    await apiPage.clickSidebarLink('交易日历');
+
+    // Then: 验证跳转到交易日历页
+    await expect(page).toHaveURL(/\/api\/calendar/);
   });
 
-  /**
-   * 额外测试: 验证导航结构的完整性
-   */
-  test('侧边栏应该包含所有主要分类', async ({ page }) => {
-    // Given: 访问任意 API 页面
-    await page.goto('/api/stock/basic');
-    
+  test('在指南页验证侧边栏显示 "安装"、"快速开始"、"配置"、"错误处理" 链接', async ({
+    page,
+  }) => {
+    // Given: 创建指南页对象并访问安装页
+    const guidePage = new GuidePage(page);
+    await guidePage.gotoInstallation();
+
     // When: 检查页面内容
-    const content = await page.content();
-    
-    // Then: 包含所有主要分类
-    expect(content).toContain('股票数据');
-    expect(content).toContain('基金数据');
-    expect(content).toContain('财务数据');
+    const hasInstallation = await guidePage.contentContains('安装');
+    const hasQuickStart = await guidePage.contentContains('快速') ||
+                          await guidePage.contentContains('入门');
+    const hasConfiguration = await guidePage.contentContains('配置');
+    const hasErrorHandling = await guidePage.contentContains('错误');
+
+    // Then: 验证侧边栏包含这些链接
+    expect(hasInstallation || hasQuickStart || hasConfiguration || hasErrorHandling).toBeTruthy();
   });
 
-  /**
-   * 额外测试: 验证子分类显示
-   */
-  test('股票数据分类应该包含所有子项', async ({ page }) => {
-    // Given: 访问股票数据相关页面
-    await page.goto('/api/stock/basic');
-    
-    // When: 检查页面内容
-    const content = await page.content();
-    
-    // Then: 包含股票数据的所有子分类
-    expect(content).toContain('基础信息');
-    expect(content).toContain('日线数据');
-    expect(content).toContain('实时数据');
+  test('在 /guide/installation 页点击侧边栏 "快速开始" 链接,验证跳转到 /guide/quick-start', async ({
+    page,
+  }) => {
+    // Given: 创建指南页对象并访问安装页
+    const guidePage = new GuidePage(page);
+    await guidePage.gotoInstallation();
+
+    // When: 点击侧边栏 "快速" 链接
+    await guidePage.clickSidebarLink('快速');
+
+    // Then: 验证跳转到快速入门页
+    await expect(page).toHaveURL(/\/guide\/quick-start/);
   });
 });

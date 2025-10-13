@@ -24,10 +24,10 @@
 
 **目的**: 项目初始化和基础结构搭建
 
-- [ ] T001 移除过时的测试文件 `apps/docs/tests/e2e/search.spec.ts` 和 `apps/docs/tests/e2e/quick-start.spec.ts`
-- [ ] T002 创建 Page Object 目录结构 `apps/docs/tests/e2e/pages/`
-- [ ] T003 更新 `apps/docs/playwright.config.ts` 配置文件,设置测试目录、baseURL和webServer配置
-- [ ] T004 在 `apps/docs/package.json` 中添加E2E测试相关的npm脚本命令
+- [X] T001 移除过时的测试文件 `apps/docs/tests/e2e/search.spec.ts` 和 `apps/docs/tests/e2e/quick-start.spec.ts`
+- [X] T002 创建 Page Object 目录结构 `apps/docs/tests/e2e/pages/`
+- [X] T003 更新 `apps/docs/playwright.config.ts` 配置文件,设置测试目录、baseURL和webServer配置
+- [X] T004 在 `apps/docs/package.json` 中添加E2E测试相关的npm脚本命令
 
 ---
 
@@ -37,9 +37,9 @@
 
 **⚠️ 关键**: 在此阶段完成前,不能开始任何用户故事的工作
 
-- [ ] T005 [P] 创建 `BasePage` 基类 `apps/docs/tests/e2e/pages/base-page.ts`,实现通用页面交互方法(goto, getTitle, getMainHeading, waitForPageLoad, getSelectors)
-- [ ] T006 [P] 定义通用选择器常量 `apps/docs/tests/e2e/pages/selectors.ts`,包含导航栏、侧边栏、主内容区的选择器
-- [ ] T007 [P] 创建测试辅助工具 `apps/docs/tests/e2e/utils/test-helpers.ts`,包含权限授予、剪贴板操作等通用函数
+- [X] T005 [P] 创建 `BasePage` 基类 `apps/docs/tests/e2e/pages/base-page.ts`,实现通用页面交互方法(goto, getTitle, getMainHeading, waitForPageLoad, getSelectors)
+- [X] T006 [P] 定义通用选择器常量 `apps/docs/tests/e2e/pages/selectors.ts`,包含导航栏、侧边栏、主内容区的选择器
+- [X] T007 [P] 创建测试辅助工具 `apps/docs/tests/e2e/utils/test-helpers.ts`,包含权限授予、剪贴板操作等通用函数
 
 **检查点**: 基础层已就绪 - 现在可以开始并行实现用户故事
 
@@ -53,11 +53,11 @@
 
 ### User Story 1 实现
 
-- [ ] T008 [P] [US1] 创建 `HomePage` 页面对象 `apps/docs/tests/e2e/pages/home-page.ts`,继承 BasePage
-- [ ] T009 [P] [US1] 创建 `GuidePage` 页面对象 `apps/docs/tests/e2e/pages/guide-page.ts`,继承 BasePage,处理指南页共性
-- [ ] T010 [P] [US1] 创建 `ApiPage` 页面对象 `apps/docs/tests/e2e/pages/api-page.ts`,继承 BasePage,处理API文档页共性
-- [ ] T011 [P] [US1] 创建 `ChangelogPage` 页面对象 `apps/docs/tests/e2e/pages/changelog-page.ts`,继承 BasePage
-- [ ] T012 [US1] 实现核心页面可访问性测试 `apps/docs/tests/e2e/core-pages.spec.ts`,包含10个测试场景:
+- [X] T008 [P] [US1] 创建 `HomePage` 页面对象 `apps/docs/tests/e2e/pages/home-page.ts`,继承 BasePage
+- [X] T009 [P] [US1] 创建 `GuidePage` 页面对象 `apps/docs/tests/e2e/pages/guide-page.ts`,继承 BasePage,处理指南页共性
+- [X] T010 [P] [US1] 创建 `ApiPage` 页面对象 `apps/docs/tests/e2e/pages/api-page.ts`,继承 BasePage,处理API文档页共性
+- [X] T011 [P] [US1] 创建 `ChangelogPage` 页面对象 `apps/docs/tests/e2e/pages/changelog-page.ts`,继承 BasePage
+- [X] T012 [US1] 实现核心页面可访问性测试 `apps/docs/tests/e2e/core-pages.spec.ts`,包含10个测试场景:
   - 验证首页可访问并显示 "Tushare SDK" 标题
   - 验证快速入门页(`/guide/quick-start`)显示快速入门内容和代码示例
   - 验证安装指南页(`/guide/installation`)显示安装命令和包名
@@ -81,8 +81,8 @@
 
 ### User Story 2 实现
 
-- [ ] T013 [US2] 扩展 `BasePage`,添加导航相关方法(`clickNavLink`, `clickSidebarLink`, `expectUrlContains`),实现 INavigable 接口
-- [ ] T014 [US2] 实现导航功能测试 `apps/docs/tests/e2e/navigation.spec.ts`,包含8个测试场景:
+- [X] T013 [US2] 扩展 `BasePage`,添加导航相关方法(`clickNavLink`, `clickSidebarLink`, `expectUrlContains`),实现 INavigable 接口
+- [X] T014 [US2] 实现导航功能测试 `apps/docs/tests/e2e/navigation.spec.ts`,包含8个测试场景:
   - 从首页点击 "指南" 链接,验证跳转到 `/guide/`
   - 从首页点击 "API 文档" 链接,验证跳转到 `/api/`
   - 从首页点击 "更新日志" 链接,验证跳转到 `/changelog/`
@@ -104,8 +104,8 @@
 
 ### User Story 3 实现
 
-- [ ] T015 [US3] 扩展 `BasePage`,添加代码示例相关方法(`getCodeBlocks`, `getFirstCodeBlockContent`, `clickCopyButton`, `getClipboardContent`, `expectCodeBlockContains`),实现 ICodeExamples 接口
-- [ ] T016 [US3] 实现代码示例功能测试 `apps/docs/tests/e2e/code-examples.spec.ts`,包含7个测试场景:
+- [X] T015 [US3] 扩展 `BasePage`,添加代码示例相关方法(`getCodeBlocks`, `getFirstCodeBlockContent`, `clickCopyButton`, `getClipboardContent`, `expectCodeBlockContains`),实现 ICodeExamples 接口
+- [X] T016 [US3] 实现代码示例功能测试 `apps/docs/tests/e2e/code-examples.spec.ts`,包含7个测试场景:
   - 在 `/guide/quick-start` 页验证至少显示一个代码块且包含 TypeScript 代码
   - 在 `/api/stock/basic` 页验证代码块显示语法高亮和行号
   - 在包含代码块的页面鼠标悬停,验证复制按钮显示
@@ -126,8 +126,8 @@
 
 ### User Story 4 实现
 
-- [ ] T017 [US4] 扩展 `ChangelogPage`,添加更新日志特定方法(`getVersionHeadings`, `validateVersionFormat`, `validateDateFormat`, `validateContentCategories`)
-- [ ] T018 [US4] 实现更新日志测试 `apps/docs/tests/e2e/changelog.spec.ts`,包含5个测试场景:
+- [X] T017 [US4] 扩展 `ChangelogPage`,添加更新日志特定方法(`getVersionHeadings`, `validateVersionFormat`, `validateDateFormat`, `validateContentCategories`)
+- [X] T018 [US4] 实现更新日志测试 `apps/docs/tests/e2e/changelog.spec.ts`,包含5个测试场景:
   - 访问 `/changelog/` 页面,验证页面包含主标题(h1)和至少一个版本标题(h2)
   - 验证版本号符合 `vX.Y.Z` 或 `X.Y.Z` 格式
   - 验证发布日期格式为 `YYYY-MM-DD`、`YYYY/MM/DD` 或 `YYYY.MM.DD`
@@ -146,9 +146,9 @@
 
 ### User Story 5 实现
 
-- [ ] T019 [US5] 扩展 `BasePage`,添加响应式测试相关方法(`setViewport`, `isSidebarVisible`, `clickMobileMenuButton`, `expectNavHeightLessThan`),实现 IResponsive 接口
-- [ ] T020 [US5] 在 `apps/docs/playwright.config.ts` 中配置移动端测试项目 "Mobile Chrome" (Pixel 5)
-- [ ] T021 [US5] 实现响应式设计测试 `apps/docs/tests/e2e/responsive.spec.ts`,包含6个测试场景:
+- [X] T019 [US5] 扩展 `BasePage`,添加响应式测试相关方法(`setViewport`, `isSidebarVisible`, `clickMobileMenuButton`, `expectNavHeightLessThan`),实现 IResponsive 接口
+- [X] T020 [US5] 在 `apps/docs/playwright.config.ts` 中配置移动端测试项目 "Mobile Chrome" (Pixel 5)
+- [X] T021 [US5] 实现响应式设计测试 `apps/docs/tests/e2e/responsive.spec.ts`,包含6个测试场景:
   - 设置移动端视口(390x844),访问 `/api/stock/basic`,验证侧边栏默认不可见或折叠
   - 在移动端点击菜单按钮,验证侧边栏展开并可见
   - 设置移动端视口(375x667),访问包含代码块的页面,验证代码块支持横向滚动且不破坏布局
@@ -164,12 +164,12 @@
 
 **目的**: 影响多个用户故事的改进和优化
 
-- [ ] T022 [P] 为所有测试文件添加清晰的注释和 JSDoc 文档
-- [ ] T023 [P] 优化测试执行性能,确保完整测试套件执行时间 < 2分钟
-- [ ] T024 [P] 在 CI 环境配置中启用重试机制和串行执行
-- [ ] T025 [P] 配置测试失败时的截图、视频和 trace 生成
-- [ ] T026 验证 quickstart.md 中的所有示例代码和命令可以正常运行
-- [ ] T027 清理和移除所有未使用的导入和代码
+- [X] T022 [P] 为所有测试文件添加清晰的注释和 JSDoc 文档
+- [X] T023 [P] 优化测试执行性能,确保完整测试套件执行时间 < 2分钟
+- [X] T024 [P] 在 CI 环境配置中启用重试机制和串行执行
+- [X] T025 [P] 配置测试失败时的截图、视频和 trace 生成
+- [X] T026 验证 quickstart.md 中的所有示例代码和命令可以正常运行
+- [X] T027 清理和移除所有未使用的导入和代码
 - [ ] T028 运行完整的测试套件,确保所有测试在本地和CI环境100%通过
 
 ---
