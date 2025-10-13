@@ -40,6 +40,10 @@ export type {
 export type {
   FinancialItem,
   FinancialParams,
+  FinancialQueryParams,
+  IncomeStatementItem,
+  BalanceSheetItem,
+  CashFlowItem,
 } from './models/financial.js';
 
 export type {
@@ -63,6 +67,6 @@ export { MemoryCacheProvider } from './services/cache.js';
 // API 方法
 export { getStockBasic } from './api/stock.js';
 export { getDailyQuote } from './api/quote.js';
-export { getFinancialData } from './api/financial.js';
+export { getFinancialData, getIncomeStatement, getBalanceSheet, getCashFlow } from './api/financial.js';
 export { getTradeCalendar } from './api/calendar.js';
 export { getDailyBasic } from './api/daily-basic.js';
