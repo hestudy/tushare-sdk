@@ -21,6 +21,7 @@ Auto-generated from all feature plans. Last updated: 2025-10-13
 - N/A (API客户端SDK,无本地持久化存储) (009-sdk)
 - TypeScript 5.3+ / Node.js 18+ LTS + vitest (测试框架), @vitest/expect-type (类型测试), 现有TushareClient (测试目标) (010-sdk)
 - N/A (测试不需要持久化存储) (010-sdk)
+- TypeScript 5.3+ / Node.js 18+ LTS + @hestudy/tushare-sdk (本地 workspace 依赖), dotenv (环境变量管理), 现有演示框架工具模块 (011-)
 
 ## Project Structure
 ```
@@ -35,9 +36,9 @@ npm test [ONLY COMMANDS FOR ACTIVE TECHNOLOGIES][ONLY COMMANDS FOR ACTIVE TECHNO
 TypeScript 5.x+, Node.js 18+ LTS: Follow standard conventions
 
 ## Recent Changes
+- 011-: Added TypeScript 5.3+ / Node.js 18+ LTS + @hestudy/tushare-sdk (本地 workspace 依赖), dotenv (环境变量管理), 现有演示框架工具模块
 - 010-sdk: Added TypeScript 5.3+ / Node.js 18+ LTS + vitest (测试框架), @vitest/expect-type (类型测试), 现有TushareClient (测试目标)
 - 009-sdk: Added TypeScript 5.3+ / Node.js 18+ LTS + rslib (构建工具), vitest (测试框架), axios (HTTP客户端), 现有TushareClient核心功能
-- 008-e2e-e2e: Added TypeScript 5.6+, Node.js 18+ LTS
 
 <!-- MANUAL ADDITIONS START -->
 <!-- MANUAL ADDITIONS END -->
