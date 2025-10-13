@@ -9,8 +9,9 @@ export default {
   /**
    * 站点根路径
    * 如果部署在子路径下,需要设置此项
+   * 开发环境使用根路径,生产环境使用子路径
    */
-  base: '/tushare-sdk/',
+  base: process.env.NODE_ENV === 'production' ? '/tushare-sdk/' : '/',
 
   /**
    * 站点标题

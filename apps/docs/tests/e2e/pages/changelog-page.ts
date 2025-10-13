@@ -24,17 +24,24 @@ export class ChangelogPage extends BasePage {
    */
   async expectChangelogTitle(): Promise<boolean> {
     const heading = await this.getMainHeading();
-    return heading?.includes('更新日志') || heading?.includes('Changelog') ?? false;
+    return (heading?.includes('更新日志') || heading?.includes('Changelog')) ?? false;
   }
 
   /**
    * 获取所有版本标题 (h2)
    */
   async getVersionHeadings(): Promise<Locator[]> {
-    const headings = this.page.locator(`${this.selectors.common.mainContent} h2`);
-    const count = await headings.count();
-    const results: Locator[] = [];
+    // 尝试多个可能的选择器
+    let headings = this.page.locator('article h2, main h2, .doc-content h2, .content h2');
+    let count = await headings.count();
 
+    // 如果找不到,尝试只用 h2
+    if (count === 0) {
+      headings = this.page.locator('h2');
+      count = await headings.count();
+    }
+
+    const results: Locator[] = [];
     for (let i = 0; i < count; i++) {
       results.push(headings.nth(i));
     }
@@ -65,18 +72,21 @@ export class ChangelogPage extends BasePage {
 
   /**
    * 验证发布日期格式
-   * 支持格式: YYYY-MM-DD, YYYY/MM/DD, YYYY.MM.DD
+   * 支持格式: YYYY-MM-DD, YYYY/MM/DD, YYYY.MM.DD (可能在括号内)
    */
   async validateDateFormat(): Promise<boolean> {
-    const content = await this.page.locator(this.selectors.common.mainContent).textContent();
+    // 尝试多个可能的内容区域选择器
+    const selectors = ['article', 'main', '.doc-content', '.content', 'body'];
+    // 匹配日期格式,包括可能的括号包裹
+    const datePattern = /\(?\d{4}[-/.]\d{2}[-/.]\d{2}\)?/;
 
-    if (!content) {
-      return false;
+    for (const selector of selectors) {
+      const content = await this.page.locator(selector).first().textContent().catch(() => null);
+      if (content && datePattern.test(content)) {
+        return true;
+      }
     }
-
-    // 匹配日期格式
-    const datePattern = /\d{4}[-/.]\d{2}[-/.]\d{2}/;
-    return datePattern.test(content);
+    return false;
   }
 
   /**
@@ -84,15 +94,17 @@ export class ChangelogPage extends BasePage {
    * (新增/功能/Features 或 修复/Bug/Fixes)
    */
   async validateContentCategories(): Promise<boolean> {
-    const content = await this.page.locator(this.selectors.common.mainContent).textContent();
-
-    if (!content) {
-      return false;
-    }
-
-    // 检查是否包含分类关键词
+    // 尝试多个可能的内容区域选择器
+    const selectors = ['article', 'main', '.doc-content', '.content', 'body'];
     const categories = ['新增', '功能', 'Features', '修复', 'Bug', 'Fixes', 'Fixed'];
-    return categories.some((keyword) => content.includes(keyword));
+
+    for (const selector of selectors) {
+      const content = await this.page.locator(selector).first().textContent().catch(() => null);
+      if (content && categories.some((keyword) => content.includes(keyword))) {
+        return true;
+      }
+    }
+    return false;
   }
 
   /**

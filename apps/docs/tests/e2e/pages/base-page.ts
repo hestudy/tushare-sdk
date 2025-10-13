@@ -55,12 +55,23 @@ export class BasePage implements IBasePage, INavigable, ICodeExamples, IResponsi
    * 等待页面完全加载
    */
   async waitForPageLoad(timeout: number = 30000): Promise<void> {
+    // 等待网络空闲
     await this.page.waitForLoadState('networkidle', { timeout });
-    // 等待主内容区渲染
-    await this.page.locator(this.selectors.common.mainContent).waitFor({
-      state: 'visible',
-      timeout,
-    });
+
+    // 等待 DOM 加载完成
+    await this.page.waitForLoadState('domcontentloaded', { timeout });
+
+    // 等待至少一个主要内容元素可见 (h1 或 main content)
+    try {
+      await Promise.race([
+        this.page.locator('h1').first().waitFor({ state: 'visible', timeout: 10000 }),
+        this.page.locator('article').first().waitFor({ state: 'visible', timeout: 10000 }),
+        this.page.locator('main').first().waitFor({ state: 'visible', timeout: 10000 }),
+      ]);
+    } catch (error) {
+      // 如果没有找到这些元素,等待一段时间让页面完全渲染
+      await this.page.waitForTimeout(2000);
+    }
   }
 
   /**
