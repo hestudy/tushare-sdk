@@ -1,0 +1,387 @@
+/**
+ * BasePage 基类
+ *
+ * 所有页面对象的基类,提供通用的页面交互方法
+ * 实现 IBasePage, INavigable, ICodeExamples, IResponsive 接口
+ */
+
+import { Page, Locator, expect } from '@playwright/test';
+import type {
+  IBasePage,
+  INavigable,
+  ICodeExamples,
+  IResponsive,
+  PageSelectors,
+} from '../../../specs/008-e2e-e2e/contracts/page-object-interface';
+import { getPageSelectors } from './selectors';
+import { readClipboard, urlContains, isElementVisible } from '../utils/test-helpers';
+
+export class BasePage implements IBasePage, INavigable, ICodeExamples, IResponsive {
+  readonly page: Page;
+  readonly baseURL: string;
+  protected selectors: PageSelectors;
+
+  constructor(page: Page) {
+    this.page = page;
+    this.baseURL = process.env.BASE_URL || 'http://localhost:3000';
+    this.selectors = getPageSelectors();
+  }
+
+  /**
+   * 导航到指定路径
+   */
+  async goto(path: string): Promise<void> {
+    const url = path.startsWith('http') ? path : `${this.baseURL}${path}`;
+    await this.page.goto(url);
+    await this.waitForPageLoad();
+  }
+
+  /**
+   * 获取页面标题 (document.title)
+   */
+  async getTitle(): Promise<string> {
+    return this.page.title();
+  }
+
+  /**
+   * 获取主标题 (h1 标签)
+   */
+  async getMainHeading(): Promise<string | null> {
+    const heading = this.page.locator('h1').first();
+    return heading.textContent();
+  }
+
+  /**
+   * 等待页面完全加载
+   */
+  async waitForPageLoad(timeout: number = 30000): Promise<void> {
+    // 等待网络空闲
+    await this.page.waitForLoadState('networkidle', { timeout });
+
+    // 等待 DOM 加载完成
+    await this.page.waitForLoadState('domcontentloaded', { timeout });
+
+    // 等待至少一个主要内容元素可见 (h1 或 main content)
+    try {
+      await Promise.race([
+        this.page.locator('h1').first().waitFor({ state: 'visible', timeout: 10000 }),
+        this.page.locator('article').first().waitFor({ state: 'visible', timeout: 10000 }),
+        this.page.locator('main').first().waitFor({ state: 'visible', timeout: 10000 }),
+      ]);
+    } catch (error) {
+      // 如果没有找到这些元素,等待一段时间让页面完全渲染
+      await this.page.waitForTimeout(2000);
+    }
+  }
+
+  /**
+   * 获取页面选择器
+   */
+  getSelectors(): PageSelectors {
+    return this.selectors;
+  }
+
+  // ===== INavigable 接口实现 =====
+
+  /**
+   * 点击顶部导航栏链接
+   */
+  async clickNavLink(linkText: string): Promise<void> {
+    // 等待页面加载完成
+    await this.waitForPageLoad(30000);
+
+    // 在移动端,可能需要先点击菜单按钮
+    const isMobile = await this.isMobileViewport();
+    if (isMobile) {
+      try {
+        // 尝试多种移动菜单按钮选择器
+        const menuButtonSelectors = [
+          'button[aria-label*="menu"]',
+          'button[aria-label*="菜单"]',
+          'button[class*="menu"]',
+          'button[class*="nav"]',
+          '.mobile-menu-button',
+          '.nav-menu-toggle',
+          'nav button',
+          'header button',
+        ];
+
+        for (const selector of menuButtonSelectors) {
+          try {
+            const mobileMenuButton = this.page.locator(selector).first();
+            if (await mobileMenuButton.isVisible({ timeout: 1000 })) {
+              await mobileMenuButton.click();
+              await this.page.waitForTimeout(800); // 增加等待时间
+              break;
+            }
+          } catch {
+            // 尝试下一个选择器
+            continue;
+          }
+        }
+      } catch {
+        // 如果没有移动菜单按钮,继续
+      }
+    }
+
+    // 尝试多种选择器方式,包括更通用的选择器
+    let link;
+    try {
+      link = this.page.getByRole('link', { name: linkText, exact: true });
+      if (await link.count() === 0) {
+        link = this.page.getByRole('link', { name: linkText, exact: false });
+      }
+      if (await link.count() === 0) {
+        link = this.page.locator(`nav a:has-text("${linkText}")`);
+      }
+      if (await link.count() === 0) {
+        link = this.page.locator(`header a:has-text("${linkText}")`);
+      }
+      if (await link.count() === 0) {
+        link = this.page.locator(`a:has-text("${linkText}")`);
+      }
+    } catch (error) {
+      throw new Error(`无法找到或点击导航链接: ${linkText}`);
+    }
+
+    // 确保链接可见并点击
+    try {
+      await link.first().waitFor({ state: 'visible', timeout: 5000 });
+      await link.first().click();
+      await this.page.waitForLoadState('domcontentloaded');
+    } catch (error) {
+      throw new Error(`无法找到或点击导航链接: ${linkText}`);
+    }
+  }
+
+  /**
+   * 检查是否为移动端视口
+   */
+  private async isMobileViewport(): Promise<boolean> {
+    const viewport = this.page.viewportSize();
+    return viewport ? viewport.width < 768 : false;
+  }
+
+  /**
+   * 点击侧边栏链接
+   */
+  async clickSidebarLink(linkText: string): Promise<void> {
+    // 等待页面加载完成
+    await this.waitForPageLoad(30000);
+
+    // 在移动端,可能需要先展开侧边栏
+    const isMobile = await this.isMobileViewport();
+    if (isMobile) {
+      try {
+        // 尝试找到并点击侧边栏按钮
+        const sidebarButton = this.page.locator('button[aria-label*="sidebar"], button[aria-label*="侧边栏"], .sidebar-toggle').first();
+        if (await sidebarButton.isVisible({ timeout: 2000 })) {
+          await sidebarButton.click();
+          await this.page.waitForTimeout(500); // 等待侧边栏展开
+        }
+      } catch {
+        // 如果没有侧边栏按钮,继续
+      }
+    }
+
+    // 尝试多种选择器方式
+    const selectors = [
+      `${this.selectors.common.sidebarLink}`,
+      `aside a`,
+      `.sidebar a`,
+      `[role="complementary"] a`,
+      `.rspress-sidebar a`,
+    ];
+
+    let link = null;
+    for (const selector of selectors) {
+      const elements = this.page.locator(selector).filter({ hasText: linkText });
+      const count = await elements.count();
+      if (count > 0) {
+        const firstElement = elements.first();
+        // 确保元素可见
+        if (await firstElement.isVisible({ timeout: 2000 }).catch(() => false)) {
+          link = firstElement;
+          break;
+        }
+      }
+    }
+
+    if (link) {
+      try {
+        // 先滚动到元素可见位置
+        await link.scrollIntoViewIfNeeded();
+        await this.page.waitForTimeout(500); // 等待滚动完成
+
+        // 在移动端,直接通过 JavaScript 导航到链接的 href
+        if (isMobile) {
+          const href = await link.getAttribute('href');
+          if (href) {
+            await this.page.goto(`${this.baseURL}${href}`);
+            await this.waitForPageLoad();
+            return;
+          }
+        }
+
+        // 桌面端正常点击
+        await link.click({ force: true });
+        await this.page.waitForLoadState('domcontentloaded');
+      } catch (error) {
+        // 如果点击失败,尝试通过 href 导航
+        const href = await link.getAttribute('href');
+        if (href) {
+          await this.page.goto(`${this.baseURL}${href}`);
+          await this.waitForPageLoad();
+        } else {
+          throw error;
+        }
+      }
+    } else {
+      throw new Error(`无法找到侧边栏链接: ${linkText}`);
+    }
+  }
+
+  /**
+   * 验证当前 URL 是否包含指定路径
+   */
+  async expectUrlContains(path: string): Promise<boolean> {
+    return urlContains(this.page, path);
+  }
+
+  // ===== ICodeExamples 接口实现 =====
+
+  /**
+   * 获取所有代码块
+   */
+  async getCodeBlocks(): Promise<Locator[]> {
+    const codeBlocks = this.page.locator(this.selectors.code!.codeBlock);
+    const count = await codeBlocks.count();
+    const blocks: Locator[] = [];
+
+    for (let i = 0; i < count; i++) {
+      blocks.push(codeBlocks.nth(i));
+    }
+
+    return blocks;
+  }
+
+  /**
+   * 获取第一个代码块的内容
+   */
+  async getFirstCodeBlockContent(): Promise<string | null> {
+    const codeBlock = this.page.locator(this.selectors.code!.codeContent).first();
+    return codeBlock.textContent();
+  }
+
+  /**
+   * 点击代码块的复制按钮
+   */
+  async clickCopyButton(index: number = 0): Promise<void> {
+    const codeBlock = this.page.locator(this.selectors.code!.codeBlock).nth(index);
+
+    // 悬停在代码块上显示复制按钮
+    await codeBlock.hover();
+
+    // 等待复制按钮可见
+    const copyButton = this.page.locator(this.selectors.code!.copyButton).first();
+    await copyButton.waitFor({ state: 'visible', timeout: 5000 });
+
+    // 点击复制按钮
+    await copyButton.click();
+
+    // 等待复制完成
+    await this.page.waitForTimeout(500);
+  }
+
+  /**
+   * 获取剪贴板内容
+   */
+  async getClipboardContent(): Promise<string> {
+    return readClipboard(this.page);
+  }
+
+  /**
+   * 验证代码块是否包含特定文本
+   */
+  async expectCodeBlockContains(text: string, index: number = 0): Promise<boolean> {
+    const codeBlock = this.page.locator(this.selectors.code!.codeContent).nth(index);
+    const content = await codeBlock.textContent();
+    return content?.includes(text) ?? false;
+  }
+
+  // ===== IResponsive 接口实现 =====
+
+  /**
+   * 设置视口尺寸
+   */
+  async setViewport(width: number, height: number): Promise<void> {
+    await this.page.setViewportSize({ width, height });
+  }
+
+  /**
+   * 验证侧边栏是否可见
+   */
+  async isSidebarVisible(): Promise<boolean> {
+    return isElementVisible(this.page, this.selectors.common.sidebar);
+  }
+
+  /**
+   * 点击移动端菜单按钮
+   */
+  async clickMobileMenuButton(): Promise<void> {
+    const menuButton = this.page.locator(this.selectors.mobile!.menuButton);
+    await menuButton.click();
+  }
+
+  /**
+   * 验证导航栏高度
+   */
+  async expectNavHeightLessThan(maxHeight: number): Promise<boolean> {
+    const nav = this.page.locator(this.selectors.common.nav);
+    const box = await nav.boundingBox();
+    return box ? box.height < maxHeight : false;
+  }
+
+  // ===== 辅助方法 =====
+
+  /**
+   * 获取元素文本内容
+   */
+  protected async getElementText(selector: string): Promise<string | null> {
+    const element = this.page.locator(selector).first();
+    return element.textContent();
+  }
+
+  /**
+   * 验证元素是否存在
+   */
+  protected async elementExists(selector: string): Promise<boolean> {
+    try {
+      const element = this.page.locator(selector);
+      const count = await element.count();
+      return count > 0;
+    } catch {
+      return false;
+    }
+  }
+
+  /**
+   * 等待元素可见
+   */
+  protected async waitForElement(
+    selector: string,
+    timeout: number = 10000
+  ): Promise<void> {
+    await this.page.locator(selector).waitFor({
+      state: 'visible',
+      timeout,
+    });
+  }
+
+  /**
+   * 截图
+   */
+  async takeScreenshot(name: string): Promise<void> {
+    await this.page.screenshot({ path: `test-results/${name}.png`, fullPage: true });
+  }
+}
