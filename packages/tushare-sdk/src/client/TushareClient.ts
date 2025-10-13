@@ -12,10 +12,12 @@ import type { StockBasicItem, StockBasicParams } from '../models/stock.js';
 import type { DailyQuoteItem, DailyQuoteParams } from '../models/quote.js';
 import type { TradeCalItem, TradeCalParams } from '../models/calendar.js';
 import type { DailyBasicItem, DailyBasicParams } from '../models/daily-basic.js';
+import type { FinancialQueryParams, IncomeStatementItem, BalanceSheetItem, CashFlowItem } from '../models/financial.js';
 import { getStockBasic as getStockBasicApi } from '../api/stock.js';
 import { getDailyQuote as getDailyQuoteApi } from '../api/quote.js';
 import { getTradeCalendar as getTradeCalendarApi } from '../api/calendar.js';
 import { getDailyBasic as getDailyBasicApi } from '../api/daily-basic.js';
+import { getIncomeStatement as getIncomeStatementApi, getBalanceSheet as getBalanceSheetApi, getCashFlow as getCashFlowApi } from '../api/financial.js';
 
 /**
  * Tushare 客户端
@@ -260,6 +262,103 @@ export class TushareClient {
    */
   async getDailyBasic(params?: DailyBasicParams): Promise<DailyBasicItem[]> {
     return getDailyBasicApi(this, params);
+  }
+
+  /**
+   * 获取利润表数据
+   *
+   * 查询上市公司的利润表数据,包括营业收入、净利润、每股收益等核心财务指标。
+   *
+   * **权限要求**: 至少 2000 积分
+   * **数据更新**: 通常在财报公告日后1-2个工作日内更新
+   * **调用限制**: 仅支持单股票历史数据查询
+   *
+   * @param params - 查询参数
+   * @returns 利润表数据列表,按报告期降序排列
+   * @throws {ApiError} 当参数无效、权限不足或网络错误时抛出
+   *
+   * @example
+   * ```typescript
+   * // 查询指定公司的年报利润表
+   * const data = await client.getIncomeStatement({
+   *   ts_code: '000001.SZ',
+   *   period: '20231231'
+   * });
+   * console.log(`营业收入: ${data[0].total_revenue} 元`);
+   *
+   * // 查询指定时间范围的利润表
+   * const data2 = await client.getIncomeStatement({
+   *   ts_code: '600519.SH',
+   *   start_date: '20200101',
+   *   end_date: '20231231'
+   * });
+   * ```
+   */
+  async getIncomeStatement(
+    params?: FinancialQueryParams
+  ): Promise<IncomeStatementItem[]> {
+    return getIncomeStatementApi(this, params);
+  }
+
+  /**
+   * 获取资产负债表数据
+   *
+   * 查询上市公司的资产负债表数据,包括总资产、总负债、股东权益等关键指标。
+   *
+   * **权限要求**: 至少 2000 积分
+   * **数据更新**: 通常在财报公告日后1-2个工作日内更新
+   * **调用限制**: 仅支持单股票历史数据查询
+   *
+   * @param params - 查询参数
+   * @returns 资产负债表数据列表,按报告期降序排列
+   * @throws {ApiError} 当参数无效、权限不足或网络错误时抛出
+   *
+   * @example
+   * ```typescript
+   * // 查询指定公司的资产负债表
+   * const data = await client.getBalanceSheet({
+   *   ts_code: '000001.SZ',
+   *   period: '20231231'
+   * });
+   * console.log(`总资产: ${data[0].total_assets} 元`);
+   * console.log(`资产负债率: ${(data[0].total_cur_liab! + data[0].total_ncl!) / data[0].total_assets! * 100}%`);
+   * ```
+   */
+  async getBalanceSheet(
+    params?: FinancialQueryParams
+  ): Promise<BalanceSheetItem[]> {
+    return getBalanceSheetApi(this, params);
+  }
+
+  /**
+   * 获取现金流量表数据
+   *
+   * 查询上市公司的现金流量表数据,包括经营活动现金流、投资活动现金流、筹资活动现金流等。
+   *
+   * **权限要求**: 至少 2000 积分
+   * **数据更新**: 通常在财报公告日后1-2个工作日内更新
+   * **调用限制**: 仅支持单股票历史数据查询
+   *
+   * @param params - 查询参数
+   * @returns 现金流量表数据列表,按报告期降序排列
+   * @throws {ApiError} 当参数无效、权限不足或网络错误时抛出
+   *
+   * @example
+   * ```typescript
+   * // 查询指定公司的现金流量表
+   * const data = await client.getCashFlow({
+   *   ts_code: '000001.SZ',
+   *   start_date: '20230101',
+   *   end_date: '20231231'
+   * });
+   * console.log(`经营活动现金流: ${data[0].n_cashflow_act} 元`);
+   * console.log(`自由现金流: ${data[0].free_cashflow} 元`);
+   * ```
+   */
+  async getCashFlow(
+    params?: FinancialQueryParams
+  ): Promise<CashFlowItem[]> {
+    return getCashFlowApi(this, params);
   }
 
   /**
