@@ -1,0 +1,355 @@
+# 现金流量表文档结构契约
+# Contract for Cash Flow Statement Documentation Structure
+#
+# 定义现金流量表文档必须包含的章节、字段和格式要求
+# 用于验证文档内容的完整性和一致性
+
+version: "1.0"
+contract_type: "document_structure"
+feature_branch: "012-"
+created_at: "2025-10-13"
+
+# 文档元数据(Frontmatter)
+frontmatter:
+  required_fields:
+    - name: title
+      type: string
+      pattern: "^get_cashflow - .+$"
+      description: "文档标题,必须以 'get_cashflow - ' 开头"
+      example: "get_cashflow - 获取现金流量表数据"
+
+    - name: description
+      type: string
+      min_length: 20
+      max_length: 200
+      description: "文档描述,用于 SEO 和页面摘要"
+      example: "获取上市公司的现金流量表数据,包括经营、投资、筹资活动现金流"
+
+    - name: keywords
+      type: array
+      min_items: 3
+      max_items: 10
+      item_type: string
+      description: "关键词列表,用于搜索优化"
+      example: ["财务数据", "现金流量表", "get_cashflow", "经营活动", "投资活动", "筹资活动"]
+
+    - name: type
+      type: string
+      enum: ["api"]
+      description: "文档类型,财务数据文档固定为 'api'"
+
+    - name: order
+      type: integer
+      min: 1
+      max: 100
+      description: "文档排序顺序(现金流量表为第 3 个)"
+      example: 3
+
+# 文档主体结构
+document_sections:
+  # 1. 标题和简介
+  - section: "heading_and_intro"
+    required: true
+    structure:
+      - element: h1
+        content_pattern: "^get_cashflow$|^getCashFlow$"
+        description: "主标题,使用函数名"
+
+      - element: paragraph
+        min_length: 20
+        description: "简短介绍,说明 API 的用途"
+        example: "获取上市公司的现金流量表数据,包括经营活动、投资活动、筹资活动的现金流量。"
+
+  # 2. 函数签名
+  - section: "function_signature"
+    required: true
+    heading: "函数签名"
+    structure:
+      - element: code_block
+        language: typescript
+        required_content:
+          - "async function getCashFlow"
+          - "params: FinancialQueryParams"
+          - "Promise<CashFlowItem[]>"
+        description: "TypeScript 函数签名,必须与 SDK 实际定义一致"
+
+  # 3. 参数说明
+  - section: "parameters"
+    required: true
+    heading: "参数"
+    structure:
+      - element: table
+        required_columns:
+          - name: "参数名"
+            type: string
+            pattern: "^params\\..+$"
+
+          - name: "类型"
+            type: string
+            allowed_values: ["string", "number", "boolean", "string[]"]
+
+          - name: "必填"
+            type: string
+            allowed_values: ["是", "否"]
+
+          - name: "描述"
+            type: string
+            min_length: 5
+
+          - name: "默认值"
+            type: string
+            nullable: true
+
+          - name: "示例"
+            type: string
+            min_length: 1
+
+        min_rows: 5
+        max_rows: 15
+        description: "参数表格,至少包含 5 个参数"
+
+        required_parameters:
+          - "params.ts_code"
+          - "params.period"
+          - "params.start_date"
+          - "params.end_date"
+          - "params.report_type"
+
+  # 4. 返回值说明
+  - section: "return_value"
+    required: true
+    heading: "返回值"
+    structure:
+      - element: paragraph
+        content_pattern: "Promise<CashFlowItem\\[\\]>"
+        description: "返回值类型说明"
+
+      - element: paragraph
+        min_length: 20
+        description: "返回值概述"
+        example: "返回现金流量表数据数组,每个对象包含:"
+
+      - element: list
+        list_type: unordered
+        min_items: 50
+        max_items: 100
+        description: "返回字段列表,至少 50 个核心字段"
+
+        required_core_fields:
+          # 基本标识字段
+          - "ts_code: 股票代码"
+          - "ann_date: 公告日期"
+          - "end_date: 报告期"
+          - "report_type: 报表类型"
+          - "comp_type: 公司类型"
+
+          # 经营活动现金流(核心)
+          - "n_cashflow_act: 经营活动产生的现金流量净额"
+          - "c_fr_sale_sg: 销售商品、提供劳务收到的现金"
+          - "c_paid_goods_s: 购买商品、接受劳务支付的现金"
+          - "c_paid_to_for_empl: 支付给职工以及为职工支付的现金"
+          - "c_paid_for_taxes: 支付的各项税费"
+
+          # 投资活动现金流(核心)
+          - "n_cashflow_inv_act: 投资活动产生的现金流量净额"
+          - "c_pay_acq_const_fiolta: 购建固定资产、无形资产和其他长期资产支付的现金"
+          - "c_paid_invest: 投资支付的现金"
+
+          # 筹资活动现金流(核心)
+          - "n_cash_flows_fnc_act: 筹资活动产生的现金流量净额"
+          - "c_recp_borrow: 取得借款收到的现金"
+          - "c_prepay_amt_borr: 偿还债务支付的现金"
+
+          # 现金汇总指标
+          - "n_incr_cash_cash_equ: 现金及现金等价物净增加额"
+          - "c_cash_equ_beg_period: 期初现金及现金等价物余额"
+          - "c_cash_equ_end_period: 期末现金及现金等价物余额"
+
+  # 5. 代码示例
+  - section: "code_examples"
+    required: true
+    heading: "代码示例"
+    structure:
+      - element: subsection
+        min_count: 2
+        max_count: 5
+        description: "至少 2 个代码示例,展示不同使用场景"
+
+        required_examples:
+          - title_pattern: "获取.*现金流量表"
+            description: "基础查询示例"
+
+          - title_pattern: "现金流.*分析|自由现金流|多期.*对比"
+            description: "业务场景示例"
+
+        subsection_structure:
+          - element: h3
+            description: "示例标题"
+
+          - element: code_block
+            language: typescript
+            required_imports:
+              - "from '@tushare/sdk'"
+            required_api_calls:
+              - "getCashFlow"
+            min_lines: 5
+            max_lines: 50
+            description: "完整可执行的 TypeScript 代码"
+
+            validation_rules:
+              - rule: "must_use_real_stock_code"
+                pattern: "\\d{6}\\.(SZ|SH|BJ)"
+                description: "必须使用真实的股票代码格式"
+
+              - rule: "must_use_valid_period"
+                pattern: "2[0-9]{7}"
+                description: "必须使用 YYYYMMDD 格式的日期"
+
+              - rule: "no_real_token"
+                pattern: "token:\\s*['\"](?!YOUR_TOKEN|\\$\\{|process\\.env)"
+                violation: true
+                description: "不得包含真实的 API token"
+
+  # 6. 异常说明
+  - section: "exceptions"
+    required: true
+    heading: "异常"
+    structure:
+      - element: table
+        required_columns:
+          - name: "异常类型"
+            type: string
+          - name: "描述"
+            type: string
+          - name: "触发条件"
+            type: string
+
+        min_rows: 3
+        description: "异常类型表格"
+
+        required_exception_types:
+          - "ApiError"
+          - "ValidationError"
+          - "NotFoundError"
+
+  # 7. 注意事项
+  - section: "notes"
+    required: true
+    heading: "注意事项"
+    structure:
+      - element: list
+        list_type: unordered
+        min_items: 5
+        max_items: 15
+        description: "重要提示和最佳实践"
+
+        required_notes:
+          - content_pattern: "金额单位.*元"
+            description: "必须说明金额单位"
+
+          - content_pattern: "日期格式.*YYYYMMDD"
+            description: "必须说明日期格式"
+
+          - content_pattern: "报告期.*季度末|0331|0630|0930|1231"
+            description: "必须说明报告期格式"
+
+          - content_pattern: "权限|积分|2000"
+            description: "必须说明权限要求"
+
+          - content_pattern: "数据更新|T\\+1|公告后"
+            description: "必须说明数据时效性"
+
+  # 8. 相关 API(可选)
+  - section: "related_apis"
+    required: false
+    heading: "相关 API"
+    structure:
+      - element: list
+        list_type: unordered
+        description: "指向其他相关文档的链接"
+
+        recommended_links:
+          - text: "get_income"
+            link: "/api/finance/income"
+
+          - text: "get_balance"
+            link: "/api/finance/balance"
+
+# 文档质量标准
+quality_standards:
+  readability:
+    max_heading_depth: 3
+    description: "最多使用三级标题"
+
+  completeness:
+    min_total_words: 800
+    max_total_words: 3000
+    description: "文档总字数应在 800-3000 字之间"
+
+  code_quality:
+    all_code_must_compile: true
+    must_use_typescript: true
+    must_include_comments: true
+    description: "所有代码示例必须语法正确且包含注释"
+
+  consistency:
+    import_path: "@tushare/sdk"
+    api_name_in_code: "getCashFlow"
+    api_name_in_title: "get_cashflow"
+    description: "保持命名一致性(文档标题用下划线,代码用驼峰)"
+
+# 验证规则
+validation:
+  automated_checks:
+    - check: "frontmatter_completeness"
+      description: "验证所有必需的 frontmatter 字段都存在"
+
+    - check: "section_presence"
+      description: "验证所有必需的章节都存在"
+
+    - check: "field_completeness"
+      description: "验证返回字段列表与 SDK 模型定义一致"
+
+    - check: "code_syntax"
+      description: "验证所有代码示例语法正确"
+
+    - check: "link_validity"
+      description: "验证所有内部链接指向存在的页面"
+
+  manual_checks:
+    - check: "business_accuracy"
+      description: "验证字段说明的业务含义准确性"
+
+    - check: "example_relevance"
+      description: "验证示例代码的业务场景相关性"
+
+    - check: "writing_quality"
+      description: "验证文档语言的清晰性和可读性"
+
+# 与 SDK 的一致性要求
+sdk_consistency:
+  model_file: "packages/tushare-sdk/src/models/financial.ts"
+  api_file: "packages/tushare-sdk/src/api/financial.ts"
+
+  consistency_checks:
+    - check: "function_signature_match"
+      description: "函数签名必须与 SDK 中的定义完全一致"
+
+    - check: "parameter_type_match"
+      description: "参数类型必须与 FinancialQueryParams 接口一致"
+
+    - check: "return_field_match"
+      description: "返回字段必须与 CashFlowItem 接口一致(87个字段)"
+
+    - check: "import_path_correctness"
+      description: "导入路径必须使用包名而非相对路径"
+
+# 契约变更记录
+changelog:
+  - version: "1.0"
+    date: "2025-10-13"
+    changes:
+      - "初始版本,定义现金流量表文档结构契约"
+      - "要求至少 50 个核心返回字段"
+      - "要求至少 2 个代码示例"
+      - "要求说明权限、单位、日期格式等关键信息"
