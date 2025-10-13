@@ -87,41 +87,102 @@ export class BasePage implements IBasePage, INavigable, ICodeExamples, IResponsi
    * 点击顶部导航栏链接
    */
   async clickNavLink(linkText: string): Promise<void> {
-    // 使用更灵活的选择器,先确保导航栏存在
-    await this.page.locator(this.selectors.common.nav).waitFor({ state: 'visible', timeout: 10000 });
+    // 等待页面加载完成
+    await this.waitForPageLoad(30000);
 
-    // 尝试多种选择器方式
-    const selectors = [
-      `${this.selectors.common.nav} a:has-text("${linkText}")`,
-      `${this.selectors.common.nav} a:text-is("${linkText}")`,
-      `nav a:text-is("${linkText}")`,
-      `nav a:has-text("${linkText}")`,
-    ];
-
-    let link = null;
-    for (const selector of selectors) {
-      const element = this.page.locator(selector);
-      const count = await element.count();
-      if (count > 0) {
-        link = element.first();
-        break;
+    // 在移动端,可能需要先点击菜单按钮
+    const isMobile = await this.isMobileViewport();
+    if (isMobile) {
+      try {
+        // 尝试找到并点击移动菜单按钮
+        const mobileMenuButton = this.page.locator('button[aria-label*="menu"], button[aria-label*="菜单"], .mobile-menu-button, button.nav-menu-toggle').first();
+        if (await mobileMenuButton.isVisible({ timeout: 2000 })) {
+          await mobileMenuButton.click();
+          await this.page.waitForTimeout(500); // 等待菜单展开
+        }
+      } catch {
+        // 如果没有移动菜单按钮,继续
       }
     }
 
-    if (link) {
+    // 尝试多种选择器方式,包括更通用的选择器
+    const link = await this.page.getByRole('link', { name: linkText, exact: true }).or(
+      this.page.getByRole('link', { name: linkText, exact: false })
+    ).or(
+      this.page.locator(`nav a`, { hasText: linkText })
+    ).or(
+      this.page.locator(`header a`, { hasText: linkText })
+    ).first();
+
+    // 确保链接可见
+    try {
+      await link.waitFor({ state: 'visible', timeout: 5000 });
       await link.click();
-    } else {
-      throw new Error(`无法找到导航链接: ${linkText}`);
+      await this.page.waitForLoadState('domcontentloaded');
+    } catch (error) {
+      throw new Error(`无法找到或点击导航链接: ${linkText}`);
     }
+  }
+
+  /**
+   * 检查是否为移动端视口
+   */
+  private async isMobileViewport(): Promise<boolean> {
+    const viewport = this.page.viewportSize();
+    return viewport ? viewport.width < 768 : false;
   }
 
   /**
    * 点击侧边栏链接
    */
   async clickSidebarLink(linkText: string): Promise<void> {
-    // 使用sidebarLink选择器,确保只选择链接元素
-    const link = this.page.locator(this.selectors.common.sidebarLink).filter({ hasText: linkText });
-    await link.first().click();
+    // 等待页面加载完成
+    await this.waitForPageLoad(30000);
+
+    // 在移动端,可能需要先展开侧边栏
+    const isMobile = await this.isMobileViewport();
+    if (isMobile) {
+      try {
+        // 尝试找到并点击侧边栏按钮
+        const sidebarButton = this.page.locator('button[aria-label*="sidebar"], button[aria-label*="侧边栏"], .sidebar-toggle').first();
+        if (await sidebarButton.isVisible({ timeout: 2000 })) {
+          await sidebarButton.click();
+          await this.page.waitForTimeout(500); // 等待侧边栏展开
+        }
+      } catch {
+        // 如果没有侧边栏按钮,继续
+      }
+    }
+
+    // 尝试多种选择器方式
+    const selectors = [
+      `${this.selectors.common.sidebarLink}`,
+      `aside a`,
+      `.sidebar a`,
+      `[role="complementary"] a`,
+      `.rspress-sidebar a`,
+    ];
+
+    let link = null;
+    for (const selector of selectors) {
+      const elements = this.page.locator(selector).filter({ hasText: linkText });
+      const count = await elements.count();
+      if (count > 0) {
+        const firstElement = elements.first();
+        // 确保元素可见
+        if (await firstElement.isVisible({ timeout: 2000 }).catch(() => false)) {
+          link = firstElement;
+          break;
+        }
+      }
+    }
+
+    if (link) {
+      await link.click();
+      await this.page.waitForLoadState('domcontentloaded');
+    } else {
+      throw new Error(`无法找到侧边栏链接: ${linkText}`);
+    }
   }
 
   /**

@@ -81,9 +81,15 @@ export class ChangelogPage extends BasePage {
     const datePattern = /\(?\d{4}[-/.]\d{2}[-/.]\d{2}\)?/;
 
     for (const selector of selectors) {
-      const content = await this.page.locator(selector).first().textContent().catch(() => null);
-      if (content && datePattern.test(content)) {
-        return true;
+      try {
+        const element = this.page.locator(selector).first();
+        await element.waitFor({ state: 'attached', timeout: 5000 });
+        const content = await element.textContent();
+        if (content && datePattern.test(content)) {
+          return true;
+        }
+      } catch {
+        continue;
       }
     }
     return false;
@@ -99,9 +105,15 @@ export class ChangelogPage extends BasePage {
     const categories = ['新增', '功能', 'Features', '修复', 'Bug', 'Fixes', 'Fixed'];
 
     for (const selector of selectors) {
-      const content = await this.page.locator(selector).first().textContent().catch(() => null);
-      if (content && categories.some((keyword) => content.includes(keyword))) {
-        return true;
+      try {
+        const element = this.page.locator(selector).first();
+        await element.waitFor({ state: 'attached', timeout: 5000 });
+        const content = await element.textContent();
+        if (content && categories.some((keyword) => content.includes(keyword))) {
+          return true;
+        }
+      } catch {
+        continue;
       }
     }
     return false;

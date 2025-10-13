@@ -86,7 +86,7 @@ export class ApiPage extends BasePage {
    */
   async contentContains(keyword: string): Promise<boolean> {
     try {
-      // 先等待主内容区可见
+      // 等待主内容区可见 (goto已经等待了页面加载)
       const content = this.page.locator(this.selectors.common.mainContent).first();
       await content.waitFor({ state: 'visible', timeout: 10000 });
       const text = await content.textContent();

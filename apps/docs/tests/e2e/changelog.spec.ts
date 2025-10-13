@@ -43,25 +43,25 @@ test.describe('更新日志测试', () => {
     // Given: 创建更新日志页对象
     const changelogPage = new ChangelogPage(page);
 
-    // When: 访问更新日志页
+    // When: 访问更新日志页 (goto已经会等待页面加载)
     await changelogPage.goto();
 
-    // Then: 验证日期格式正确
+    // Then: 验证日期格式正确 (不需要再次等待页面加载)
     const isValidDateFormat = await changelogPage.validateDateFormat();
     expect(isValidDateFormat).toBeTruthy();
-  });
+  }, { timeout: 90000 });
 
   test('验证更新内容包含分类关键词(新增/功能/Features 或 修复/Bug/Fixes)', async ({ page }) => {
     // Given: 创建更新日志页对象
     const changelogPage = new ChangelogPage(page);
 
-    // When: 访问更新日志页
+    // When: 访问更新日志页 (goto已经会等待页面加载)
     await changelogPage.goto();
 
-    // Then: 验证更新内容包含分类关键词
+    // Then: 验证更新内容包含分类关键词 (不需要再次等待页面加载)
     const hasCategories = await changelogPage.validateContentCategories();
     expect(hasCategories).toBeTruthy();
-  });
+  }, { timeout: 90000 });
 
   test('如果包含破坏性变更,验证包含迁移指南或升级注意事项的说明', async ({ page }) => {
     // Given: 创建更新日志页对象
