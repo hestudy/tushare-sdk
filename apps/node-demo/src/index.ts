@@ -17,6 +17,7 @@ import { runStockListExample } from './examples/stock-list.js';
 import { runDailyDataExample } from './examples/daily-data.js';
 import { runTradeCalendarExample } from './examples/trade-calendar.js';
 import { runDailyBasicExample } from './examples/daily-basic.js';
+import { runFinancialDataExample } from './examples/financial-data.js';
 import type { DemoOutput, OutputFormat, ExampleName } from './types.js';
 
 // 应用版本(从 package.json 读取)
@@ -40,8 +41,9 @@ function parseArgs(): {
   for (const arg of args) {
     if (arg.startsWith('--example=')) {
       const exampleValue = arg.split('=')[1];
-      if (exampleValue === 'stock-list' || exampleValue === 'daily-data' || 
-          exampleValue === 'trade-calendar' || exampleValue === 'daily-basic' || 
+      if (exampleValue === 'stock-list' || exampleValue === 'daily-data' ||
+          exampleValue === 'trade-calendar' || exampleValue === 'daily-basic' ||
+          exampleValue === 'financial-data' ||
           exampleValue === 'all') {
         example = exampleValue;
       }
@@ -102,6 +104,11 @@ async function main(): Promise<void> {
         name: '每日指标查询',
         key: 'daily-basic' as const,
         fn: async () => runDailyBasicExample(config),
+      },
+      {
+        name: '财务数据查询',
+        key: 'financial-data' as const,
+        fn: async () => runFinancialDataExample(config),
       },
     ];
     
