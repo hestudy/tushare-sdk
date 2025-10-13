@@ -17,6 +17,8 @@ Auto-generated from all feature plans. Last updated: 2025-10-13
 - TypeScript 5.x+ / Node.js 18+ LTS + Playwright (E2E测试框架), @playwright/test (测试运行器) (008-e2e-e2e)
 - TypeScript 5.6+, Node.js 18+ LTS (008-e2e-e2e)
 - N/A (E2E测试不需要持久化存储) (008-e2e-e2e)
+- TypeScript 5.3+ / Node.js 18+ LTS + rslib (构建工具), vitest (测试框架), axios (HTTP客户端), 现有TushareClient核心功能 (009-sdk)
+- N/A (API客户端SDK,无本地持久化存储) (009-sdk)
 
 ## Project Structure
 ```
@@ -31,9 +33,9 @@ npm test [ONLY COMMANDS FOR ACTIVE TECHNOLOGIES][ONLY COMMANDS FOR ACTIVE TECHNO
 TypeScript 5.x+, Node.js 18+ LTS: Follow standard conventions
 
 ## Recent Changes
+- 009-sdk: Added TypeScript 5.3+ / Node.js 18+ LTS + rslib (构建工具), vitest (测试框架), axios (HTTP客户端), 现有TushareClient核心功能
 - 008-e2e-e2e: Added TypeScript 5.6+, Node.js 18+ LTS
 - 008-e2e-e2e: Added TypeScript 5.x+ / Node.js 18+ LTS + Playwright (E2E测试框架), @playwright/test (测试运行器)
-- 007-sdk: Added TypeScript 5.3+, Node.js 18+
 
 <!-- MANUAL ADDITIONS START -->
 <!-- MANUAL ADDITIONS END -->
