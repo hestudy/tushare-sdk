@@ -87,8 +87,32 @@ export class BasePage implements IBasePage, INavigable, ICodeExamples, IResponsi
    * 点击顶部导航栏链接
    */
   async clickNavLink(linkText: string): Promise<void> {
-    const link = this.page.locator(`${this.selectors.common.nav} a:has-text("${linkText}")`);
-    await link.click();
+    // 使用更灵活的选择器,先确保导航栏存在
+    await this.page.locator(this.selectors.common.nav).waitFor({ state: 'visible', timeout: 10000 });
+
+    // 尝试多种选择器方式
+    const selectors = [
+      `${this.selectors.common.nav} a:has-text("${linkText}")`,
+      `${this.selectors.common.nav} a:text-is("${linkText}")`,
+      `nav a:text-is("${linkText}")`,
+      `nav a:has-text("${linkText}")`,
+    ];
+
+    let link = null;
+    for (const selector of selectors) {
+      const element = this.page.locator(selector);
+      const count = await element.count();
+      if (count > 0) {
+        link = element.first();
+        break;
+      }
+    }
+
+    if (link) {
+      await link.click();
+    } else {
+      throw new Error(`无法找到导航链接: ${linkText}`);
+    }
   }
 
   /**

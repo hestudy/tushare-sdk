@@ -19,10 +19,14 @@ test.describe('核心页面可访问性测试', () => {
     // When: 访问首页
     await homePage.goto();
 
-    // Then: 验证页面标题包含 "Tushare SDK"
-    const heading = await homePage.getMainHeading();
-    expect(heading).toBeTruthy();
-    expect(heading).toContain('Tushare SDK');
+    // Then: 验证页面包含 "Tushare SDK" 标题
+    // rspress 首页使用 hero 组件,标题可能在特殊结构中
+    const heroTitle = await homePage.getHeroTitle();
+    const mainHeading = await homePage.getMainHeading();
+    const titleText = heroTitle || mainHeading;
+
+    expect(titleText).toBeTruthy();
+    expect(titleText).toContain('Tushare SDK');
   });
 
   test('验证快速入门页显示快速入门内容和代码示例', async ({ page }) => {

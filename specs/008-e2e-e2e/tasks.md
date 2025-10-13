@@ -175,8 +175,12 @@
   - ✅ 修复 Playwright baseURL 配置
   - ✅ 优化页面加载等待策略
   - ✅ 修复语法错误(空值合并运算符)
-  - ⚠️  选择器需要根据实际 rspress DOM 结构进一步调整
-  - 📝 测试现在可以运行,部分测试需要继续优化选择器策略
+  - ✅ 修复首页hero配置,添加hero section到index.md
+  - ✅ 修复选择器 - rspress使用 div.rspress-nav 而非 nav 标签
+  - ✅ 更新HomePage添加getHeroTitle()方法支持hero组件
+  - ✅ 首页标题测试和导航链接测试已通过
+  - ⚠️  部分测试仍需优化(更新日志格式、响应式侧边栏)
+  - 📝 核心测试已可运行,需要继续优化剩余失败的测试用例
 
 ---
 

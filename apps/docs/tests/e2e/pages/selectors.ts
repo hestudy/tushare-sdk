@@ -9,29 +9,30 @@ import type { CommonSelectors, CodeSelectors, MobileSelectors, PageSelectors } f
 
 /**
  * 通用选择器 - 适用于所有页面
+ * 注意: rspress 使用 div.rspress-nav 而不是 nav 标签
  */
 export const commonSelectors: CommonSelectors = {
-  // 顶部导航栏
-  nav: 'nav.rspress-nav',
+  // 顶部导航栏 - rspress 使用 div 而非 nav 标签
+  nav: '.rspress-nav',
 
   // 导航栏链接
   navLinks: {
-    guide: 'nav.rspress-nav a[href*="/guide"]',
-    api: 'nav.rspress-nav a[href*="/api"]',
-    changelog: 'nav.rspress-nav a[href*="/changelog"]',
-    github: 'nav.rspress-nav a[href*="github.com"]',
+    guide: '.rspress-nav a[href*="/guide"]',
+    api: '.rspress-nav a[href*="/api"]',
+    changelog: '.rspress-nav a[href*="/changelog"]',
+    github: '.rspress-nav a[href*="github.com"]',
   },
 
-  // 侧边栏
-  sidebar: 'aside.rspress-sidebar',
-  sidebarGroup: '.rspress-sidebar-group',
-  sidebarLink: '.rspress-sidebar a',
+  // 侧边栏 - rspress 使用 aside 标签
+  sidebar: 'aside, .rspress-sidebar, [class*="sidebar"]',
+  sidebarGroup: '.rspress-sidebar-group, [class*="sidebar"] > div',
+  sidebarLink: 'aside a, .rspress-sidebar a, [class*="sidebar"] a',
 
-  // 主内容区
-  mainContent: 'article.rspress-doc-content',
+  // 主内容区 - rspress 使用特定的 class
+  mainContent: 'article, .rspress-doc-content, [class*="doc-content"], main',
 
   // 页脚
-  footer: 'footer.rspress-footer',
+  footer: 'footer, .rspress-footer, [class*="footer"]',
 };
 
 /**
