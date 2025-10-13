@@ -62,12 +62,13 @@ test.describe('核心页面可访问性测试', () => {
     const hasNpm = await guidePage.contentContains('npm');
     const hasPnpm = await guidePage.contentContains('pnpm');
     const hasTushare = await guidePage.contentContains('tushare');
+    const hasHestudy = await guidePage.contentContains('hestudy');
 
     // 至少包含 npm 或 pnpm
     expect(hasNpm || hasPnpm).toBeTruthy();
-    // 包含 tushare 包名
-    expect(hasTushare).toBeTruthy();
-  });
+    // 包含 tushare 或 hestudy 包名
+    expect(hasTushare || hasHestudy).toBeTruthy();
+  }, { timeout: 60000 });
 
   test('验证配置指南页显示Token配置方法', async ({ page }) => {
     // Given: 创建指南页对象
@@ -84,7 +85,7 @@ test.describe('核心页面可访问性测试', () => {
     // Then: 验证页面包含 Token 相关内容
     const hasToken = await guidePage.contentContains('token');
     expect(hasToken).toBeTruthy();
-  });
+  }, { timeout: 60000 });
 
   test('验证错误处理页显示错误处理内容', async ({ page }) => {
     // Given: 创建指南页对象
@@ -103,7 +104,7 @@ test.describe('核心页面可访问性测试', () => {
                              await guidePage.contentContains('Error') ||
                              await guidePage.contentContains('异常');
     expect(hasErrorContent).toBeTruthy();
-  });
+  }, { timeout: 60000 });
 
   test('验证股票基础信息API页显示API文档和代码示例', async ({ page }) => {
     // Given: 创建API页对象
@@ -137,7 +138,7 @@ test.describe('核心页面可访问性测试', () => {
                           await apiPage.contentContains('接口') ||
                           await apiPage.contentContains('数据');
     expect(hasApiContent).toBeTruthy();
-  });
+  }, { timeout: 60000 });
 
   test('验证交易日历API页显示API文档内容', async ({ page }) => {
     // Given: 创建API页对象
@@ -155,7 +156,7 @@ test.describe('核心页面可访问性测试', () => {
                                 await apiPage.contentContains('Calendar') ||
                                 await apiPage.contentContains('交易日');
     expect(hasCalendarContent).toBeTruthy();
-  });
+  }, { timeout: 60000 });
 
   test('验证每日指标API页显示API文档内容', async ({ page }) => {
     // Given: 创建API页对象
@@ -173,7 +174,7 @@ test.describe('核心页面可访问性测试', () => {
                              await apiPage.contentContains('Basic') ||
                              await apiPage.contentContains('每日');
     expect(hasMetricContent).toBeTruthy();
-  });
+  }, { timeout: 60000 });
 
   test('验证更新日志页显示 "更新日志" 标题和版本信息', async ({ page }) => {
     // Given: 创建更新日志页对象

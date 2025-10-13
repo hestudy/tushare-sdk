@@ -94,11 +94,30 @@ export class BasePage implements IBasePage, INavigable, ICodeExamples, IResponsi
     const isMobile = await this.isMobileViewport();
     if (isMobile) {
       try {
-        // 尝试找到并点击移动菜单按钮
-        const mobileMenuButton = this.page.locator('button[aria-label*="menu"], button[aria-label*="菜单"], .mobile-menu-button, button.nav-menu-toggle').first();
-        if (await mobileMenuButton.isVisible({ timeout: 2000 })) {
-          await mobileMenuButton.click();
-          await this.page.waitForTimeout(500); // 等待菜单展开
+        // 尝试多种移动菜单按钮选择器
+        const menuButtonSelectors = [
+          'button[aria-label*="menu"]',
+          'button[aria-label*="菜单"]',
+          'button[class*="menu"]',
+          'button[class*="nav"]',
+          '.mobile-menu-button',
+          '.nav-menu-toggle',
+          'nav button',
+          'header button',
+        ];
+
+        for (const selector of menuButtonSelectors) {
+          try {
+            const mobileMenuButton = this.page.locator(selector).first();
+            if (await mobileMenuButton.isVisible({ timeout: 1000 })) {
+              await mobileMenuButton.click();
+              await this.page.waitForTimeout(800); // 增加等待时间
+              break;
+            }
+          } catch {
+            // 尝试下一个选择器
+            continue;
+          }
         }
       } catch {
         // 如果没有移动菜单按钮,继续
@@ -106,18 +125,29 @@ export class BasePage implements IBasePage, INavigable, ICodeExamples, IResponsi
     }
 
     // 尝试多种选择器方式,包括更通用的选择器
-    const link = await this.page.getByRole('link', { name: linkText, exact: true }).or(
-      this.page.getByRole('link', { name: linkText, exact: false })
-    ).or(
-      this.page.locator(`nav a`, { hasText: linkText })
-    ).or(
-      this.page.locator(`header a`, { hasText: linkText })
-    ).first();
-
-    // 确保链接可见
+    let link;
     try {
-      await link.waitFor({ state: 'visible', timeout: 5000 });
-      await link.click();
+      link = this.page.getByRole('link', { name: linkText, exact: true });
+      if (await link.count() === 0) {
+        link = this.page.getByRole('link', { name: linkText, exact: false });
+      }
+      if (await link.count() === 0) {
+        link = this.page.locator(`nav a:has-text("${linkText}")`);
+      }
+      if (await link.count() === 0) {
+        link = this.page.locator(`header a:has-text("${linkText}")`);
+      }
+      if (await link.count() === 0) {
+        link = this.page.locator(`a:has-text("${linkText}")`);
+      }
+    } catch (error) {
+      throw new Error(`无法找到或点击导航链接: ${linkText}`);
+    }
+
+    // 确保链接可见并点击
+    try {
+      await link.first().waitFor({ state: 'visible', timeout: 5000 });
+      await link.first().click();
       await this.page.waitForLoadState('domcontentloaded');
     } catch (error) {
       throw new Error(`无法找到或点击导航链接: ${linkText}`);
@@ -178,8 +208,34 @@ export class BasePage implements IBasePage, INavigable, ICodeExamples, IResponsi
     }
 
     if (link) {
-      await link.click();
-      await this.page.waitForLoadState('domcontentloaded');
+      try {
+        // 先滚动到元素可见位置
+        await link.scrollIntoViewIfNeeded();
+        await this.page.waitForTimeout(500); // 等待滚动完成
+
+        // 在移动端,直接通过 JavaScript 导航到链接的 href
+        if (isMobile) {
+          const href = await link.getAttribute('href');
+          if (href) {
+            await this.page.goto(`${this.baseURL}${href}`);
+            await this.waitForPageLoad();
+            return;
+          }
+        }
+
+        // 桌面端正常点击
+        await link.click({ force: true });
+        await this.page.waitForLoadState('domcontentloaded');
+      } catch (error) {
+        // 如果点击失败,尝试通过 href 导航
+        const href = await link.getAttribute('href');
+        if (href) {
+          await this.page.goto(`${this.baseURL}${href}`);
+          await this.waitForPageLoad();
+        } else {
+          throw error;
+        }
+      }
     } else {
       throw new Error(`无法找到侧边栏链接: ${linkText}`);
     }

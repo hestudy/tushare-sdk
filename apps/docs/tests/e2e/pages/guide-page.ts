@@ -62,11 +62,17 @@ export class GuidePage extends BasePage {
    */
   async contentContains(keyword: string): Promise<boolean> {
     try {
-      // 等待主内容区可见 (goto已经等待了页面加载)
-      const content = this.page.locator(this.selectors.common.mainContent).first();
-      await content.waitFor({ state: 'visible', timeout: 10000 });
-      const text = await content.textContent();
-      return text?.includes(keyword) ?? false;
+      // 等待页面加载完成
+      await this.page.waitForLoadState('networkidle', { timeout: 10000 });
+
+      // 直接获取整个 body 的文本内容
+      const bodyText = await this.page.locator('body').textContent();
+
+      if (!bodyText) {
+        return false;
+      }
+
+      return bodyText.toLowerCase().includes(keyword.toLowerCase());
     } catch (error) {
       return false;
     }

@@ -53,14 +53,15 @@ test.describe('导航功能测试', () => {
     const apiPage = new ApiPage(page);
     await apiPage.gotoStockBasic();
 
-    // When: 检查页面内容
-    const hasStockData = await apiPage.contentContains('股票数据');
-    const hasTradingData = await apiPage.contentContains('交易相关');
+    // When: 等待侧边栏加载并检查分类
+    const sidebar = page.locator('aside nav, aside.rspress-sidebar nav, [role="complementary"] nav');
+    await sidebar.waitFor({ state: 'visible', timeout: 10000 });
 
-    // Then: 验证侧边栏包含这些分类 (注意: 基金数据已被移除)
-    expect(hasStockData).toBeTruthy();
-    expect(hasTradingData).toBeTruthy();
-  });
+    // Then: 验证侧边栏包含这些分类
+    const sidebarText = await sidebar.textContent();
+    expect(sidebarText).toContain('股票数据');
+    expect(sidebarText).toContain('交易相关');
+  }, { timeout: 60000 });
 
   test('在 /api/stock/basic 页点击侧边栏 "日线数据" 链接,验证跳转到 /api/stock/daily', async ({
     page,
