@@ -64,6 +64,35 @@ const quotes = await client.getDailyQuote({
 console.log(`获取到 ${quotes.length} 条行情数据`);
 ```
 
+### 财务数据分析
+
+```typescript
+// 获取公司三大财务报表
+const [incomeData, balanceData, cashflowData] = await Promise.all([
+  client.getIncomeStatement({ ts_code: '600519.SH', period: '20231231' }),
+  client.getBalanceSheet({ ts_code: '600519.SH', period: '20231231' }),
+  client.getCashFlow({ ts_code: '600519.SH', period: '20231231' }),
+]);
+
+if (incomeData.length > 0 && balanceData.length > 0 && cashflowData.length > 0) {
+  const income = incomeData[0];
+  const balance = balanceData[0];
+  const cashflow = cashflowData[0];
+
+  // 盈利能力分析
+  const netProfitMargin = ((income.n_income_attr_p! / income.total_revenue!) * 100).toFixed(2);
+  console.log(`净利率: ${netProfitMargin}%`);
+
+  // 偿债能力分析
+  const currentRatio = (balance.total_cur_assets! / balance.total_cur_liab!).toFixed(2);
+  console.log(`流动比率: ${currentRatio}`);
+
+  // 现金流分析
+  const operCashFlow = cashflow.n_cashflow_act || 0;
+  console.log(`经营现金流: ${operCashFlow.toLocaleString()}元`);
+}
+```
+
 ### 高级配置
 
 ```typescript
@@ -124,13 +153,67 @@ const quotes = await client.getDailyQuote({
 ```
 
 #### `getFinancialData(params)`
-获取财务数据
+获取财务数据(通用接口)
 
 ```typescript
 const financial = await client.getFinancialData({
   ts_code: '000001.SZ',
   period: '20231231',
 });
+```
+
+#### `getIncomeStatement(params?)`
+获取利润表数据(94个字段完整类型定义)
+
+**权限要求**: 至少 2000 积分
+
+```typescript
+const incomeData = await client.getIncomeStatement({
+  ts_code: '000001.SZ',
+  period: '20231231',
+});
+
+console.log(`营业总收入: ${incomeData[0].total_revenue}`);
+console.log(`净利润: ${incomeData[0].n_income_attr_p}`);
+console.log(`基本每股收益: ${incomeData[0].basic_eps}`);
+```
+
+#### `getBalanceSheet(params?)`
+获取资产负债表数据(81个字段完整类型定义)
+
+**权限要求**: 至少 2000 积分
+
+```typescript
+const balanceData = await client.getBalanceSheet({
+  ts_code: '600519.SH',
+  period: '20231231',
+});
+
+console.log(`总资产: ${balanceData[0].total_assets}`);
+console.log(`流动资产: ${balanceData[0].total_cur_assets}`);
+console.log(`流动负债: ${balanceData[0].total_cur_liab}`);
+
+// 计算流动比率
+const currentRatio = balanceData[0].total_cur_assets! / balanceData[0].total_cur_liab!;
+console.log(`流动比率: ${currentRatio.toFixed(2)}`);
+```
+
+#### `getCashFlow(params?)`
+获取现金流量表数据(87个字段完整类型定义)
+
+**权限要求**: 至少 2000 积分
+
+```typescript
+const cashflowData = await client.getCashFlow({
+  ts_code: '000001.SZ',
+  start_date: '20230101',
+  end_date: '20231231',
+});
+
+console.log(`经营活动现金流: ${cashflowData[0].n_cashflow_act}`);
+console.log(`投资活动现金流: ${cashflowData[0].n_cashflow_inv_act}`);
+console.log(`筹资活动现金流: ${cashflowData[0].n_cash_flows_fnc_act}`);
+console.log(`自由现金流: ${cashflowData[0].free_cashflow}`);
 ```
 
 #### `getTradeCalendar(params?)`
@@ -266,10 +349,17 @@ app.post('/api/tushare/stocks', async (req, res) => {
 
 ## 📖 完整文档
 
+### SDK核心功能
 - [快速开始指南](../../specs/001-tushare-typescript-sdk/quickstart.md)
 - [API 契约](../../specs/001-tushare-typescript-sdk/contracts/)
 - [数据模型](../../specs/001-tushare-typescript-sdk/data-model.md)
 - [技术研究](../../specs/001-tushare-typescript-sdk/research.md)
+
+### 财务数据功能
+- [财务数据快速开始](../../specs/009-sdk/quickstart.md) - 5-10分钟快速入门
+- [财务数据模型](../../specs/009-sdk/data-model.md) - 三大报表完整字段说明(262个字段)
+- [财务API契约](../../specs/009-sdk/contracts/) - API规范和测试要求
+- [财务数据研究](../../specs/009-sdk/research.md) - 技术决策和设计思路
 
 ## 🧪 测试
 

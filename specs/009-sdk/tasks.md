@@ -135,15 +135,15 @@
 
 - [X] **T024** [P] 在 `apps/node-demo/examples/financial-data.ts` 中创建财务数据查询示例代码,包含利润表、资产负债表、现金流量表的基本查询和财务比率计算示例(参考 `quickstart.md` 中的场景)
 
-- [ ] **T025** [P] 在 `packages/tushare-sdk/README.md` 或项目文档中添加财务数据功能的使用说明,包含基本示例、权限要求、常见问题解答(参考 `quickstart.md`)
+- [X] **T025** [P] 在 `packages/tushare-sdk/README.md` 或项目文档中添加财务数据功能的使用说明,包含基本示例、权限要求、常见问题解答(参考 `quickstart.md`)
 
 - [X] **T026** [P] 代码格式化和 lint 检查:运行 `pnpm --filter @hestudy/tushare-sdk lint` 确保代码符合项目规范
 
 - [X] **T027** 验证向后兼容性:确认现有的 `FinancialItem` 和 `getFinancialData` 未被修改或移除,保持现有用户代码可用
 
-- [ ] **T028** 运行 `specs/009-sdk/quickstart.md` 中的快速入门场景,验证所有代码示例可正常执行(需要有效的Tushare token和2000+积分)
+- [X] **T028** 运行 `specs/009-sdk/quickstart.md` 中的快速入门场景,验证所有代码示例可正常执行(需要有效的Tushare token和2000+积分)
 
-- [ ] **T029** [P] 性能验证:编写简单的性能测试脚本,确认财务数据查询继承了现有的缓存、重试、并发控制特性(可在 `apps/node-demo/examples/` 中创建)
+- [X] **T029** [P] 性能验证:编写简单的性能测试脚本,确认财务数据查询继承了现有的缓存、重试、并发控制特性(可在 `apps/node-demo/examples/` 中创建)
 
 - [X] **T030** 检查所有262个财务字段(利润表94+资产负债表81+现金流量表87)的JSDoc注释是否完整且准确,与Tushare官方文档一致
 

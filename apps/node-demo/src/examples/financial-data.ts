@@ -5,7 +5,7 @@
  */
 
 import { TushareClient } from '@hestudy/tushare-sdk';
-import { getConfig } from '../config.js';
+import { loadConfig } from '../config.js';
 
 /**
  * 示例1: 查询利润表数据
@@ -13,8 +13,8 @@ import { getConfig } from '../config.js';
 async function queryIncomeStatement() {
   console.log('\n========== 示例1: 查询利润表数据 ==========\n');
 
-  const config = getConfig();
-  const client = new TushareClient(config);
+  const config = loadConfig();
+  const client = new TushareClient({ token: config.tushareToken });
 
   try {
     // 查询平安银行 (000001.SZ) 的2023年年报利润表
@@ -53,8 +53,8 @@ async function queryIncomeStatement() {
 async function queryBalanceSheet() {
   console.log('\n========== 示例2: 查询资产负债表数据 ==========\n');
 
-  const config = getConfig();
-  const client = new TushareClient(config);
+  const config = loadConfig();
+  const client = new TushareClient({ token: config.tushareToken });
 
   try {
     // 查询贵州茅台 (600519.SH) 的资产负债表
@@ -104,8 +104,8 @@ async function queryBalanceSheet() {
 async function queryCashFlow() {
   console.log('\n========== 示例3: 查询现金流量表数据 ==========\n');
 
-  const config = getConfig();
-  const client = new TushareClient(config);
+  const config = loadConfig();
+  const client = new TushareClient({ token: config.tushareToken });
 
   try {
     // 查询平安银行的现金流量表(时间序列)
@@ -124,7 +124,7 @@ async function queryCashFlow() {
       console.log(`投资活动现金流: ${item.n_cashflow_inv_act?.toLocaleString()} 元`);
       console.log(`筹资活动现金流: ${item.n_cash_flows_fnc_act?.toLocaleString()} 元`);
       console.log(`现金净增加额: ${item.n_incr_cash_cash_equ?.toLocaleString()} 元`);
-      if (item.free_cashflow !== undefined) {
+      if (item.free_cashflow !== undefined && item.free_cashflow !== null) {
         console.log(`自由现金流: ${item.free_cashflow.toLocaleString()} 元`);
       }
       console.log('');
@@ -140,8 +140,8 @@ async function queryCashFlow() {
 async function comprehensiveFinancialAnalysis() {
   console.log('\n========== 示例4: 综合财务分析 ==========\n');
 
-  const config = getConfig();
-  const client = new TushareClient(config);
+  const config = loadConfig();
+  const client = new TushareClient({ token: config.tushareToken });
   const tsCode = '600519.SH'; // 贵州茅台
   const period = '20231231';
 
@@ -221,8 +221,8 @@ async function comprehensiveFinancialAnalysis() {
 async function multiPeriodComparison() {
   console.log('\n========== 示例5: 多期财务数据对比 ==========\n');
 
-  const config = getConfig();
-  const client = new TushareClient(config);
+  const config = loadConfig();
+  const client = new TushareClient({ token: config.tushareToken });
   const tsCode = '600519.SH'; // 贵州茅台
   const periods = ['20211231', '20221231', '20231231'];
 
