@@ -28,9 +28,9 @@ description: "演示应用财务数据功能集成任务清单"
 
 **Purpose**: 项目初始化和基本结构验证(此功能为集成工作,无需创建新结构)
 
-- [ ] T001 验证现有项目结构符合规范(`apps/node-demo/src/` 包含 examples/, utils/, config.ts, types.ts, index.ts)
-- [ ] T002 验证依赖已安装(@hestudy/tushare-sdk, dotenv, vitest)
-- [ ] T003 验证 TypeScript 编译配置正确(`npm run build` 可正常执行)
+- [X] T001 验证现有项目结构符合规范(`apps/node-demo/src/` 包含 examples/, utils/, config.ts, types.ts, index.ts)
+- [X] T002 验证依赖已安装(@hestudy/tushare-sdk, dotenv, vitest)
+- [X] T003 验证 TypeScript 编译配置正确(`npm run build` 可正常执行)
 
 ---
 
@@ -107,8 +107,8 @@ description: "演示应用财务数据功能集成任务清单"
 - [X] T029 [US3] 验证 `npm start` 或 `npm start -- --example=all` 包含财务数据示例
 - [X] T030 [US3] 在 financial-data.ts 的子示例函数中添加 verbose 参数支持(根据 config.debug 决定详细输出)
 - [X] T031 [US3] 使用 logVerbose 工具记录详细的 API 调用日志(请求参数、响应数据条数、响应时间)
-- [ ] T032 [US3] 验证 `npm start -- --example=financial-data --verbose` 输出详细日志
-- [ ] T033 [US3] 验证 `npm start -- --example=financial-data --format=json` 输出标准 JSON 格式
+- [X] T032 [US3] 验证 `npm start -- --example=financial-data --verbose` 输出详细日志
+- [X] T033 [US3] 验证 `npm start -- --example=financial-data --format=json` 输出标准 JSON 格式
 - [X] T034 [US3] 确保财务数据示例的输出格式与其他示例一致(使用相同的 formatter 工具)
 - [X] T035 [US3] 验证财务数据示例的执行结果被正确记录到总体摘要统计中
 
@@ -147,7 +147,7 @@ description: "演示应用财务数据功能集成任务清单"
 - [X] T047 验证所有错误场景的优雅处理(无效 token、API 超时、数据缺失、null/undefined 字段)
 - [X] T048 [P] 运行 `npm run lint` 并修复所有警告和错误 (项目无lint脚本,使用type-check代替)
 - [X] T049 [P] 运行 `npm run build` 验证 TypeScript 编译通过
-- [ ] T050 执行手动测试清单(见 quickstart.md 第5节):
+- [X] T050 执行手动测试清单(见 quickstart.md 第5节):
   - `npm start -- --example=financial-data`
   - `npm start` (all 模式)
   - `npm start -- --example=financial-data --verbose`
