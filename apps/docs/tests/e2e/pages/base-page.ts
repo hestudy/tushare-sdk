@@ -119,8 +119,9 @@ export class BasePage implements IBasePage, INavigable, ICodeExamples, IResponsi
    * 点击侧边栏链接
    */
   async clickSidebarLink(linkText: string): Promise<void> {
-    const link = this.page.locator(`${this.selectors.common.sidebar} a:has-text("${linkText}")`);
-    await link.click();
+    // 使用sidebarLink选择器,确保只选择链接元素
+    const link = this.page.locator(this.selectors.common.sidebarLink).filter({ hasText: linkText });
+    await link.first().click();
   }
 
   /**

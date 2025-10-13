@@ -21,8 +21,7 @@ test.describe('导航功能测试', () => {
     await homePage.clickNavLink('指南');
 
     // Then: 验证跳转到指南页
-    const urlContains = await homePage.expectUrlContains('/guide');
-    expect(urlContains).toBeTruthy();
+    await expect(page).toHaveURL(/\/guide/);
   });
 
   test('从首页点击 "API 文档" 链接,验证跳转到 API 页', async ({ page }) => {
@@ -30,12 +29,11 @@ test.describe('导航功能测试', () => {
     const homePage = new HomePage(page);
     await homePage.goto();
 
-    // When: 点击顶部导航栏的 "API" 链接
-    await homePage.clickNavLink('API');
+    // When: 点击顶部导航栏的 "API 文档" 链接 (使用完整文本)
+    await homePage.clickNavLink('API 文档');
 
     // Then: 验证跳转到 API 页
-    const urlContains = await homePage.expectUrlContains('/api');
-    expect(urlContains).toBeTruthy();
+    await expect(page).toHaveURL(/\/api/);
   });
 
   test('从首页点击 "更新日志" 链接,验证跳转到更新日志页', async ({ page }) => {
@@ -47,22 +45,21 @@ test.describe('导航功能测试', () => {
     await homePage.clickNavLink('更新日志');
 
     // Then: 验证跳转到更新日志页
-    const urlContains = await homePage.expectUrlContains('/changelog');
-    expect(urlContains).toBeTruthy();
+    await expect(page).toHaveURL(/\/changelog/);
   });
 
-  test('在API文档页验证侧边栏显示 "股票数据" 和 "基金数据" 分类', async ({ page }) => {
+  test('在API文档页验证侧边栏显示 "股票数据" 和 "交易相关" 分类', async ({ page }) => {
     // Given: 创建API页对象并访问股票基础信息页
     const apiPage = new ApiPage(page);
     await apiPage.gotoStockBasic();
 
     // When: 检查页面内容
     const hasStockData = await apiPage.contentContains('股票数据');
-    const hasFundData = await apiPage.contentContains('基金数据');
+    const hasTradingData = await apiPage.contentContains('交易相关');
 
-    // Then: 验证侧边栏包含这些分类
+    // Then: 验证侧边栏包含这些分类 (注意: 基金数据已被移除)
     expect(hasStockData).toBeTruthy();
-    expect(hasFundData).toBeTruthy();
+    expect(hasTradingData).toBeTruthy();
   });
 
   test('在 /api/stock/basic 页点击侧边栏 "日线数据" 链接,验证跳转到 /api/stock/daily', async ({
@@ -118,8 +115,8 @@ test.describe('导航功能测试', () => {
     const guidePage = new GuidePage(page);
     await guidePage.gotoInstallation();
 
-    // When: 点击侧边栏 "快速" 链接
-    await guidePage.clickSidebarLink('快速');
+    // When: 点击侧边栏 "快速开始" 链接
+    await guidePage.clickSidebarLink('快速开始');
 
     // Then: 验证跳转到快速入门页
     await expect(page).toHaveURL(/\/guide\/quick-start/);

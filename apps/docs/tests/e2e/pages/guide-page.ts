@@ -61,8 +61,14 @@ export class GuidePage extends BasePage {
    * 验证页面内容是否包含特定关键词
    */
   async contentContains(keyword: string): Promise<boolean> {
-    const content = this.page.locator(this.selectors.common.mainContent);
-    const text = await content.textContent();
-    return text?.includes(keyword) ?? false;
+    try {
+      // 先等待主内容区可见
+      const content = this.page.locator(this.selectors.common.mainContent).first();
+      await content.waitFor({ state: 'visible', timeout: 10000 });
+      const text = await content.textContent();
+      return text?.includes(keyword) ?? false;
+    } catch (error) {
+      return false;
+    }
   }
 }

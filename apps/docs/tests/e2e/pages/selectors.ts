@@ -24,9 +24,9 @@ export const commonSelectors: CommonSelectors = {
   },
 
   // 侧边栏 - rspress 使用 aside 标签
-  sidebar: 'aside, .rspress-sidebar, [class*="sidebar"]',
+  sidebar: 'aside.rspress-sidebar, .rspress-sidebar, [class*="sidebar"]',
   sidebarGroup: '.rspress-sidebar-group, [class*="sidebar"] > div',
-  sidebarLink: 'aside a, .rspress-sidebar a, [class*="sidebar"] a',
+  sidebarLink: 'aside.rspress-sidebar a, .rspress-sidebar a',
 
   // 主内容区 - rspress 使用特定的 class
   mainContent: 'article, .rspress-doc-content, [class*="doc-content"], main',
