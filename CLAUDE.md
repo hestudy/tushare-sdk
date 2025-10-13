@@ -15,6 +15,8 @@ Auto-generated from all feature plans. Last updated: 2025-10-13
 - 静态文件(Markdown/MDX 文档源文件) (006-sdk)
 - TypeScript 5.3+, Node.js 18+ (007-sdk)
 - TypeScript 5.x+ / Node.js 18+ LTS + Playwright (E2E测试框架), @playwright/test (测试运行器) (008-e2e-e2e)
+- TypeScript 5.6+, Node.js 18+ LTS (008-e2e-e2e)
+- N/A (E2E测试不需要持久化存储) (008-e2e-e2e)
 
 ## Project Structure
 ```
@@ -29,10 +31,9 @@ npm test [ONLY COMMANDS FOR ACTIVE TECHNOLOGIES][ONLY COMMANDS FOR ACTIVE TECHNO
 TypeScript 5.x+, Node.js 18+ LTS: Follow standard conventions
 
 ## Recent Changes
+- 008-e2e-e2e: Added TypeScript 5.6+, Node.js 18+ LTS
 - 008-e2e-e2e: Added TypeScript 5.x+ / Node.js 18+ LTS + Playwright (E2E测试框架), @playwright/test (测试运行器)
 - 007-sdk: Added TypeScript 5.3+, Node.js 18+
-- 006-sdk: Added TypeScript 5.x+ / Node.js 18+ LTS + rspress (静态站点生成器), @rspress/plugin-* (官方插件)
-- 005-node-demo: Added TypeScript 5.x+ / Node.js 18+ LTS + @hestudy/tushare-sdk (本地 workspace 依赖), 现有 node-demo 工具函数
 
 <!-- MANUAL ADDITIONS START -->
 <!-- MANUAL ADDITIONS END -->
