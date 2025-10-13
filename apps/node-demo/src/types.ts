@@ -81,7 +81,7 @@ export type OutputFormat = 'console' | 'json';
 /**
  * 示例名称类型
  */
-export type ExampleName = 'stock-list' | 'daily-data' | 'trade-calendar' | 'daily-basic' | 'all';
+export type ExampleName = 'stock-list' | 'daily-data' | 'trade-calendar' | 'daily-basic' | 'financial-data' | 'all';
 
 /**
  * 运行选项
