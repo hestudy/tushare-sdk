@@ -1,0 +1,121 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "query_stock_basic",
+  "description": "查询股票基本信息,支持通过股票代码、交易所、上市状态等条件筛选。返回股票名称、行业、上市日期等基础属性。",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "const": "query_stock_basic",
+      "description": "MCP 工具名称"
+    },
+    "description": {
+      "type": "string",
+      "description": "工具功能描述"
+    },
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "ts_code": {
+          "type": "string",
+          "description": "股票代码,格式: 代码.市场后缀(如 600519.SH 表示上交所, 000001.SZ 表示深交所)",
+          "pattern": "^\\d{6}\\.(SH|SZ)$",
+          "examples": ["600519.SH", "000001.SZ", "300750.SZ"]
+        },
+        "exchange": {
+          "type": "string",
+          "description": "交易所代码,用于筛选特定交易所的股票",
+          "enum": ["SSE", "SZSE"],
+          "examples": ["SSE"]
+        },
+        "list_status": {
+          "type": "string",
+          "description": "上市状态,用于筛选上市/退市/暂停上市的股票",
+          "enum": ["L", "D", "P"],
+          "examples": ["L"]
+        }
+      },
+      "anyOf": [
+        { "required": ["ts_code"] },
+        { "required": ["exchange"] },
+        { "required": ["list_status"] }
+      ]
+    }
+  },
+  "examples": [
+    {
+      "request": {
+        "name": "query_stock_basic",
+        "arguments": {
+          "ts_code": "600519.SH"
+        }
+      },
+      "response": {
+        "content": [
+          {
+            "type": "text",
+            "text": "股票基本信息:\n- 股票代码: 600519.SH\n- 股票名称: 贵州茅台\n- 所属行业: 白酒\n- 所属市场: 主板\n- 上市日期: 2001-08-27\n- 上市状态: 正常上市"
+          }
+        ],
+        "structuredContent": {
+          "ts_code": "600519.SH",
+          "symbol": "600519",
+          "name": "贵州茅台",
+          "area": "贵州",
+          "industry": "白酒",
+          "market": "主板",
+          "exchange": "SSE",
+          "list_status": "L",
+          "list_date": "20010827"
+        }
+      }
+    },
+    {
+      "request": {
+        "name": "query_stock_basic",
+        "arguments": {
+          "exchange": "SSE",
+          "list_status": "L"
+        }
+      },
+      "response": {
+        "content": [
+          {
+            "type": "text",
+            "text": "上交所上市股票列表(前50条):\n1. 600000.SH - 浦发银行\n2. 600519.SH - 贵州茅台\n...\n50. 603XXX.SH - XXX股份\n\n提示:共找到 1500+ 只股票,仅显示前 50 条。如需查询特定股票,请提供股票代码。"
+          }
+        ]
+      }
+    }
+  ],
+  "errorScenarios": [
+    {
+      "scenario": "股票代码格式错误",
+      "request": {
+        "ts_code": "600519"
+      },
+      "error": {
+        "code": "VALIDATION_ERROR",
+        "message": "参数格式错误: 股票代码格式错误,示例: 600519.SH"
+      }
+    },
+    {
+      "scenario": "股票代码不存在",
+      "request": {
+        "ts_code": "999999.SH"
+      },
+      "error": {
+        "code": "DATA_NOT_FOUND",
+        "message": "未找到股票 999999.SH,请检查代码是否正确"
+      }
+    },
+    {
+      "scenario": "无筛选条件",
+      "request": {},
+      "error": {
+        "code": "VALIDATION_ERROR",
+        "message": "请提供至少一个筛选条件(股票代码、交易所或上市状态)"
+      }
+    }
+  ]
+}
