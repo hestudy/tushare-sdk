@@ -95,6 +95,48 @@ pnpm start
 }
 ```
 
+### Claude Code 配置
+
+在 Claude Code 中,您可以使用命令行快速添加此 MCP 服务器:
+
+```bash
+# 使用 claude mcp add 命令添加
+claude mcp add --transport stdio tushare \
+  --env TUSHARE_TOKEN=your_tushare_token_here \
+  -- npx -y @hestudy/tushare-mcp
+```
+
+**参数说明**:
+- `--transport stdio`: 使用标准输入输出传输协议
+- `tushare`: MCP 服务器名称
+- `--env TUSHARE_TOKEN=...`: 设置 Tushare API Token 环境变量
+- `--`: 分隔符,后面跟服务器启动命令
+- `npx -y @hestudy/tushare-mcp`: 服务器启动命令
+
+**管理命令**:
+```bash
+# 查看已配置的 MCP 服务器
+claude mcp list
+
+# 查看特定服务器详情
+claude mcp get tushare
+
+# 删除 MCP 服务器
+claude mcp remove tushare
+```
+
+**本地开发方式**:
+
+如果您在本地开发,可以使用本地路径:
+
+```bash
+claude mcp add --transport stdio tushare \
+  --env TUSHARE_TOKEN=your_tushare_token_here \
+  -- node /absolute/path/to/tushare-sdk/apps/tushare-mcp/dist/index.js
+```
+
+**注意**: 请将 `your_tushare_token_here` 替换为您的实际 Tushare Token。
+
 ## 可用工具
 
 ### 1. query_stock_quote - 股票行情查询

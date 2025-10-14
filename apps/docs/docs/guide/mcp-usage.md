@@ -54,12 +54,13 @@ Tushare API Token 是访问 Tushare Pro 数据的唯一凭证。
 
 ### 3. 支持 MCP 的 AI 客户端
 
-本指南重点介绍 Claude Desktop 的配置,同时支持以下客户端:
+本指南重点介绍主流 MCP 客户端的配置,支持以下客户端:
 
-- [Claude Desktop](https://claude.ai/download) ⭐ 推荐
-- [Cursor](https://cursor.sh)
-- [VSCode with Cline](https://marketplace.visualstudio.com/items?itemName=saoudrizwan.claude-dev)
-- [Zed Editor](https://zed.dev)
+- [Claude Desktop](https://claude.ai/download) ⭐ 推荐 - 图形界面客户端
+- [Claude Code](https://claude.ai/download) ⭐ 推荐 - 官方 CLI 工具,支持快捷命令
+- [Cursor](https://cursor.sh) - AI 代码编辑器
+- [VSCode with Cline](https://marketplace.visualstudio.com/items?itemName=saoudrizwan.claude-dev) - VSCode 扩展
+- [Zed Editor](https://zed.dev) - 轻量级编辑器
 
 更多客户端请查看 [MCP 客户端总览](https://modelcontextprotocol.io/clients)。
 
@@ -169,6 +170,120 @@ Claude Desktop 是使用 MCP 服务最便捷的方式,以下是详细配置步�
 保存配置文件后,**完全退出** Claude Desktop 并重新启动,新配置才会生效。
 
 **验证方法**: 在 Claude 对话中输入 "你现在可以使用哪些工具?",如果看到 Tushare 相关工具,说明配置成功。
+
+### Claude Code 配置
+
+[Claude Code](https://docs.claude.com/claude-code) 是 Anthropic 推出的官方 CLI 工具,支持通过命令行快速添加和管理 MCP 服务器。
+
+#### 使用命令行添加(推荐)
+
+在终端中直接运行以下命令即可添加 Tushare MCP 服务器:
+
+```bash
+claude mcp add --transport stdio tushare \
+  --env TUSHARE_TOKEN=your_tushare_token_here \
+  -- npx -y @hestudy/tushare-mcp
+```
+
+**命令参数说明**:
+
+| 参数 | 说明 |
+|------|------|
+| `--transport stdio` | 使用标准输入输出传输协议(stdio) |
+| `tushare` | MCP 服务器名称,可以自定义 |
+| `--env TUSHARE_TOKEN=...` | 设置环境变量,配置 Tushare API Token |
+| `--` | 分隔符,后面跟服务器启动命令 |
+| `npx -y @hestudy/tushare-mcp` | 服务器启动命令,使用 npx 运行 |
+
+**本地开发方式**:
+
+如果您在本地开发 Tushare SDK,可以指定本地路径:
+
+```bash
+claude mcp add --transport stdio tushare \
+  --env TUSHARE_TOKEN=your_tushare_token_here \
+  -- node /absolute/path/to/tushare-sdk/apps/tushare-mcp/dist/index.js
+```
+
+**注意**: Windows 用户需要使用反斜杠路径,如 `C:\Users\username\tushare-sdk\...`
+
+#### 管理 MCP 服务器
+
+Claude Code 提供了一组命令来管理 MCP 服务器:
+
+```bash
+# 查看所有已配置的 MCP 服务器
+claude mcp list
+
+# 查看特定服务器的详细信息
+claude mcp get tushare
+
+# 删除 MCP 服务器
+claude mcp remove tushare
+```
+
+#### 配置文件
+
+如果您更喜欢手动编辑配置文件,可以直接修改:
+
+**配置文件位置**:
+- macOS/Linux: `~/.config/claude/mcp.json`
+- Windows: `%APPDATA%\Claude\mcp.json`
+
+**配置内容**:
+
+```json
+{
+  "mcpServers": {
+    "tushare": {
+      "command": "npx",
+      "args": ["-y", "@hestudy/tushare-mcp"],
+      "env": {
+        "TUSHARE_TOKEN": "your_tushare_token_here"
+      }
+    }
+  }
+}
+```
+
+#### 高级配置选项
+
+Claude Code 支持额外的配置选项:
+
+```bash
+# 指定配置范围(local/project/user)
+claude mcp add --scope user --transport stdio tushare \
+  --env TUSHARE_TOKEN=your_token \
+  -- npx -y @hestudy/tushare-mcp
+
+# 添加多个环境变量
+claude mcp add --transport stdio tushare \
+  --env TUSHARE_TOKEN=your_token \
+  --env LOG_LEVEL=debug \
+  -- npx -y @hestudy/tushare-mcp
+```
+
+**配置范围说明**:
+- `local`: 当前项目配置(`.claude/mcp.json`)
+- `project`: 项目级配置
+- `user`: 用户级全局配置(默认)
+
+#### 验证配置
+
+添加完成后,可以通过以下方式验证:
+
+```bash
+# 查看服务器状态
+claude mcp get tushare
+
+# 启动 Claude Code 会话
+claude
+
+# 在对话中询问
+"你现在可以使用哪些工具?"
+```
+
+如果看到 Tushare 相关工具(query_stock_quote、query_financial 等),说明配置成功。
 
 ### 其他客户端配置
 
@@ -591,6 +706,7 @@ AI 可以基于这些数据分析趋势、计算涨跌幅等。
 ### AI 客户端
 
 - **Claude Desktop**: https://claude.ai/download
+- **Claude Code**: https://docs.claude.com/claude-code
 - **Cursor**: https://cursor.sh
 - **VSCode Cline**: https://docs.cline.bot
 - **Zed Editor**: https://zed.dev
