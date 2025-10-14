@@ -67,28 +67,28 @@ description: "Implementation task list for Tushare MCP Server Application"
 
 **NOTE: 先编写测试,确保测试 FAIL,再实现功能**
 
-- [ ] T016 [P] [US1] 创建 `apps/tushare-mcp/tests/unit/tools/stock-quote.test.ts`,测试 stock-quote 工具定义的 schema 是否有效
-- [ ] T017 [P] [US1] 创建 `apps/tushare-mcp/tests/unit/handlers/stock-quote.handler.test.ts`,测试用例:
+- [X] T016 [P] [US1] 创建 `apps/tushare-mcp/tests/unit/tools/stock-quote.test.ts`,测试 stock-quote 工具定义的 schema 是否有效
+- [X] T017 [P] [US1] 创建 `apps/tushare-mcp/tests/unit/handlers/stock-quote.handler.test.ts`,测试用例:
   - 成功查询返回结构化数据
   - 无效股票代码返回 VALIDATION_ERROR
   - Tushare API 返回空数据时返回 DATA_NOT_FOUND
   - Token 无效返回 AUTH_ERROR
-- [ ] T018 [US1] 创建 `apps/tushare-mcp/tests/integration/mcp-server-stock-quote.test.ts`,测试完整 MCP 工具调用流程(模拟 stdio 传输)
+- [X] T018 [US1] 创建 `apps/tushare-mcp/tests/integration/mcp-server-stock-quote.test.ts`,测试完整 MCP 工具调用流程(模拟 stdio 传输)
 
 **运行测试,验证 RED 状态**
 
 ### Implementation for User Story 1 (TDD - Green Phase)
 
-- [ ] T019 [US1] 创建 `apps/tushare-mcp/src/tools/stock-quote.ts`,基于 `contracts/query_stock_quote.json` 定义 MCP Tool(name, description, inputSchema)
-- [ ] T020 [US1] 创建 `apps/tushare-mcp/src/handlers/stock-quote.handler.ts`,实现 handler 函数:
+- [X] T019 [US1] 创建 `apps/tushare-mcp/src/tools/stock-quote.ts`,基于 `contracts/query_stock_quote.json` 定义 MCP Tool(name, description, inputSchema)
+- [X] T020 [US1] 创建 `apps/tushare-mcp/src/handlers/stock-quote.handler.ts`,实现 handler 函数:
   - 使用 Zod 验证 ts_code 和 trade_date 参数
   - 调用 @hestudy/tushare-sdk 的 stock.daily() 接口
   - 捕获错误并调用 error-handler 转换为用户友好消息
   - 返回 ToolResponse(content + structuredContent)
-- [ ] T021 [US1] 在 `apps/tushare-mcp/src/server.ts` 的 ListToolsRequestSchema handler 中注册 stock-quote 工具
-- [ ] T022 [US1] 在 `apps/tushare-mcp/src/server.ts` 的 CallToolRequestSchema handler 中添加 stock-quote 路由和限流检查
-- [ ] T023 [US1] 添加 JSDoc 注释到 stock-quote.handler.ts 的所有函数(参数、返回值、异常说明,使用中文)
-- [ ] T024 [US1] 运行测试验证 User Story 1 通过所有单元测试和集成测试
+- [X] T021 [US1] 在 `apps/tushare-mcp/src/server.ts` 的 ListToolsRequestSchema handler 中注册 stock-quote 工具
+- [X] T022 [US1] 在 `apps/tushare-mcp/src/server.ts` 的 CallToolRequestSchema handler 中添加 stock-quote 路由和限流检查
+- [X] T023 [US1] 添加 JSDoc 注释到 stock-quote.handler.ts 的所有函数(参数、返回值、异常说明,使用中文)
+- [X] T024 [US1] 运行测试验证 User Story 1 通过所有单元测试和集成测试
 
 **Checkpoint**: 此时 User Story 1 应完全功能且可独立测试
 

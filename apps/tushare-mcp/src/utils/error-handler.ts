@@ -1,4 +1,4 @@
-import type { ErrorCode } from '../types/mcp-tools.types.js';
+import type { ErrorCode, ToolCallResponse, TextContent } from '../types/mcp-tools.types.js';
 
 /**
  * 错误分类结果
@@ -73,6 +73,14 @@ export function classifyTushareError(error: unknown): ClassifiedError {
     message.includes('无数据') ||
     message.includes('未找到')
   ) {
+    // 检查是否是指数相关错误
+    if (message.includes('指数')) {
+      return {
+        code: 'DATA_NOT_FOUND',
+        message: error.message,
+      };
+    }
+
     return {
       code: 'DATA_NOT_FOUND',
       message:
@@ -144,5 +152,24 @@ export function createErrorResponse(error: unknown): {
   return {
     errorCode: classified.code,
     userMessage: classified.message,
+  };
+}
+
+/**
+ * 将 Tushare 错误转换为 MCP ToolCallResponse 格式
+ *
+ * @param error 原始错误对象
+ * @returns MCP 工具调用响应
+ */
+export function handleTushareError(error: unknown): ToolCallResponse {
+  const classified = classifyTushareError(error);
+  return {
+    content: [
+      {
+        type: 'text',
+        text: classified.message,
+      } as TextContent,
+    ],
+    isError: true,
   };
 }

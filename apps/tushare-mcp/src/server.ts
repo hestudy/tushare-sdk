@@ -11,6 +11,14 @@ import type {
 } from './types/mcp-tools.types.js';
 import { createLogger } from './utils/logger.js';
 import { createRateLimiter } from './utils/rate-limiter.js';
+import { stockQuoteTool } from './tools/stock-quote.js';
+import { handleStockQuote } from './handlers/stock-quote.handler.js';
+import { financialTool } from './tools/financial.js';
+import { handleFinancial } from './handlers/financial.handler.js';
+import { klineTool } from './tools/kline.js';
+import { handleKline } from './handlers/kline.handler.js';
+import { indexDataTool } from './tools/index-data.js';
+import { handleIndexData } from './handlers/index-data.handler.js';
 
 /**
  * 创建并配置 MCP Server 实例
@@ -39,13 +47,23 @@ export function createMCPServer(config: ServerConfig): Server {
   );
 
   // 工具注册表
-  const tools: MCPToolDefinition[] = [];
+  const tools: MCPToolDefinition[] = [
+    stockQuoteTool,
+    financialTool,
+    klineTool,
+    indexDataTool,
+  ];
 
   // 工具处理器映射
   const toolHandlers = new Map<
     string,
     (args: Record<string, unknown>) => Promise<ToolCallResponse>
-  >();
+  >([
+    ['query_stock_quote', handleStockQuote],
+    ['query_financial', handleFinancial],
+    ['query_kline', handleKline],
+    ['query_index', handleIndexData],
+  ]);
 
   /**
    * ListToolsRequestSchema handler
