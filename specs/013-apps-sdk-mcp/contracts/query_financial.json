@@ -1,0 +1,182 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Query Financial Data Tool",
+  "description": "查询公司财务报表数据,支持利润表、资产负债表、现金流量表",
+  "type": "object",
+  "properties": {
+    "input": {
+      "type": "object",
+      "properties": {
+        "ts_code": {
+          "type": "string",
+          "description": "股票代码,格式: 代码.市场后缀(如 600519.SH)",
+          "pattern": "^\\d{6}\\.(SH|SZ)$",
+          "examples": ["600519.SH", "000001.SZ"]
+        },
+        "period": {
+          "type": "string",
+          "description": "报告期,格式: YYYYMMDD,通常为季度末日期(0331/0630/0930/1231)",
+          "pattern": "^\\d{4}(0331|0630|0930|1231)$",
+          "examples": ["20231231", "20230930", "20230630"]
+        },
+        "report_type": {
+          "type": "string",
+          "description": "报表类型",
+          "enum": ["income", "balance", "cashflow"],
+          "examples": ["income"]
+        }
+      },
+      "required": ["ts_code", "period", "report_type"],
+      "additionalProperties": false
+    },
+    "output": {
+      "oneOf": [
+        {
+          "title": "Income Statement (利润表)",
+          "type": "object",
+          "properties": {
+            "ts_code": {
+              "type": "string",
+              "description": "股票代码"
+            },
+            "end_date": {
+              "type": "string",
+              "description": "报告期(YYYYMMDD)"
+            },
+            "total_revenue": {
+              "type": "number",
+              "description": "营业总收入(元)"
+            },
+            "revenue": {
+              "type": "number",
+              "description": "营业收入(元)"
+            },
+            "operate_profit": {
+              "type": "number",
+              "description": "营业利润(元)"
+            },
+            "total_profit": {
+              "type": "number",
+              "description": "利润总额(元)"
+            },
+            "n_income": {
+              "type": "number",
+              "description": "净利润(元)"
+            },
+            "gross_margin": {
+              "type": "number",
+              "description": "毛利率(%)"
+            }
+          }
+        },
+        {
+          "title": "Balance Sheet (资产负债表)",
+          "type": "object",
+          "properties": {
+            "ts_code": {
+              "type": "string",
+              "description": "股票代码"
+            },
+            "end_date": {
+              "type": "string",
+              "description": "报告期(YYYYMMDD)"
+            },
+            "total_assets": {
+              "type": "number",
+              "description": "总资产(元)"
+            },
+            "total_cur_assets": {
+              "type": "number",
+              "description": "流动资产合计(元)"
+            },
+            "total_liab": {
+              "type": "number",
+              "description": "负债合计(元)"
+            },
+            "total_hldr_eqy_exc_min_int": {
+              "type": "number",
+              "description": "股东权益合计(元)"
+            }
+          }
+        },
+        {
+          "title": "Cash Flow Statement (现金流量表)",
+          "type": "object",
+          "properties": {
+            "ts_code": {
+              "type": "string",
+              "description": "股票代码"
+            },
+            "end_date": {
+              "type": "string",
+              "description": "报告期(YYYYMMDD)"
+            },
+            "n_cashflow_act": {
+              "type": "number",
+              "description": "经营活动现金流量净额(元)"
+            },
+            "n_cashflow_inv_act": {
+              "type": "number",
+              "description": "投资活动现金流量净额(元)"
+            },
+            "n_cash_flows_fnc_act": {
+              "type": "number",
+              "description": "筹资活动现金流量净额(元)"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "examples": [
+    {
+      "input": {
+        "ts_code": "600519.SH",
+        "period": "20231231",
+        "report_type": "income"
+      },
+      "output": {
+        "ts_code": "600519.SH",
+        "end_date": "20231231",
+        "total_revenue": 149371000000,
+        "revenue": 149371000000,
+        "operate_profit": 89371000000,
+        "total_profit": 89500000000,
+        "n_income": 74982000000,
+        "gross_margin": 91.50
+      }
+    },
+    {
+      "input": {
+        "ts_code": "600519.SH",
+        "period": "20231231",
+        "report_type": "balance"
+      },
+      "output": {
+        "ts_code": "600519.SH",
+        "end_date": "20231231",
+        "total_assets": 280000000000,
+        "total_cur_assets": 180000000000,
+        "total_liab": 80000000000,
+        "total_hldr_eqy_exc_min_int": 200000000000
+      }
+    }
+  ],
+  "errors": [
+    {
+      "code": "VALIDATION_ERROR",
+      "message": "报告期格式错误,必须为季度末日期,示例: 20231231",
+      "trigger": "period 不符合格式要求"
+    },
+    {
+      "code": "DATA_NOT_FOUND",
+      "message": "该报告期数据暂未披露,请选择已披露的报告期",
+      "trigger": "Tushare API 返回空数据"
+    },
+    {
+      "code": "AUTH_ERROR",
+      "message": "Tushare 积分不足或权限不够,请升级账户或选择其他接口",
+      "trigger": "Tushare API 返回权限错误"
+    }
+  ]
+}

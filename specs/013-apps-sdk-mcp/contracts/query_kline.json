@@ -1,0 +1,152 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Query K-Line Data Tool",
+  "description": "查询历史K线数据(日线、周线、月线),用于技术分析和趋势研究",
+  "type": "object",
+  "properties": {
+    "input": {
+      "type": "object",
+      "properties": {
+        "ts_code": {
+          "type": "string",
+          "description": "股票代码,格式: 代码.市场后缀(如 600519.SH)",
+          "pattern": "^\\d{6}\\.(SH|SZ)$",
+          "examples": ["600519.SH", "000001.SZ"]
+        },
+        "start_date": {
+          "type": "string",
+          "description": "开始日期,格式: YYYYMMDD",
+          "pattern": "^\\d{8}$",
+          "examples": ["20250101", "20240701"]
+        },
+        "end_date": {
+          "type": "string",
+          "description": "结束日期,格式: YYYYMMDD,必须晚于或等于 start_date",
+          "pattern": "^\\d{8}$",
+          "examples": ["20251014", "20241231"]
+        },
+        "freq": {
+          "type": "string",
+          "description": "K线频率/粒度",
+          "enum": ["D", "W", "M"],
+          "default": "D",
+          "examples": ["D"]
+        }
+      },
+      "required": ["ts_code", "start_date", "end_date"],
+      "additionalProperties": false
+    },
+    "output": {
+      "type": "array",
+      "description": "K线数据时间序列,按交易日期升序排列",
+      "items": {
+        "type": "object",
+        "properties": {
+          "ts_code": {
+            "type": "string",
+            "description": "股票代码"
+          },
+          "trade_date": {
+            "type": "string",
+            "description": "交易日期(YYYYMMDD)"
+          },
+          "open": {
+            "type": "number",
+            "description": "开盘价(元)"
+          },
+          "high": {
+            "type": "number",
+            "description": "最高价(元)"
+          },
+          "low": {
+            "type": "number",
+            "description": "最低价(元)"
+          },
+          "close": {
+            "type": "number",
+            "description": "收盘价(元)"
+          },
+          "vol": {
+            "type": "number",
+            "description": "成交量(手)"
+          },
+          "amount": {
+            "type": "number",
+            "description": "成交额(千元)"
+          }
+        },
+        "required": ["ts_code", "trade_date", "open", "high", "low", "close"]
+      }
+    }
+  },
+  "examples": [
+    {
+      "input": {
+        "ts_code": "600519.SH",
+        "start_date": "20251001",
+        "end_date": "20251003",
+        "freq": "D"
+      },
+      "output": [
+        {
+          "ts_code": "600519.SH",
+          "trade_date": "20251001",
+          "open": 1800.00,
+          "high": 1820.00,
+          "low": 1795.00,
+          "close": 1810.00,
+          "vol": 980000,
+          "amount": 1770000
+        },
+        {
+          "ts_code": "600519.SH",
+          "trade_date": "20251002",
+          "open": 1810.00,
+          "high": 1850.00,
+          "low": 1805.00,
+          "close": 1845.00,
+          "vol": 1120000,
+          "amount": 2050000
+        },
+        {
+          "ts_code": "600519.SH",
+          "trade_date": "20251003",
+          "open": 1845.00,
+          "high": 1870.00,
+          "low": 1840.00,
+          "close": 1860.00,
+          "vol": 1050000,
+          "amount": 1950000
+        }
+      ]
+    }
+  ],
+  "errors": [
+    {
+      "code": "VALIDATION_ERROR",
+      "message": "结束日期必须晚于或等于开始日期",
+      "trigger": "end_date < start_date"
+    },
+    {
+      "code": "VALIDATION_ERROR",
+      "message": "时间范围超出限制,最多支持查询 10 年历史数据",
+      "trigger": "时间跨度超过 10 年"
+    },
+    {
+      "code": "DATA_NOT_FOUND",
+      "message": "该时间段无交易数据,可能是节假日或停牌期间",
+      "trigger": "Tushare API 返回空数组"
+    },
+    {
+      "code": "RATE_LIMIT",
+      "message": "请求过于频繁,已触发限流保护,请稍后重试",
+      "trigger": "客户端限流器拒绝请求"
+    }
+  ],
+  "notes": [
+    "freq 参数说明: D=日线, W=周线, M=月线",
+    "返回数据按 trade_date 升序排列,便于绘制时间序列图表",
+    "周线和月线数据会自动聚合日线数据(如周收盘价为本周最后一个交易日的收盘价)",
+    "如果时间范围内包含节假日或停牌,返回数组中不会包含这些日期"
+  ]
+}
