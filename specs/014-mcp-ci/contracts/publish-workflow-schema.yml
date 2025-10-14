@@ -1,0 +1,413 @@
+# GitHub Actions Workflow Contract: Multi-Package Publishing
+# Feature: 014-mcp-ci
+# Date: 2025-10-14
+
+## 工作流契约说明
+# 本文件定义了多包发布工作流的输入输出契约,确保工作流各部分的接口清晰。
+
+---
+
+## 触发器契约
+
+trigger:
+  event: push
+  filters:
+    tags:
+      - pattern: "(sdk|mcp)-v*"
+        description: "标签必须以 sdk-v 或 mcp-v 开头,后跟语义化版本号"
+        examples:
+          - "sdk-v1.2.0"
+          - "mcp-v0.5.0-beta.1"
+          - "sdk-v2.0.0-rc.1"
+        invalid_examples:
+          - "v1.0.0"  # 缺少包前缀
+          - "sdk-1.0.0"  # 缺少 v 前缀
+          - "unknown-v1.0.0"  # 未知的包标识符
+
+---
+
+## Job 1: Detect Package (包识别)
+
+description: "从标签名解析包信息,为后续 job 提供参数"
+
+inputs:
+  github.ref_name:
+    type: string
+    description: "Git 标签名,如 sdk-v1.2.0"
+    source: GitHub Actions 内置变量
+
+outputs:
+  package_id:
+    type: string
+    description: "包标识符: sdk 或 mcp"
+    enum: ["sdk", "mcp"]
+    example: "mcp"
+
+  package_name:
+    type: string
+    description: "npm 包名"
+    enum: ["@hestudy/tushare-sdk", "@hestudy/tushare-mcp"]
+    example: "@hestudy/tushare-mcp"
+
+  package_path:
+    type: string
+    description: "包在仓库中的相对路径"
+    enum: ["packages/tushare-sdk", "apps/tushare-mcp"]
+    example: "apps/tushare-mcp"
+
+  version:
+    type: string
+    description: "语义化版本号(去除 v 前缀和包前缀)"
+    pattern: "^\\d+\\.\\d+\\.\\d+(-.+)?$"
+    example: "1.0.0-beta.1"
+
+validation:
+  - rule: "github.ref_name 必须匹配 ^(sdk|mcp)-v\\d+\\.\\d+\\.\\d+(-.+)?$"
+    on_failure: "快速失败,输出错误信息并退出"
+  - rule: "package_id 必须是 sdk 或 mcp"
+    on_failure: "快速失败"
+
+---
+
+## Job 2: Test and Build (测试和构建)
+
+description: "执行代码质量检查、构建和测试,确保代码可发布"
+
+dependencies:
+  - job: detect-package
+    required_outputs: [package_id, package_path]
+
+inputs:
+  TUSHARE_TOKEN:
+    type: secret
+    description: "Tushare API token,用于集成测试"
+    source: GitHub Secrets
+
+steps:
+  - name: Lint
+    command: pnpm lint
+    description: "代码规范检查(workspace 级别)"
+    on_failure: "终止流程"
+
+  - name: Type Check
+    command: pnpm type-check
+    description: "TypeScript 类型检查(workspace 级别)"
+    on_failure: "终止流程"
+
+  - name: Build
+    command: pnpm build
+    description: "构建所有包(workspace 级别)"
+    on_failure: "终止流程"
+
+  - name: Test with Coverage
+    command: pnpm test:coverage
+    description: "运行测试并生成覆盖率报告(workspace 级别)"
+    on_failure: "终止流程"
+    env:
+      TUSHARE_TOKEN: ${{ secrets.TUSHARE_TOKEN }}
+
+  - name: Verify Build Artifacts
+    description: "验证构建产物是否存在"
+    validation:
+      - path: "${{ needs.detect-package.outputs.package_path }}/dist"
+        must_exist: true
+    on_failure: "终止流程,输出错误信息"
+
+outputs:
+  none
+
+---
+
+## Job 3: Publish to npm (发布到 npm)
+
+description: "同步版本号、推断 dist-tag、检查版本冲突、发布到 npm"
+
+dependencies:
+  - job: detect-package
+    required_outputs: [package_id, package_path, package_name, version]
+  - job: test-and-build
+    must_succeed: true
+
+inputs:
+  NPM_AUTOMATION_TOKEN:
+    type: secret
+    description: "npm 认证 token"
+    source: GitHub Secrets
+    scope: "@hestudy/*"
+
+steps:
+  - name: Sync Version to package.json
+    command: |
+      cd ${{ needs.detect-package.outputs.package_path }}
+      npm version ${{ needs.detect-package.outputs.version }} --no-git-tag-version --allow-same-version
+    description: "将标签版本同步到 package.json"
+    on_failure: "终止流程"
+
+  - name: Verify Version Consistency
+    validation:
+      - tag_version: "${{ needs.detect-package.outputs.version }}"
+        package_json_version:
+          path: "${{ needs.detect-package.outputs.package_path }}/package.json"
+          field: "version"
+        must_match: true
+    on_failure: "终止流程,输出不一致的版本号"
+
+  - name: Infer Dist Tag
+    logic: |
+      if version contains "-":
+        extract prerelease identifier (alpha/beta/rc/next)
+        dist_tag = identifier
+      else:
+        dist_tag = "latest"
+    outputs:
+      dist_tag:
+        type: string
+        examples: ["latest", "beta", "alpha", "rc", "next"]
+
+  - name: Check Version Conflict
+    command: npm view ${{ needs.detect-package.outputs.package_name }}@${{ needs.detect-package.outputs.version }} version
+    expected_result: "command fails (version not found)"
+    on_success: "继续发布"
+    on_failure: "终止流程,提示版本已存在"
+
+  - name: Publish to npm
+    command: |
+      cd ${{ needs.detect-package.outputs.package_path }}
+      pnpm publish --tag ${{ steps.dist-tag.outputs.dist_tag }} --no-git-checks --access public
+    env:
+      NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTOMATION_TOKEN }}
+      NPM_CONFIG_PROVENANCE: true
+    description: "发布包到 npm,启用 provenance"
+    on_failure: "终止流程"
+
+  - name: Verify Publication
+    command: npm view ${{ needs.detect-package.outputs.package_name }}@${{ needs.detect-package.outputs.version }} version
+    expected_result: "version matches tag version"
+    description: "验证包是否成功发布到 npm(允许延迟)"
+    on_failure: "记录警告,但不终止流程"
+
+outputs:
+  npm_url:
+    type: string
+    format: "https://www.npmjs.com/package/${{ needs.detect-package.outputs.package_name }}/v/${{ needs.detect-package.outputs.version }}"
+    example: "https://www.npmjs.com/package/@hestudy/tushare-mcp/v/1.0.0"
+
+---
+
+## Job 4: Create GitHub Release (创建 GitHub Release)
+
+description: "生成变更日志并创建 GitHub Release"
+
+dependencies:
+  - job: detect-package
+    required_outputs: [package_id, version]
+  - job: publish
+    must_succeed: true
+
+steps:
+  - name: Get Previous Tag
+    description: "获取同一包的上一个发布标签"
+    logic: |
+      package_id = ${{ needs.detect-package.outputs.package_id }}
+      current_tag = ${{ github.ref_name }}
+
+      # 列出同包的所有标签,按版本号降序排序
+      previous_tag = git tag -l "${package_id}-v*" --sort=-version:refname | grep -A1 "$current_tag" | tail -1
+
+      if previous_tag is empty:
+        is_first_release = true
+    outputs:
+      previous_tag:
+        type: string
+        nullable: true
+        example: "mcp-v0.9.0"
+      is_first_release:
+        type: boolean
+        example: false
+
+  - name: Generate Changelog
+    description: "生成从上一版本到当前版本的变更日志"
+    logic: |
+      if is_first_release:
+        commits = git log --pretty=format:"- %s (%h)" --no-merges
+        footer = "**First Release** 🎉"
+      else:
+        commits = git log $previous_tag..HEAD --pretty=format:"- %s (%h)" --no-merges
+        footer = "**Full Changelog**: https://github.com/${{ github.repository }}/compare/$previous_tag...${{ github.ref_name }}"
+
+      changelog = "## What's Changed\n\n" + commits + "\n\n" + footer
+    outputs:
+      changelog:
+        type: string
+        format: markdown
+
+  - name: Determine if Prerelease
+    logic: |
+      version = ${{ needs.detect-package.outputs.version }}
+      is_prerelease = version contains "-"
+    outputs:
+      is_prerelease:
+        type: boolean
+        example: true
+
+  - name: Create GitHub Release
+    uses: actions/create-release@v1
+    inputs:
+      tag_name: ${{ github.ref_name }}
+      release_name: "Release ${{ github.ref_name }}"
+      body: ${{ steps.generate-changelog.outputs.changelog }}
+      draft: false
+      prerelease: ${{ steps.determine-prerelease.outputs.is_prerelease }}
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    on_failure: "记录错误,但不影响整体成功(npm 已发布)"
+
+outputs:
+  release_url:
+    type: string
+    format: "https://github.com/${{ github.repository }}/releases/tag/${{ github.ref_name }}"
+    example: "https://github.com/owner/repo/releases/tag/mcp-v1.0.0"
+
+---
+
+## 并发控制契约
+
+concurrency:
+  group: publish-${{ github.ref }}
+  cancel_in_progress: false
+
+behavior:
+  - description: "同一标签的多次推送排队执行"
+    example:
+      - time: T1
+        tag: "sdk-v1.0.0"
+        action: "开始执行"
+      - time: T2
+        tag: "sdk-v1.0.0"  # 重复推送
+        action: "排队等待 T1 完成"
+
+  - description: "不同标签并行执行"
+    example:
+      - time: T1
+        tag: "sdk-v1.0.0"
+        action: "开始执行"
+      - time: T2
+        tag: "mcp-v1.0.0"  # 不同包
+        action: "并行执行"
+
+---
+
+## 权限契约
+
+permissions:
+  contents: write    # 创建 GitHub Release
+  id-token: write    # npm provenance
+
+---
+
+## 错误处理契约
+
+error_handling:
+  - stage: "detect-package"
+    errors:
+      - type: "invalid_tag_format"
+        action: "快速失败,输出正确格式示例"
+        exit_code: 1
+
+  - stage: "test-and-build"
+    errors:
+      - type: "lint_failure"
+        action: "终止流程,不进入发布阶段"
+        exit_code: 1
+      - type: "test_failure"
+        action: "终止流程,不进入发布阶段"
+        exit_code: 1
+      - type: "build_artifacts_missing"
+        action: "终止流程,输出缺失路径"
+        exit_code: 1
+
+  - stage: "publish"
+    errors:
+      - type: "version_conflict"
+        action: "终止流程,提示使用新版本号"
+        exit_code: 1
+      - type: "npm_publish_failure"
+        action: "终止流程,不创建 GitHub Release"
+        exit_code: 1
+
+  - stage: "create-release"
+    errors:
+      - type: "release_creation_failure"
+        action: "记录警告,继续执行(npm 已发布)"
+        exit_code: 0
+
+---
+
+## 测试场景契约
+
+test_scenarios:
+  - scenario: "发布稳定版 SDK"
+    trigger:
+      tag: "sdk-v1.2.0"
+    expected:
+      package_id: "sdk"
+      package_name: "@hestudy/tushare-sdk"
+      version: "1.2.0"
+      dist_tag: "latest"
+      is_prerelease: false
+
+  - scenario: "发布预发布版 MCP"
+    trigger:
+      tag: "mcp-v0.5.0-beta.1"
+    expected:
+      package_id: "mcp"
+      package_name: "@hestudy/tushare-mcp"
+      version: "0.5.0-beta.1"
+      dist_tag: "beta"
+      is_prerelease: true
+
+  - scenario: "首次发布 MCP"
+    trigger:
+      tag: "mcp-v1.0.0"
+    precondition:
+      previous_tags: []
+    expected:
+      is_first_release: true
+      changelog_contains: "**First Release** 🎉"
+
+  - scenario: "并发发布不同包"
+    triggers:
+      - tag: "sdk-v1.2.0"
+        timestamp: T1
+      - tag: "mcp-v1.0.0"
+        timestamp: T2
+    expected:
+      execution: "并行(不同 concurrency group)"
+
+  - scenario: "错误标签格式"
+    trigger:
+      tag: "v1.0.0"
+    expected:
+      result: "快速失败"
+      error_message: "Invalid tag format. Expected: (sdk|mcp)-v*"
+
+---
+
+## 性能契约
+
+performance:
+  - metric: "总执行时间"
+    target: "< 15 分钟"
+    measurement: "从标签推送到 Release 创建完成"
+
+  - metric: "测试和构建时间"
+    target: "< 10 分钟"
+    measurement: "test-and-build job 执行时间"
+
+  - metric: "npm 发布时间"
+    target: "< 3 分钟"
+    measurement: "publish job 执行时间"
+
+  - metric: "Release 创建时间"
+    target: "< 2 分钟"
+    measurement: "create-release job 执行时间"
