@@ -3,7 +3,8 @@ name: Publish to npm
 on:
   push:
     tags:
-      - 'v*'  # 匹配所有以 v 开头的标签
+      - 'sdk-v*'  # SDK 包标签格式：sdk-v1.0.0
+      - 'mcp-v*'  # MCP 包标签格式：mcp-v1.0.0
 
 # 并发控制：同一标签排队执行，不同标签并行
 concurrency:
@@ -16,13 +17,68 @@ permissions:
   id-token: write    # npm provenance
 
 jobs:
+  # Job 0: Detect Package
+  # 目的：从标签名解析包信息，为后续 job 提供参数
+  detect-package:
+    name: Detect Package
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    outputs:
+      package_id: ${{ steps.detect.outputs.package_id }}
+      package_name: ${{ steps.detect.outputs.package_name }}
+      package_path: ${{ steps.detect.outputs.package_path }}
+      version: ${{ steps.detect.outputs.version }}
+
+    steps:
+      - name: Validate and parse tag
+        id: detect
+        run: |
+          TAG_NAME="${GITHUB_REF_NAME}"
+          echo "::notice::Processing tag: $TAG_NAME"
+
+          # 验证标签格式：(sdk|mcp)-v*
+          if [[ ! $TAG_NAME =~ ^(sdk|mcp)-v[0-9]+\.[0-9]+\.[0-9]+(-.+)?$ ]]; then
+            echo "::error::Invalid tag format: $TAG_NAME"
+            echo "::error::Expected format: (sdk|mcp)-v<semver>"
+            echo "::error::Examples: sdk-v1.2.0, mcp-v0.5.0-beta.1"
+            exit 1
+          fi
+
+          # 提取包标识符 (sdk 或 mcp)
+          PACKAGE_ID=$(echo "$TAG_NAME" | sed -E 's/^(sdk|mcp)-.*/\1/')
+          echo "package_id=$PACKAGE_ID" >> $GITHUB_OUTPUT
+          echo "::notice::Package ID: $PACKAGE_ID"
+
+          # 提取版本号 (去除包前缀和 v)
+          VERSION=$(echo "$TAG_NAME" | sed -E 's/^(sdk|mcp)-v//')
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "::notice::Version: $VERSION"
+
+          # 设置包名和路径
+          if [ "$PACKAGE_ID" = "sdk" ]; then
+            PACKAGE_NAME="@hestudy/tushare-sdk"
+            PACKAGE_PATH="packages/tushare-sdk"
+          elif [ "$PACKAGE_ID" = "mcp" ]; then
+            PACKAGE_NAME="@hestudy/tushare-mcp"
+            PACKAGE_PATH="apps/tushare-mcp"
+          else
+            echo "::error::Unknown package ID: $PACKAGE_ID"
+            exit 1
+          fi
+
+          echo "package_name=$PACKAGE_NAME" >> $GITHUB_OUTPUT
+          echo "package_path=$PACKAGE_PATH" >> $GITHUB_OUTPUT
+          echo "::notice::Package name: $PACKAGE_NAME"
+          echo "::notice::Package path: $PACKAGE_PATH"
+
   # Job 1: Test & Build
   # 目的：确保代码质量，只有通过所有测试的代码才能发布
   test-and-build:
     name: Test & Build
     runs-on: ubuntu-latest
+    needs: detect-package
     timeout-minutes: 10
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -57,13 +113,15 @@ jobs:
       
       - name: Verify build artifacts
         run: |
-          echo "::group::Verify build artifacts"
-          cd packages/tushare-sdk
+          PACKAGE_PATH="${{ needs.detect-package.outputs.package_path }}"
+          echo "::group::Verify build artifacts for $PACKAGE_PATH"
+          cd "$PACKAGE_PATH"
           if [ ! -d "dist" ]; then
-            echo "::error::Build artifacts missing: dist/ directory not found"
+            echo "::error::Build artifacts missing: dist/ directory not found in $PACKAGE_PATH"
             exit 1
           fi
           ls -lh dist/
+          echo "::notice::✅ Build artifacts verified in $PACKAGE_PATH/dist"
           echo "::endgroup::"
 
   # Job 2: Publish to npm
@@ -71,105 +129,105 @@ jobs:
   publish:
     name: Publish to npm
     runs-on: ubuntu-latest
-    needs: test-and-build
+    needs: [detect-package, test-and-build]
     timeout-minutes: 5
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      
+
       - name: Setup pnpm
         uses: pnpm/action-setup@v2
         with:
           version: 8
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20.x
           cache: 'pnpm'
           registry-url: 'https://registry.npmjs.org'
-      
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-      
+
       - name: Build
         run: pnpm build
-      
-      - name: Extract version from tag
-        id: version
-        run: |
-          TAG_VERSION=${GITHUB_REF_NAME#v}
-          echo "version=$TAG_VERSION" >> $GITHUB_OUTPUT
-          echo "::notice::Extracted version: $TAG_VERSION"
-      
+
       - name: Sync version to package.json
         run: |
-          echo "::group::Sync version from tag"
-          TAG_VERSION=${{ steps.version.outputs.version }}
-          cd packages/tushare-sdk
-          npm version $TAG_VERSION --no-git-tag-version --allow-same-version
+          PACKAGE_PATH="${{ needs.detect-package.outputs.package_path }}"
+          VERSION="${{ needs.detect-package.outputs.version }}"
+          echo "::group::Sync version from tag to $PACKAGE_PATH"
+          cd "$PACKAGE_PATH"
+          npm version "$VERSION" --no-git-tag-version --allow-same-version
+          echo "::notice::Version synced: $VERSION"
           echo "::endgroup::"
       
       - name: Verify version consistency
         run: |
-          TAG_VERSION=${{ steps.version.outputs.version }}
-          PKG_VERSION=$(node -p "require('./packages/tushare-sdk/package.json').version")
+          PACKAGE_PATH="${{ needs.detect-package.outputs.package_path }}"
+          TAG_VERSION="${{ needs.detect-package.outputs.version }}"
+          PKG_VERSION=$(node -p "require('./$PACKAGE_PATH/package.json').version")
           echo "Tag version: $TAG_VERSION"
           echo "Package version: $PKG_VERSION"
           if [ "$TAG_VERSION" != "$PKG_VERSION" ]; then
             echo "::error::Version mismatch: tag=$TAG_VERSION, package=$PKG_VERSION"
             exit 1
           fi
-          echo "::notice::Version consistency verified: $TAG_VERSION"
+          echo "::notice::✅ Version consistency verified: $TAG_VERSION"
       
       - name: Infer dist-tag
         id: dist-tag
         run: |
-          TAG_VERSION=${{ steps.version.outputs.version }}
-          
+          VERSION="${{ needs.detect-package.outputs.version }}"
+
           # 推断 dist-tag
-          if [[ $TAG_VERSION =~ - ]]; then
+          if [[ $VERSION =~ - ]]; then
             # 预发布版本：提取标识符（alpha, beta, rc, next）
-            PRERELEASE_TAG=$(echo $TAG_VERSION | sed -E 's/.*-([a-z]+).*/\1/')
-            DIST_TAG=$PRERELEASE_TAG
+            PRERELEASE_TAG=$(echo "$VERSION" | sed -E 's/.*-([a-z]+).*/\1/')
+            DIST_TAG="$PRERELEASE_TAG"
           else
             # 稳定版本
             DIST_TAG="latest"
           fi
-          
+
           echo "dist_tag=$DIST_TAG" >> $GITHUB_OUTPUT
-          echo "::notice::Inferred dist-tag: $DIST_TAG"
+          echo "::notice::Inferred dist-tag: $DIST_TAG (version: $VERSION)"
       
       - name: Check version conflict
         run: |
-          TAG_VERSION=${{ steps.version.outputs.version }}
-          if npm view @hestudy/tushare-sdk@$TAG_VERSION version 2>/dev/null; then
-            echo "::error::Version $TAG_VERSION already exists on npm. Please use a new version number."
+          PACKAGE_NAME="${{ needs.detect-package.outputs.package_name }}"
+          VERSION="${{ needs.detect-package.outputs.version }}"
+          if npm view "$PACKAGE_NAME@$VERSION" version 2>/dev/null; then
+            echo "::error::Version $VERSION already exists on npm for $PACKAGE_NAME. Please use a new version number."
             exit 1
           fi
-          echo "::notice::Version $TAG_VERSION is available"
-      
+          echo "::notice::✅ Version $VERSION is available for $PACKAGE_NAME"
+
       - name: Publish to npm
         run: |
-          cd packages/tushare-sdk
-          DIST_TAG=${{ steps.dist-tag.outputs.dist_tag }}
-          echo "::group::Publishing to npm with tag: $DIST_TAG"
-          pnpm publish --tag $DIST_TAG --no-git-checks --access public
+          PACKAGE_PATH="${{ needs.detect-package.outputs.package_path }}"
+          DIST_TAG="${{ steps.dist-tag.outputs.dist_tag }}"
+          cd "$PACKAGE_PATH"
+          echo "::group::Publishing ${{ needs.detect-package.outputs.package_name }} to npm with tag: $DIST_TAG"
+          pnpm publish --tag "$DIST_TAG" --no-git-checks --access public
+          echo "::notice::✅ Published successfully"
           echo "::endgroup::"
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTOMATION_TOKEN }}
           NPM_CONFIG_PROVENANCE: true
-      
+
       - name: Verify publication
         run: |
-          TAG_VERSION=${{ steps.version.outputs.version }}
+          PACKAGE_NAME="${{ needs.detect-package.outputs.package_name }}"
+          VERSION="${{ needs.detect-package.outputs.version }}"
           echo "::group::Verify npm publication"
           sleep 5  # 等待 npm 索引更新
-          PUBLISHED_VERSION=$(npm view @hestudy/tushare-sdk@$TAG_VERSION version 2>/dev/null || echo "")
-          if [ "$PUBLISHED_VERSION" = "$TAG_VERSION" ]; then
-            echo "::notice::✅ Published @hestudy/tushare-sdk@$TAG_VERSION with tag '${{ steps.dist-tag.outputs.dist_tag }}'"
-            echo "::notice::📦 npm: https://www.npmjs.com/package/@hestudy/tushare-sdk/v/$TAG_VERSION"
+          PUBLISHED_VERSION=$(npm view "$PACKAGE_NAME@$VERSION" version 2>/dev/null || echo "")
+          if [ "$PUBLISHED_VERSION" = "$VERSION" ]; then
+            echo "::notice::✅ Published $PACKAGE_NAME@$VERSION with tag '${{ steps.dist-tag.outputs.dist_tag }}'"
+            echo "::notice::📦 npm: https://www.npmjs.com/package/$PACKAGE_NAME/v/$VERSION"
           else
             echo "::warning::Publication verification failed, but this may be due to npm indexing delay"
           fi
@@ -180,24 +238,34 @@ jobs:
   create-release:
     name: Create GitHub Release
     runs-on: ubuntu-latest
-    needs: publish
+    needs: [detect-package, publish]
     timeout-minutes: 3
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0  # 获取完整历史以生成变更日志
-      
+
       - name: Get previous tag
         id: previous-tag
         run: |
-          PREVIOUS_TAG=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || echo "")
+          PACKAGE_ID="${{ needs.detect-package.outputs.package_id }}"
+          CURRENT_TAG="${{ github.ref_name }}"
+
+          # 获取同一包的上一个标签
+          PREVIOUS_TAG=$(git tag -l "${PACKAGE_ID}-v*" --sort=-version:refname | grep -A1 "$CURRENT_TAG" | tail -1)
+
+          # 如果结果和当前标签相同,说明没有上一个标签
+          if [ "$PREVIOUS_TAG" = "$CURRENT_TAG" ] || [ -z "$PREVIOUS_TAG" ]; then
+            PREVIOUS_TAG=""
+          fi
+
           echo "previous_tag=$PREVIOUS_TAG" >> $GITHUB_OUTPUT
           if [ -n "$PREVIOUS_TAG" ]; then
-            echo "::notice::Previous tag: $PREVIOUS_TAG"
+            echo "::notice::Previous tag for $PACKAGE_ID: $PREVIOUS_TAG"
           else
-            echo "::notice::No previous tag found (first release)"
+            echo "::notice::No previous tag found for $PACKAGE_ID (first release)"
           fi
       
       - name: Generate changelog
@@ -238,12 +306,13 @@ jobs:
       - name: Determine if prerelease
         id: prerelease
         run: |
-          if [[ ${{ github.ref_name }} =~ - ]]; then
+          VERSION="${{ needs.detect-package.outputs.version }}"
+          if [[ $VERSION =~ - ]]; then
             echo "is_prerelease=true" >> $GITHUB_OUTPUT
-            echo "::notice::This is a prerelease version"
+            echo "::notice::This is a prerelease version ($VERSION)"
           else
             echo "is_prerelease=false" >> $GITHUB_OUTPUT
-            echo "::notice::This is a stable release"
+            echo "::notice::This is a stable release ($VERSION)"
           fi
       
       - name: Create GitHub Release
@@ -259,5 +328,8 @@ jobs:
       
       - name: Report success
         run: |
+          PACKAGE_NAME="${{ needs.detect-package.outputs.package_name }}"
+          VERSION="${{ needs.detect-package.outputs.version }}"
           echo "::notice::🎉 Release ${{ github.ref_name }} created successfully"
+          echo "::notice::📦 npm: https://www.npmjs.com/package/$PACKAGE_NAME/v/$VERSION"
           echo "::notice::📋 Release: https://github.com/${{ github.repository }}/releases/tag/${{ github.ref_name }}"

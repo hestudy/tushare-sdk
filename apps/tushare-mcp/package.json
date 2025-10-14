@@ -41,5 +41,22 @@
   },
   "engines": {
     "node": ">=18.0.0"
-  }
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hestudy/tushare-sdk",
+    "directory": "apps/tushare-mcp"
+  },
+  "bugs": {
+    "url": "https://github.com/hestudy/tushare-sdk/issues"
+  },
+  "homepage": "https://github.com/hestudy/tushare-sdk/tree/main/apps/tushare-mcp#readme",
+  "files": [
+    "dist",
+    "README.md"
+  ]
 }
