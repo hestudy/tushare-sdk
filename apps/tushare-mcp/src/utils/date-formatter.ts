@@ -43,7 +43,7 @@ export function getWeekday(date: string): string {
   const dateObj = new Date(year, month, day);
   const weekdays = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
 
-  return weekdays[dateObj.getDay()];
+  return weekdays[dateObj.getDay()]!;
 }
 
 /**

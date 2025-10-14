@@ -19,6 +19,12 @@ import { klineTool } from './tools/kline.js';
 import { handleKline } from './handlers/kline.handler.js';
 import { indexDataTool } from './tools/index-data.js';
 import { handleIndexData } from './handlers/index-data.handler.js';
+import { stockBasicTool } from './tools/stock-basic.js';
+import { handleStockBasic } from './handlers/stock-basic.handler.js';
+import { tradeCalendarTool } from './tools/trade-calendar.js';
+import { handleTradeCalendar } from './handlers/trade-calendar.handler.js';
+import { dailyBasicTool } from './tools/daily-basic.js';
+import { handleDailyBasic } from './handlers/daily-basic.handler.js';
 
 /**
  * 创建并配置 MCP Server 实例
@@ -52,6 +58,9 @@ export function createMCPServer(config: ServerConfig): Server {
     financialTool,
     klineTool,
     indexDataTool,
+    stockBasicTool,
+    tradeCalendarTool,
+    dailyBasicTool,
   ];
 
   // 工具处理器映射
@@ -63,6 +72,9 @@ export function createMCPServer(config: ServerConfig): Server {
     ['query_financial', handleFinancial],
     ['query_kline', handleKline],
     ['query_index', handleIndexData],
+    ['query_stock_basic', handleStockBasic],
+    ['query_trade_calendar', handleTradeCalendar],
+    ['query_daily_basic', handleDailyBasic],
   ]);
 
   /**

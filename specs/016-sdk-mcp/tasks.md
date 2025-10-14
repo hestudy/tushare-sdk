@@ -72,13 +72,13 @@
 
 ### 实现任务 (US1)
 
-- [ ] T009 [US1] 创建股票基本信息工具定义 (`apps/tushare-mcp/src/tools/stock-basic.ts`)
+- [X] T009 [US1] 创建股票基本信息工具定义 (`apps/tushare-mcp/src/tools/stock-basic.ts`)
   - 定义工具名称: `query_stock_basic`
   - 定义 inputSchema (参考 `contracts/query_stock_basic.json`)
   - 参数: ts_code (可选), exchange (可选), list_status (可选)
   - 验证规则: 至少提供一个筛选条件
 
-- [ ] T010 [US1] 实现股票基本信息处理器 (`apps/tushare-mcp/src/handlers/stock-basic.handler.ts`)
+- [X] T010 [US1] 实现股票基本信息处理器 (`apps/tushare-mcp/src/handlers/stock-basic.handler.ts`)
   - 参数验证 (使用 zod schema)
   - 调用 SDK: `client.getStockBasic()`
   - 格式化单个股票响应
@@ -86,7 +86,7 @@
   - 错误处理 (复用 `handleTushareError`)
   - 日志记录
 
-- [ ] T011 [US1] 在 MCP 服务器中注册股票基本信息工具 (`apps/tushare-mcp/src/server.ts`)
+- [X] T011 [US1] 在 MCP 服务器中注册股票基本信息工具 (`apps/tushare-mcp/src/server.ts`)
   - 导入 `stockBasicTool`
   - 导入 `handleStockBasic`
   - 添加到 `tools` 数组
@@ -125,13 +125,13 @@
 
 ### 实现任务 (US2)
 
-- [ ] T014 [US2] 创建交易日历工具定义 (`apps/tushare-mcp/src/tools/trade-calendar.ts`)
+- [X] T014 [US2] 创建交易日历工具定义 (`apps/tushare-mcp/src/tools/trade-calendar.ts`)
   - 定义工具名称: `query_trade_calendar`
   - 定义 inputSchema (参考 `contracts/query_trade_calendar.json`)
   - 参数: start_date (必填), end_date (必填), exchange (可选,默认 SSE)
   - 验证规则: 日期格式、日期范围限制
 
-- [ ] T015 [US2] 实现交易日历处理器 (`apps/tushare-mcp/src/handlers/trade-calendar.handler.ts`)
+- [X] T015 [US2] 实现交易日历处理器 (`apps/tushare-mcp/src/handlers/trade-calendar.handler.ts`)
   - 参数验证 (使用 zod schema + 自定义日期范围验证)
   - 调用 SDK: `client.getTradeCalendar()`
   - 格式化单日查询响应 (交易日/休市日)
@@ -139,7 +139,7 @@
   - 错误处理 (复用 `handleTushareError`)
   - 日志记录
 
-- [ ] T016 [US2] 在 MCP 服务器中注册交易日历工具 (`apps/tushare-mcp/src/server.ts`)
+- [X] T016 [US2] 在 MCP 服务器中注册交易日历工具 (`apps/tushare-mcp/src/server.ts`)
   - 导入 `tradeCalendarTool`
   - 导入 `handleTradeCalendar`
   - 添加到 `tools` 数组
@@ -181,13 +181,13 @@
 
 ### 实现任务 (US3)
 
-- [ ] T019 [US3] 创建每日技术指标工具定义 (`apps/tushare-mcp/src/tools/daily-basic.ts`)
+- [X] T019 [US3] 创建每日技术指标工具定义 (`apps/tushare-mcp/src/tools/daily-basic.ts`)
   - 定义工具名称: `query_daily_basic`
   - 定义 inputSchema (参考 `contracts/query_daily_basic.json`)
   - 参数: ts_code (必填), trade_date (可选), start_date (可选), end_date (可选)
   - 验证规则: trade_date 与 (start_date + end_date) 互斥
 
-- [ ] T020 [US3] 实现每日技术指标处理器 (`apps/tushare-mcp/src/handlers/daily-basic.handler.ts`)
+- [X] T020 [US3] 实现每日技术指标处理器 (`apps/tushare-mcp/src/handlers/daily-basic.handler.ts`)
   - 参数验证 (使用 zod schema + 自定义日期范围验证)
   - 调用 SDK: `client.getDailyBasic()`
   - 格式化单日查询响应 (显示关键指标)
@@ -197,7 +197,7 @@
   - 错误处理 (复用 `handleTushareError`)
   - 日志记录
 
-- [ ] T021 [US3] 在 MCP 服务器中注册每日技术指标工具 (`apps/tushare-mcp/src/server.ts`)
+- [X] T021 [US3] 在 MCP 服务器中注册每日技术指标工具 (`apps/tushare-mcp/src/server.ts`)
   - 导入 `dailyBasicTool`
   - 导入 `handleDailyBasic`
   - 添加到 `tools` 数组
@@ -217,7 +217,7 @@
   - 确保所有单元测试通过
   - 确保测试覆盖率 > 80%
 
-- [ ] T023 [P] 构建 MCP 服务器 (`pnpm build`)
+- [X] T023 [P] 构建 MCP 服务器 (`pnpm build`)
   - 确保 TypeScript 编译无错误
   - 确保输出文件生成正确
 
