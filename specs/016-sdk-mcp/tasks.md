@@ -25,9 +25,9 @@
 
 **目的**: 配置开发环境和基础结构
 
-- [ ] T001 验证 MCP 项目依赖已正确安装 (`apps/tushare-mcp/package.json`)
-- [ ] T002 验证 SDK 包在 workspace 中正确链接 (`@hestudy/tushare-sdk`)
-- [ ] T003 [P] 验证 vitest 测试环境配置 (`apps/tushare-mcp/vitest.config.ts`)
+- [x] T001 验证 MCP 项目依赖已正确安装 (`apps/tushare-mcp/package.json`)
+- [x] T002 验证 SDK 包在 workspace 中正确链接 (`@hestudy/tushare-sdk`)
+- [x] T003 [P] 验证 vitest 测试环境配置 (`apps/tushare-mcp/vitest.config.ts`)
 
 ---
 
@@ -37,9 +37,9 @@
 
 **⚠️ 关键**: 在此阶段完成前,不能开始任何用户故事的实现
 
-- [ ] T004 创建通用日期格式化工具函数 (`apps/tushare-mcp/src/utils/date-formatter.ts`)
-- [ ] T005 [P] 创建通用数值格式化工具函数 (`apps/tushare-mcp/src/utils/number-formatter.ts`)
-- [ ] T006 [P] 创建日期范围验证工具函数 (`apps/tushare-mcp/src/utils/date-validator.ts`)
+- [x] T004 创建通用日期格式化工具函数 (`apps/tushare-mcp/src/utils/date-formatter.ts`)
+- [x] T005 [P] 创建通用数值格式化工具函数 (`apps/tushare-mcp/src/utils/number-formatter.ts`)
+- [x] T006 [P] 创建日期范围验证工具函数 (`apps/tushare-mcp/src/utils/date-validator.ts`)
 
 **Checkpoint**: 基础设施就绪 - 用户故事实现可以开始
 
