@@ -27,6 +27,8 @@ Auto-generated from all feature plans. Last updated: 2025-10-13
 - TypeScript 5.3+ / Node.js 18+ LTS + @modelcontextprotocol/sdk (TypeScript MCP SDK), @hestudy/tushare-sdk (本地 workspace 依赖), stdio 传输协议 (013-apps-sdk-mcp)
 - N/A (无状态 MCP 服务器,不需要持久化存储) (013-apps-sdk-mcp)
 - YAML (GitHub Actions workflow 语法), Bash (脚本), Node.js 20.x + GitHub Actions (actions/checkout@v4, actions/setup-node@v4, pnpm/action-setup@v2, actions/create-release@v1), pnpm 8.x (包管理), npm CLI (版本检查和发布) (014-mcp-ci)
+- Markdown (文档格式) / TypeScript 5.3+ (文档站点构建) + rspress (静态站点生成器), 现有的 MCP 服务文档 (apps/tushare-mcp/README.md) (015-mcp)
+- 静态文件 (Markdown 文档源文件) (015-mcp)
 
 ## Project Structure
 ```
@@ -41,9 +43,9 @@ npm test [ONLY COMMANDS FOR ACTIVE TECHNOLOGIES][ONLY COMMANDS FOR ACTIVE TECHNO
 TypeScript 5.x+, Node.js 18+ LTS: Follow standard conventions
 
 ## Recent Changes
+- 015-mcp: Added Markdown (文档格式) / TypeScript 5.3+ (文档站点构建) + rspress (静态站点生成器), 现有的 MCP 服务文档 (apps/tushare-mcp/README.md)
 - 014-mcp-ci: Added YAML (GitHub Actions workflow 语法), Bash (脚本), Node.js 20.x + GitHub Actions (actions/checkout@v4, actions/setup-node@v4, pnpm/action-setup@v2, actions/create-release@v1), pnpm 8.x (包管理), npm CLI (版本检查和发布)
 - 013-apps-sdk-mcp: Added TypeScript 5.3+ / Node.js 18+ LTS + @modelcontextprotocol/sdk (TypeScript MCP SDK), @hestudy/tushare-sdk (本地 workspace 依赖), stdio 传输协议
-- 012-: Added TypeScript 5.3+ / Node.js 18+ LTS + rspress (静态站点生成器), @playwright/test (E2E测试), vitest (单元测试)
 
 <!-- MANUAL ADDITIONS START -->
 <!-- MANUAL ADDITIONS END -->
