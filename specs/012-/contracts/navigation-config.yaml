@@ -1,0 +1,352 @@
+# 财务数据导航配置契约
+# Contract for Financial Data Navigation Configuration
+#
+# 定义文档站中财务数据章节的导航结构和配置要求
+# 用于确保导航的一致性和可维护性
+
+version: "1.0"
+contract_type: "navigation_configuration"
+feature_branch: "012-"
+created_at: "2025-10-13"
+
+# 导航配置文件位置
+navigation_files:
+  primary_config:
+    file_path: "apps/docs/rspress.config.ts"
+    description: "rspress 主配置文件,包含顶层导航结构"
+    format: "TypeScript"
+
+  section_metadata:
+    file_path: "apps/docs/docs/api/finance/_meta.json"
+    description: "财务数据章节的元数据配置"
+    format: "JSON"
+
+# 导航结构定义
+navigation_structure:
+  section:
+    name: "财务数据"
+    name_en: "Financial Data"
+    description: "上市公司财务报表数据查询接口"
+    level: 2
+    parent: "API 文档"
+    order: 2
+
+    items:
+      - id: "income"
+        text: "利润表"
+        text_en: "Income Statement"
+        link: "/api/finance/income"
+        order: 1
+        status: "active"
+        description: "获取上市公司利润表数据"
+        required_file: "apps/docs/docs/api/finance/income.md"
+
+      - id: "balance"
+        text: "资产负债表"
+        text_en: "Balance Sheet"
+        link: "/api/finance/balance"
+        order: 2
+        status: "active"
+        description: "获取上市公司资产负债表数据"
+        required_file: "apps/docs/docs/api/finance/balance.md"
+
+      - id: "cashflow"
+        text: "现金流量表"
+        text_en: "Cash Flow Statement"
+        link: "/api/finance/cashflow"
+        order: 3
+        status: "pending"
+        description: "获取上市公司现金流量表数据"
+        required_file: "apps/docs/docs/api/finance/cashflow.md"
+        note: "此文档需要新建"
+
+# rspress.config.ts 配置契约
+rspress_config:
+  sidebar_structure:
+    # 财务数据章节必须在 sidebar 中定义
+    required_section:
+      text: "财务数据"
+      collapsible: true
+      collapsed: false
+      items:
+        - text: "利润表"
+          link: "/api/finance/income"
+        - text: "资产负债表"
+          link: "/api/finance/balance"
+        - text: "现金流量表"
+          link: "/api/finance/cashflow"
+
+    # 配置示例(TypeScript)
+    example_code: |
+      {
+        text: '财务数据',
+        collapsible: true,
+        items: [
+          { text: '利润表', link: '/api/finance/income' },
+          { text: '资产负债表', link: '/api/finance/balance' },
+          { text: '现金流量表', link: '/api/finance/cashflow' }
+        ]
+      }
+
+  # 当前状态
+  current_status:
+    is_commented: true
+    reason: "文档内容尚未完全完成和验证"
+    target_status: "enabled"
+
+    # 启用条件
+    enable_conditions:
+      - condition: "cashflow_doc_created"
+        description: "现金流量表文档已创建"
+        validation: "文件存在: apps/docs/docs/api/finance/cashflow.md"
+
+      - condition: "all_docs_validated"
+        description: "所有财务数据文档通过质量验证"
+        validation: "E2E 测试和内容验证测试全部通过"
+
+      - condition: "navigation_links_valid"
+        description: "所有导航链接有效"
+        validation: "链接指向的文件都存在且格式正确"
+
+# _meta.json 配置契约
+meta_json_structure:
+  file_path: "apps/docs/docs/api/finance/_meta.json"
+
+  # 必需字段
+  required_fields:
+    - name: "income"
+      type: string
+      value: "利润表"
+      description: "利润表文档的显示名称"
+
+    - name: "balance"
+      type: string
+      value: "资产负债表"
+      description: "资产负债表文档的显示名称"
+
+    - name: "cashflow"
+      type: string
+      value: "现金流量表"
+      description: "现金流量表文档的显示名称"
+
+  # 配置示例(JSON)
+  example_config:
+    income: "利润表"
+    balance: "资产负债表"
+    cashflow: "现金流量表"
+
+  # 排序规则
+  ordering:
+    method: "by_file_order"
+    description: "文档按在 _meta.json 中的顺序显示"
+    order_sequence:
+      - "income"
+      - "balance"
+      - "cashflow"
+
+# 导航一致性要求
+consistency_requirements:
+  naming:
+    - requirement: "chapter_name_consistency"
+      description: "章节名称在所有配置文件中保持一致"
+      validation:
+        - "rspress.config.ts 中的 text 字段"
+        - "文档 frontmatter 中的 title 字段"
+        - "_meta.json 中的显示名称"
+      example:
+        config: "现金流量表"
+        frontmatter: "get_cashflow - 获取现金流量表数据"
+        meta: "现金流量表"
+
+  links:
+    - requirement: "link_path_correctness"
+      description: "所有链接路径必须正确且一致"
+      validation:
+        - "link 以 /api/finance/ 开头"
+        - "指向实际存在的 .md 文件(不包含扩展名)"
+        - "路径大小写与文件名完全一致"
+      examples:
+        correct:
+          - "/api/finance/income"
+          - "/api/finance/balance"
+          - "/api/finance/cashflow"
+        incorrect:
+          - "/api/finance/Income"  # 大小写错误
+          - "/api/finance/cashflow.md"  # 不应包含扩展名
+          - "api/finance/cashflow"  # 缺少前导斜杠
+
+# 导航测试要求
+testing_requirements:
+  e2e_tests:
+    test_file: "tests/e2e/docs/finance-navigation.spec.ts"
+
+    required_test_cases:
+      - test_case: "homepage_to_finance_section"
+        description: "从文档首页导航到财务数据章节"
+        steps:
+          - "访问文档首页"
+          - "点击 'API 文档' 或侧边栏"
+          - "找到并点击 '财务数据' 章节"
+          - "验证财务数据章节展开并显示三个子项"
+
+      - test_case: "navigate_to_cashflow_doc"
+        description: "导航到现金流量表文档页面"
+        steps:
+          - "从财务数据章节点击 '现金流量表'"
+          - "验证页面成功加载"
+          - "验证页面标题为 'get_cashflow'"
+          - "验证 URL 为 /api/finance/cashflow"
+
+      - test_case: "cross_navigation_between_reports"
+        description: "在三大报表文档间交叉导航"
+        steps:
+          - "访问利润表文档"
+          - "点击侧边栏的 '资产负债表'"
+          - "验证页面切换成功"
+          - "点击侧边栏的 '现金流量表'"
+          - "验证页面切换成功"
+
+      - test_case: "related_api_links"
+        description: "验证相关 API 链接可用"
+        steps:
+          - "访问现金流量表文档"
+          - "滚动到 '相关 API' 章节"
+          - "点击 'get_income' 链接"
+          - "验证成功跳转到利润表文档"
+
+  unit_tests:
+    test_file: "tests/unit/docs/finance-content.spec.ts"
+
+    required_test_cases:
+      - test_case: "navigation_config_structure"
+        description: "验证导航配置结构正确"
+        validations:
+          - "财务数据章节存在"
+          - "包含三个子项(利润表、资产负债表、现金流量表)"
+          - "所有链接路径格式正确"
+
+      - test_case: "navigation_file_consistency"
+        description: "验证导航配置文件之间的一致性"
+        validations:
+          - "rspress.config.ts 中的链接与文件系统一致"
+          - "_meta.json 中的项目与实际文档文件一致"
+          - "所有链接指向的文档文件都存在"
+
+# 导航配置变更流程
+change_process:
+  current_to_enabled:
+    step1:
+      action: "创建现金流量表文档"
+      files:
+        - "apps/docs/docs/api/finance/cashflow.md"
+      validation: "文件存在且通过内容验证"
+
+    step2:
+      action: "更新 _meta.json"
+      files:
+        - "apps/docs/docs/api/finance/_meta.json"
+      changes:
+        - "添加 cashflow: '现金流量表' 配置"
+      validation: "JSON 格式正确"
+
+    step3:
+      action: "启用 rspress.config.ts 中的导航配置"
+      files:
+        - "apps/docs/rspress.config.ts"
+      changes:
+        - "取消财务数据导航的注释"
+        - "确保三个子项都存在"
+      validation: "配置语法正确,构建成功"
+
+    step4:
+      action: "执行测试验证"
+      tests:
+        - "E2E 导航测试"
+        - "文档内容验证测试"
+        - "链接有效性测试"
+      validation: "所有测试通过"
+
+    step5:
+      action: "本地预览验证"
+      commands:
+        - "npm run docs:dev"
+      manual_checks:
+        - "手动验证导航菜单显示正确"
+        - "手动验证所有链接可点击"
+        - "手动验证页面内容正确渲染"
+      validation: "人工确认无问题"
+
+# 回滚计划
+rollback_plan:
+  trigger_conditions:
+    - "E2E 测试失败"
+    - "文档页面无法正常加载"
+    - "导航链接失效"
+    - "构建失败"
+
+  rollback_actions:
+    step1:
+      action: "重新注释导航配置"
+      files:
+        - "apps/docs/rspress.config.ts"
+      changes:
+        - "将财务数据导航配置重新注释"
+
+    step2:
+      action: "恢复 _meta.json"
+      files:
+        - "apps/docs/docs/api/finance/_meta.json"
+      changes:
+        - "移除 cashflow 配置项(如果添加了)"
+
+    step3:
+      action: "验证回滚成功"
+      tests:
+        - "重新运行 E2E 测试"
+        - "重新构建文档站"
+      validation: "恢复到稳定状态"
+
+# 最佳实践
+best_practices:
+  navigation_design:
+    - practice: "logical_grouping"
+      description: "按业务逻辑分组,财务数据作为独立章节"
+
+    - practice: "consistent_ordering"
+      description: "按使用频率或业务逻辑排序(利润表 → 资产负债表 → 现金流量表)"
+
+    - practice: "descriptive_naming"
+      description: "使用清晰的中文名称,避免技术术语"
+
+    - practice: "shallow_hierarchy"
+      description: "保持层级扁平,避免过深的嵌套"
+
+  link_management:
+    - practice: "relative_paths"
+      description: "使用相对于站点根目录的绝对路径(以 / 开头)"
+
+    - practice: "no_file_extension"
+      description: "链接路径不包含 .md 扩展名"
+
+    - practice: "case_sensitivity"
+      description: "严格匹配文件名大小写"
+
+  maintenance:
+    - practice: "version_control"
+      description: "所有配置变更通过 git 版本控制"
+
+    - practice: "automated_testing"
+      description: "使用自动化测试验证导航配置"
+
+    - practice: "documentation"
+      description: "在契约文件中记录配置变更原因和过程"
+
+# 契约变更记录
+changelog:
+  - version: "1.0"
+    date: "2025-10-13"
+    changes:
+      - "初始版本,定义财务数据导航配置契约"
+      - "明确三大报表的导航结构"
+      - "定义从注释状态到启用状态的转换条件"
+      - "规定导航一致性要求和测试要求"

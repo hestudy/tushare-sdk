@@ -6,5 +6,9 @@
   "balance": {
     "title": "资产负债表",
     "order": 2
+  },
+  "cashflow": {
+    "title": "现金流量表",
+    "order": 3
   }
 }
