@@ -94,6 +94,7 @@ export default {
             { text: '快速开始', link: '/guide/quick-start' },
             { text: '配置', link: '/guide/configuration' },
             { text: '错误处理', link: '/guide/error-handling' },
+            { text: 'MCP 使用指南', link: '/guide/mcp-usage' },
           ],
         },
       ],

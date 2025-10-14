@@ -19,6 +19,62 @@ TypeScript SDK for [Tushare Pro](https://tushare.pro) - 为 Node.js 和浏览器
 - ⚡ **高性能** - 并发控制 + 请求优化
 - 🧪 **测试覆盖率 ≥ 80%** - 单元测试 + 集成测试 + 契约测试
 
+## 🤖 MCP 服务
+
+本项目提供基于 [Model Context Protocol (MCP)](https://modelcontextprotocol.io) 的 Tushare 数据服务,让 AI 助手(如 Claude Desktop)能够直接查询 A 股市场数据。
+
+### 功能特性
+
+- 📈 **股票行情查询**: 查询实时股票行情数据,包括最新价、涨跌幅、成交量等
+- 💰 **财务数据查询**: 查询公司财务报表数据(利润表、资产负债表、现金流量表)
+- 📊 **K线数据查询**: 查询历史 K 线数据,支持日线、周线、月线
+- 📉 **市场指数查询**: 查询市场指数行情数据(上证指数、深证成指、创业板指等)
+
+### 快速使用
+
+**1. 安装**
+
+```bash
+pnpm add -g @hestudy/tushare-mcp
+```
+
+**2. 配置 Claude Desktop**
+
+编辑 Claude Desktop 配置文件 (`~/Library/Application Support/Claude/claude_desktop_config.json` on macOS):
+
+```json
+{
+  "mcpServers": {
+    "tushare": {
+      "command": "npx",
+      "args": ["-y", "@hestudy/tushare-mcp"],
+      "env": {
+        "TUSHARE_TOKEN": "your_tushare_token_here"
+      }
+    }
+  }
+}
+```
+
+**3. 重启 Claude Desktop** 并开始使用!
+
+### 使用示例
+
+在 Claude Desktop 中直接提问:
+
+- "帮我查询贵州茅台 (600519.SH) 最新的股票行情"
+- "查询平安银行 2023 年的利润表数据"
+- "获取上证指数最近一个月的日线数据"
+
+AI 会自动调用 Tushare MCP 服务获取数据并为你分析。
+
+### 相关链接
+
+- [MCP 使用指南](./apps/docs/docs/guide/mcp-usage.md) - 完整的安装和配置文档
+- [MCP 服务源码](./apps/tushare-mcp) - 查看 MCP 服务器实现
+- [Tushare Pro](https://tushare.pro) - 获取 API Token
+- [Model Context Protocol](https://modelcontextprotocol.io) - 了解 MCP 协议
+
 ## 📦 安装
 
 ```bash
