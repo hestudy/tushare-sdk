@@ -1,8 +1,8 @@
 import { z } from 'zod';
 import { TushareClient } from '@hestudy/tushare-sdk';
-import type { ToolCallResponse, TextContent } from '../types/mcp-tools.types';
-import { handleTushareError } from '../utils/error-handler';
-import { createLogger } from '../utils/logger';
+import type { ToolCallResponse, TextContent } from '../types/mcp-tools.types.js';
+import { handleTushareError } from '../utils/error-handler.js';
+import { createLogger } from '../utils/logger.js';
 
 const logger = createLogger('info');
 
@@ -209,8 +209,12 @@ function aggregateToMonthly(dailyData: KLineData[]): KLineData[] {
  * @returns 聚合后的K线数据
  */
 function aggregateKline(klines: KLineData[]): KLineData {
-  const first = klines[0];
-  const last = klines[klines.length - 1];
+  if (klines.length === 0) {
+    throw new Error('无法聚合空数据');
+  }
+
+  const first = klines[0]!;
+  const last = klines[klines.length - 1]!;
 
   return {
     ts_code: first.ts_code,
@@ -252,9 +256,13 @@ function formatKlineText(
   freq: string,
   data: KLineData[]
 ): string {
+  if (data.length === 0) {
+    return '没有可用的K线数据';
+  }
+
   const freqText = freq === 'D' ? '日线' : freq === 'W' ? '周线' : '月线';
-  const first = data[0];
-  const last = data[data.length - 1];
+  const first = data[0]!;
+  const last = data[data.length - 1]!;
 
   // 格式化日期
   const formatDate = (dateStr: string) =>

@@ -1,4 +1,4 @@
-import type { MCPToolDefinition } from '../types/mcp-tools.types';
+import type { MCPToolDefinition } from '../types/mcp-tools.types.js';
 
 /**
  * 财务数据查询工具定义

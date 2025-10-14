@@ -1,8 +1,8 @@
 import { z } from 'zod';
 import { TushareClient } from '@hestudy/tushare-sdk';
-import type { ToolCallResponse, TextContent } from '../types/mcp-tools.types';
-import { handleTushareError } from '../utils/error-handler';
-import { createLogger } from '../utils/logger';
+import type { ToolCallResponse, TextContent } from '../types/mcp-tools.types.js';
+import { handleTushareError } from '../utils/error-handler.js';
+import { createLogger } from '../utils/logger.js';
 
 const logger = createLogger('info');
 

@@ -102,31 +102,31 @@ description: "Implementation task list for Tushare MCP Server Application"
 
 ### Tests for User Story 2 (TDD - Red Phase)
 
-- [ ] T025 [P] [US2] 创建 `apps/tushare-mcp/tests/unit/tools/financial.test.ts`,测试 financial 工具定义的 schema 是否有效
-- [ ] T026 [P] [US2] 创建 `apps/tushare-mcp/tests/unit/handlers/financial.handler.test.ts`,测试用例:
+- [X] T025 [P] [US2] 创建 `apps/tushare-mcp/tests/unit/tools/financial.test.ts`,测试 financial 工具定义的 schema 是否有效
+- [X] T026 [P] [US2] 创建 `apps/tushare-mcp/tests/unit/handlers/financial.handler.test.ts`,测试用例:
   - 成功查询利润表返回结构化数据
   - 成功查询资产负债表返回结构化数据
   - 成功查询现金流量表返回结构化数据
   - 报告期格式错误返回 VALIDATION_ERROR
   - 报告期未披露返回 DATA_NOT_FOUND
   - 积分不足返回 AUTH_ERROR(权限错误)
-- [ ] T027 [US2] 创建 `apps/tushare-mcp/tests/integration/mcp-server-financial.test.ts`,测试完整财务查询流程
+- [X] T027 [US2] 创建 `apps/tushare-mcp/tests/integration/mcp-server-financial.test.ts`,测试完整财务查询流程
 
 **运行测试,验证 RED 状态**
 
 ### Implementation for User Story 2 (TDD - Green Phase)
 
-- [ ] T028 [US2] 创建 `apps/tushare-mcp/src/tools/financial.ts`,基于 `contracts/query_financial.json` 定义 MCP Tool
-- [ ] T029 [US2] 创建 `apps/tushare-mcp/src/handlers/financial.handler.ts`,实现 handler 函数:
+- [X] T028 [US2] 创建 `apps/tushare-mcp/src/tools/financial.ts`,基于 `contracts/query_financial.json` 定义 MCP Tool
+- [X] T029 [US2] 创建 `apps/tushare-mcp/src/handlers/financial.handler.ts`,实现 handler 函数:
   - 使用 Zod 验证 ts_code, period, report_type 参数
   - 根据 report_type 路由到 SDK 的 stock.income() / stock.balancesheet() / stock.cashflow()
   - 实现数据转换逻辑(金额单位转换为亿元,报告期格式转换)
   - 捕获错误并转换为用户友好消息
   - 返回 ToolResponse
-- [ ] T030 [US2] 在 `apps/tushare-mcp/src/server.ts` 的 ListToolsRequestSchema handler 中注册 financial 工具
-- [ ] T031 [US2] 在 `apps/tushare-mcp/src/server.ts` 的 CallToolRequestSchema handler 中添加 financial 路由
-- [ ] T032 [US2] 添加 JSDoc 注释到 financial.handler.ts 的所有函数
-- [ ] T033 [US2] 运行测试验证 User Story 2 通过所有测试
+- [X] T030 [US2] 在 `apps/tushare-mcp/src/server.ts` 的 ListToolsRequestSchema handler 中注册 financial 工具
+- [X] T031 [US2] 在 `apps/tushare-mcp/src/server.ts` 的 CallToolRequestSchema handler 中添加 financial 路由
+- [X] T032 [US2] 添加 JSDoc 注释到 financial.handler.ts 的所有函数
+- [X] T033 [US2] 运行测试验证 User Story 2 通过所有测试
 
 **Checkpoint**: 此时 User Stories 1 AND 2 应都独立工作
 
@@ -140,31 +140,31 @@ description: "Implementation task list for Tushare MCP Server Application"
 
 ### Tests for User Story 3 (TDD - Red Phase)
 
-- [ ] T034 [P] [US3] 创建 `apps/tushare-mcp/tests/unit/tools/kline.test.ts`,测试 kline 工具定义的 schema 是否有效
-- [ ] T035 [P] [US3] 创建 `apps/tushare-mcp/tests/unit/handlers/kline.handler.test.ts`,测试用例:
+- [X] T034 [P] [US3] 创建 `apps/tushare-mcp/tests/unit/tools/kline.test.ts`,测试 kline 工具定义的 schema 是否有效
+- [X] T035 [P] [US3] 创建 `apps/tushare-mcp/tests/unit/handlers/kline.handler.test.ts`,测试用例:
   - 成功查询日 K 线返回时间序列数组
   - 成功查询周 K 线和月 K 线
   - end_date < start_date 返回 VALIDATION_ERROR
   - 时间范围超过 10 年返回 VALIDATION_ERROR
   - 时间段无交易数据返回 DATA_NOT_FOUND
-- [ ] T036 [US3] 创建 `apps/tushare-mcp/tests/integration/mcp-server-kline.test.ts`,测试完整 K 线查询流程
+- [X] T036 [US3] 创建 `apps/tushare-mcp/tests/integration/mcp-server-kline.test.ts`,测试完整 K 线查询流程
 
 **运行测试,验证 RED 状态**
 
 ### Implementation for User Story 3 (TDD - Green Phase)
 
-- [ ] T037 [US3] 创建 `apps/tushare-mcp/src/tools/kline.ts`,基于 `contracts/query_kline.json` 定义 MCP Tool
-- [ ] T038 [US3] 创建 `apps/tushare-mcp/src/handlers/kline.handler.ts`,实现 handler 函数:
+- [X] T037 [US3] 创建 `apps/tushare-mcp/src/tools/kline.ts`,基于 `contracts/query_kline.json` 定义 MCP Tool
+- [X] T038 [US3] 创建 `apps/tushare-mcp/src/handlers/kline.handler.ts`,实现 handler 函数:
   - 使用 Zod 验证 ts_code, start_date, end_date, freq 参数
   - 验证 end_date >= start_date 和时间范围 <= 10 年
   - 调用 SDK 的 stock.daily() 接口(参数:ts_code, start_date, end_date)
   - 实现按 freq 聚合逻辑(日线直接返回,周线/月线聚合)
   - 返回按 trade_date 升序排列的 KLineData 数组
   - 捕获错误并转换
-- [ ] T039 [US3] 在 `apps/tushare-mcp/src/server.ts` 中注册 kline 工具
-- [ ] T040 [US3] 在 `apps/tushare-mcp/src/server.ts` 中添加 kline 路由
-- [ ] T041 [US3] 添加 JSDoc 注释到 kline.handler.ts 的所有函数
-- [ ] T042 [US3] 运行测试验证 User Story 3 通过所有测试
+- [X] T039 [US3] 在 `apps/tushare-mcp/src/server.ts` 中注册 kline 工具
+- [X] T040 [US3] 在 `apps/tushare-mcp/src/server.ts` 中添加 kline 路由
+- [X] T041 [US3] 添加 JSDoc 注释到 kline.handler.ts 的所有函数
+- [X] T042 [US3] 运行测试验证 User Story 3 通过所有测试
 
 **Checkpoint**: 此时所有核心数据查询功能应独立工作
 
@@ -178,28 +178,28 @@ description: "Implementation task list for Tushare MCP Server Application"
 
 ### Tests for User Story 4 (TDD - Red Phase)
 
-- [ ] T043 [P] [US4] 创建 `apps/tushare-mcp/tests/unit/tools/index-data.test.ts`,测试 index-data 工具定义的 schema 是否有效
-- [ ] T044 [P] [US4] 创建 `apps/tushare-mcp/tests/unit/handlers/index-data.handler.test.ts`,测试用例:
+- [X] T043 [P] [US4] 创建 `apps/tushare-mcp/tests/unit/tools/index-data.test.ts`,测试 index-data 工具定义的 schema 是否有效
+- [X] T044 [P] [US4] 创建 `apps/tushare-mcp/tests/unit/handlers/index-data.handler.test.ts`,测试用例:
   - 成功查询上证指数返回结构化数据
   - 成功查询深证成指、创业板指
   - 无效指数代码返回 DATA_NOT_FOUND
   - 休市时段返回最近交易日数据
-- [ ] T045 [US4] 创建 `apps/tushare-mcp/tests/integration/mcp-server-index-data.test.ts`,测试完整指数查询流程
+- [X] T045 [US4] 创建 `apps/tushare-mcp/tests/integration/mcp-server-index-data.test.ts`,测试完整指数查询流程
 
 **运行测试,验证 RED 状态**
 
 ### Implementation for User Story 4 (TDD - Green Phase)
 
-- [ ] T046 [US4] 创建 `apps/tushare-mcp/src/tools/index-data.ts`,基于 `contracts/query_index.json` 定义 MCP Tool
-- [ ] T047 [US4] 创建 `apps/tushare-mcp/src/handlers/index-data.handler.ts`,实现 handler 函数:
+- [X] T046 [US4] 创建 `apps/tushare-mcp/src/tools/index-data.ts`,基于 `contracts/query_index.json` 定义 MCP Tool
+- [X] T047 [US4] 创建 `apps/tushare-mcp/src/handlers/index-data.handler.ts`,实现 handler 函数:
   - 使用 Zod 验证 ts_code 和 trade_date 参数
   - 调用 SDK 的 index.daily() 接口
   - 捕获错误并转换
   - 返回 ToolResponse
-- [ ] T048 [US4] 在 `apps/tushare-mcp/src/server.ts` 中注册 index-data 工具
-- [ ] T049 [US4] 在 `apps/tushare-mcp/src/server.ts` 中添加 index-data 路由
-- [ ] T050 [US4] 添加 JSDoc 注释到 index-data.handler.ts 的所有函数
-- [ ] T051 [US4] 运行测试验证 User Story 4 通过所有测试
+- [X] T048 [US4] 在 `apps/tushare-mcp/src/server.ts` 中注册 index-data 工具
+- [X] T049 [US4] 在 `apps/tushare-mcp/src/server.ts` 中添加 index-data 路由
+- [X] T050 [US4] 添加 JSDoc 注释到 index-data.handler.ts 的所有函数
+- [X] T051 [US4] 运行测试验证 User Story 4 通过所有测试
 
 **Checkpoint**: 所有用户故事应现在独立功能
 

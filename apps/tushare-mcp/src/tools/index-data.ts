@@ -1,4 +1,4 @@
-import type { MCPToolDefinition } from '../types/mcp-tools.types';
+import type { MCPToolDefinition } from '../types/mcp-tools.types.js';
 
 /**
  * 市场指数数据查询工具定义
