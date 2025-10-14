@@ -1,0 +1,170 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Query Index Data Tool",
+  "description": "查询市场指数行情数据(如上证指数、深证成指、创业板指等)",
+  "type": "object",
+  "properties": {
+    "input": {
+      "type": "object",
+      "properties": {
+        "ts_code": {
+          "type": "string",
+          "description": "指数代码,格式: 代码.市场后缀。常用指数: 000001.SH(上证指数), 399001.SZ(深证成指), 399006.SZ(创业板指), 000300.SH(沪深300), 000016.SH(上证50)",
+          "pattern": "^\\d{6}\\.(SH|SZ)$",
+          "examples": ["000001.SH", "399001.SZ", "399006.SZ", "000300.SH"]
+        },
+        "trade_date": {
+          "type": "string",
+          "description": "交易日期,格式: YYYYMMDD。可选,默认查询最新交易日数据",
+          "pattern": "^\\d{8}$",
+          "examples": ["20251014", "20231229"]
+        }
+      },
+      "required": ["ts_code"],
+      "additionalProperties": false
+    },
+    "output": {
+      "type": "object",
+      "properties": {
+        "ts_code": {
+          "type": "string",
+          "description": "指数代码"
+        },
+        "trade_date": {
+          "type": "string",
+          "description": "交易日期(YYYYMMDD)"
+        },
+        "close": {
+          "type": "number",
+          "description": "收盘点位"
+        },
+        "open": {
+          "type": "number",
+          "description": "开盘点位"
+        },
+        "high": {
+          "type": "number",
+          "description": "最高点位"
+        },
+        "low": {
+          "type": "number",
+          "description": "最低点位"
+        },
+        "pre_close": {
+          "type": "number",
+          "description": "前收盘点位"
+        },
+        "change": {
+          "type": "number",
+          "description": "涨跌点数"
+        },
+        "pct_chg": {
+          "type": "number",
+          "description": "涨跌幅(%)"
+        },
+        "vol": {
+          "type": "number",
+          "description": "成交量(手)"
+        },
+        "amount": {
+          "type": "number",
+          "description": "成交额(千元)"
+        }
+      },
+      "required": ["ts_code", "trade_date", "close"]
+    }
+  },
+  "examples": [
+    {
+      "input": {
+        "ts_code": "000001.SH"
+      },
+      "output": {
+        "ts_code": "000001.SH",
+        "trade_date": "20251014",
+        "close": 3250.50,
+        "open": 3200.00,
+        "high": 3260.00,
+        "low": 3195.00,
+        "pre_close": 3200.00,
+        "change": 50.50,
+        "pct_chg": 1.58,
+        "vol": 350000000,
+        "amount": 450000000
+      }
+    },
+    {
+      "input": {
+        "ts_code": "399006.SZ",
+        "trade_date": "20231229"
+      },
+      "output": {
+        "ts_code": "399006.SZ",
+        "trade_date": "20231229",
+        "close": 2150.30,
+        "open": 2130.00,
+        "high": 2160.50,
+        "low": 2125.00,
+        "pre_close": 2130.00,
+        "change": 20.30,
+        "pct_chg": 0.95,
+        "vol": 120000000,
+        "amount": 150000000
+      }
+    }
+  ],
+  "commonIndexCodes": [
+    {
+      "code": "000001.SH",
+      "name": "上证指数",
+      "description": "上海证券交易所综合指数"
+    },
+    {
+      "code": "399001.SZ",
+      "name": "深证成指",
+      "description": "深圳证券交易所成份指数"
+    },
+    {
+      "code": "399006.SZ",
+      "name": "创业板指",
+      "description": "创业板综合指数"
+    },
+    {
+      "code": "000300.SH",
+      "name": "沪深300",
+      "description": "沪深两市300只蓝筹股指数"
+    },
+    {
+      "code": "000016.SH",
+      "name": "上证50",
+      "description": "上海证券市场规模大、流动性好的50只股票"
+    },
+    {
+      "code": "000905.SH",
+      "name": "中证500",
+      "description": "中等规模公司股票指数"
+    }
+  ],
+  "errors": [
+    {
+      "code": "VALIDATION_ERROR",
+      "message": "指数代码格式错误,示例: 000001.SH",
+      "trigger": "ts_code 不符合格式要求"
+    },
+    {
+      "code": "DATA_NOT_FOUND",
+      "message": "未找到该指数的行情数据,请检查指数代码是否正确",
+      "trigger": "Tushare API 返回空数据"
+    },
+    {
+      "code": "NETWORK_ERROR",
+      "message": "市场休市时段,返回最近一个交易日的收盘数据",
+      "trigger": "查询时间为非交易时段"
+    }
+  ],
+  "notes": [
+    "指数代码与股票代码格式相同,但语义不同(指数代码通常以 000/399 开头)",
+    "休市时段(周末、节假日、盘后)查询会返回最近一个交易日的收盘数据",
+    "部分冷门指数可能需要更高的 Tushare 积分权限"
+  ]
+}

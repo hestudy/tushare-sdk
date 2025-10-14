@@ -1,0 +1,45 @@
+{
+  "name": "@hestudy/tushare-mcp",
+  "version": "1.0.0",
+  "description": "Tushare MCP Server - Model Context Protocol server for Tushare financial data access",
+  "type": "module",
+  "bin": {
+    "tushare-mcp": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc && chmod +x dist/index.js",
+    "dev": "tsx src/index.ts",
+    "start": "node dist/index.js",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "type-check": "tsc --noEmit",
+    "prepublishOnly": "pnpm build"
+  },
+  "keywords": [
+    "tushare",
+    "mcp",
+    "model-context-protocol",
+    "financial-data",
+    "stock",
+    "ai",
+    "claude"
+  ],
+  "author": "hestudy",
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.4",
+    "@hestudy/tushare-sdk": "workspace:*",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "tsx": "^4.7.1",
+    "typescript": "^5.6.3",
+    "vitest": "^2.1.8",
+    "@vitest/coverage-v8": "^2.1.8"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

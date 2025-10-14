@@ -1,0 +1,133 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Query Stock Quote Tool",
+  "description": "查询实时股票行情数据,支持A股股票代码(如 600519.SH 贵州茅台)",
+  "type": "object",
+  "properties": {
+    "input": {
+      "type": "object",
+      "properties": {
+        "ts_code": {
+          "type": "string",
+          "description": "股票代码,格式: 代码.市场后缀(如 600519.SH 表示上交所, 000001.SZ 表示深交所)",
+          "pattern": "^\\d{6}\\.(SH|SZ)$",
+          "examples": ["600519.SH", "000001.SZ", "600036.SH"]
+        },
+        "trade_date": {
+          "type": "string",
+          "description": "交易日期,格式: YYYYMMDD。可选,默认查询最新交易日数据",
+          "pattern": "^\\d{8}$",
+          "examples": ["20251014", "20231231"]
+        }
+      },
+      "required": ["ts_code"],
+      "additionalProperties": false
+    },
+    "output": {
+      "type": "object",
+      "properties": {
+        "ts_code": {
+          "type": "string",
+          "description": "股票代码"
+        },
+        "trade_date": {
+          "type": "string",
+          "description": "交易日期(YYYYMMDD)"
+        },
+        "open": {
+          "type": "number",
+          "description": "开盘价(元)"
+        },
+        "high": {
+          "type": "number",
+          "description": "最高价(元)"
+        },
+        "low": {
+          "type": "number",
+          "description": "最低价(元)"
+        },
+        "close": {
+          "type": "number",
+          "description": "收盘价(元)"
+        },
+        "pre_close": {
+          "type": "number",
+          "description": "前收盘价(元)"
+        },
+        "change": {
+          "type": "number",
+          "description": "涨跌额(元)"
+        },
+        "pct_chg": {
+          "type": "number",
+          "description": "涨跌幅(%)"
+        },
+        "vol": {
+          "type": "number",
+          "description": "成交量(手)"
+        },
+        "amount": {
+          "type": "number",
+          "description": "成交额(千元)"
+        }
+      },
+      "required": ["ts_code", "trade_date", "close"]
+    }
+  },
+  "examples": [
+    {
+      "input": {
+        "ts_code": "600519.SH"
+      },
+      "output": {
+        "ts_code": "600519.SH",
+        "trade_date": "20251014",
+        "open": 1850.50,
+        "high": 1900.00,
+        "low": 1845.00,
+        "close": 1888.00,
+        "pre_close": 1845.00,
+        "change": 43.00,
+        "pct_chg": 2.33,
+        "vol": 1234567,
+        "amount": 2345000
+      }
+    },
+    {
+      "input": {
+        "ts_code": "000001.SZ",
+        "trade_date": "20231229"
+      },
+      "output": {
+        "ts_code": "000001.SZ",
+        "trade_date": "20231229",
+        "open": 10.50,
+        "high": 10.80,
+        "low": 10.45,
+        "close": 10.75,
+        "pre_close": 10.50,
+        "change": 0.25,
+        "pct_chg": 2.38,
+        "vol": 5678900,
+        "amount": 608900
+      }
+    }
+  ],
+  "errors": [
+    {
+      "code": "VALIDATION_ERROR",
+      "message": "股票代码格式错误,示例: 600519.SH",
+      "trigger": "ts_code 不符合格式要求"
+    },
+    {
+      "code": "DATA_NOT_FOUND",
+      "message": "未找到该股票的行情数据,请检查股票代码是否正确",
+      "trigger": "Tushare API 返回空数据"
+    },
+    {
+      "code": "AUTH_ERROR",
+      "message": "Tushare Token 无效或已过期,请检查环境变量 TUSHARE_TOKEN",
+      "trigger": "Tushare API 返回认证错误"
+    }
+  ]
+}
