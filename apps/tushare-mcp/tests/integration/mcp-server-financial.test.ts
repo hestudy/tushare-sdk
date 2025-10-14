@@ -9,14 +9,19 @@ describe('MCP Server - Financial Tool Integration', () => {
 
   beforeAll(async () => {
     // 设置环境变量 (至少 32 字符)
-    process.env.TUSHARE_TOKEN = process.env.TUSHARE_TOKEN || 'test_token_1234567890123456789012345678';
-    process.env.LOG_LEVEL = 'error'; // 减少测试日志
+    const tushareToken = process.env.TUSHARE_TOKEN || 'test_token_1234567890123456789012345678';
+    const logLevel = 'error'; // 减少测试日志
 
     // 启动 MCP 服务器
     transport = new StdioClientTransport({
       command: 'tsx',
       args: ['src/index.ts'],
       cwd: process.cwd(),
+      env: {
+        ...process.env,
+        TUSHARE_TOKEN: tushareToken,
+        LOG_LEVEL: logLevel,
+      },
     });
 
     client = new Client(

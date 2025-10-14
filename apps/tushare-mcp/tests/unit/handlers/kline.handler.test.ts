@@ -64,9 +64,17 @@ describe('K-Line Handler', () => {
 
       expect(result.content).toBeDefined();
       expect(result.content[0].type).toBe('text');
-      expect(result.structuredContent).toBeInstanceOf(Array);
-      expect(result.structuredContent.length).toBe(2);
-      expect(result.structuredContent[0].trade_date).toBe('20251001');
+      expect(result.structuredContent).toBeDefined();
+      expect(result.structuredContent).toMatchObject({
+        ts_code: '600519.SH',
+        freq: 'D',
+        start_date: '20251001',
+        end_date: '20251002',
+        count: 2,
+      });
+      expect(result.structuredContent.data).toBeInstanceOf(Array);
+      expect(result.structuredContent.data.length).toBe(2);
+      expect(result.structuredContent.data[0].trade_date).toBe('20251001');
       expect(mockGetDailyQuote).toHaveBeenCalledWith({
         ts_code: '600519.SH',
         start_date: '20251001',
@@ -114,8 +122,9 @@ describe('K-Line Handler', () => {
         freq: 'W',
       });
 
-      expect(result.structuredContent).toBeInstanceOf(Array);
-      expect(result.structuredContent.length).toBeGreaterThan(0);
+      expect(result.structuredContent).toBeDefined();
+      expect(result.structuredContent.data).toBeInstanceOf(Array);
+      expect(result.structuredContent.data.length).toBeGreaterThan(0);
     });
   });
 
@@ -148,7 +157,8 @@ describe('K-Line Handler', () => {
         freq: 'M',
       });
 
-      expect(result.structuredContent).toBeInstanceOf(Array);
+      expect(result.structuredContent).toBeDefined();
+      expect(result.structuredContent.data).toBeInstanceOf(Array);
     });
   });
 

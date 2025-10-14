@@ -8,13 +8,18 @@ describe('MCP Server - K-Line Tool Integration', () => {
   let transport: StdioClientTransport;
 
   beforeAll(async () => {
-    process.env.TUSHARE_TOKEN = process.env.TUSHARE_TOKEN || 'test_token_1234567890123456789012345678';
-    process.env.LOG_LEVEL = 'error';
+    const tushareToken = process.env.TUSHARE_TOKEN || 'test_token_1234567890123456789012345678';
+    const logLevel = 'error';
 
     transport = new StdioClientTransport({
       command: 'tsx',
       args: ['src/index.ts'],
       cwd: process.cwd(),
+      env: {
+        ...process.env,
+        TUSHARE_TOKEN: tushareToken,
+        LOG_LEVEL: logLevel,
+      },
     });
 
     client = new Client(

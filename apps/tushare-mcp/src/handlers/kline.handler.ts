@@ -125,7 +125,14 @@ export async function handleKline(args: unknown): Promise<ToolCallResponse> {
           text,
         } as TextContent,
       ],
-      structuredContent: klineData,
+      structuredContent: {
+        ts_code: validated.ts_code,
+        freq: validated.freq,
+        start_date: validated.start_date,
+        end_date: validated.end_date,
+        count: klineData.length,
+        data: klineData,
+      },
     };
   } catch (error) {
     // 7. 错误处理
