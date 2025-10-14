@@ -13,6 +13,8 @@ export default defineConfig({
         'tests/**',
         '**/*.config.ts',
         '**/*.d.ts',
+        'src/types/**',
+        'src/index.ts',
       ],
       thresholds: {
         lines: 80,
