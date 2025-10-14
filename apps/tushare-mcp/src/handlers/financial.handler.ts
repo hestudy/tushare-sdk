@@ -94,50 +94,50 @@ export async function handleFinancial(
 
     switch (validated.report_type) {
       case 'income':
-        response = await client.stock.income({
+        response = await client.getIncomeStatement({
           ts_code: validated.ts_code,
           period: validated.period,
         });
-        if (!response || !response.items || response.items.length === 0) {
+        if (!response || response.length === 0) {
           logger.warn('未找到利润表数据', {
             ts_code: validated.ts_code,
             period: validated.period,
           });
           throw new Error('该报告期数据暂未披露,请选择已披露的报告期');
         }
-        data = response.items[0] as IncomeData;
+        data = response[0] as IncomeData;
         text = formatIncomeText(data);
         break;
 
       case 'balance':
-        response = await client.stock.balancesheet({
+        response = await client.getBalanceSheet({
           ts_code: validated.ts_code,
           period: validated.period,
         });
-        if (!response || !response.items || response.items.length === 0) {
+        if (!response || response.length === 0) {
           logger.warn('未找到资产负债表数据', {
             ts_code: validated.ts_code,
             period: validated.period,
           });
           throw new Error('该报告期数据暂未披露,请选择已披露的报告期');
         }
-        data = response.items[0] as BalanceData;
+        data = response[0] as BalanceData;
         text = formatBalanceText(data);
         break;
 
       case 'cashflow':
-        response = await client.stock.cashflow({
+        response = await client.getCashFlow({
           ts_code: validated.ts_code,
           period: validated.period,
         });
-        if (!response || !response.items || response.items.length === 0) {
+        if (!response || response.length === 0) {
           logger.warn('未找到现金流量表数据', {
             ts_code: validated.ts_code,
             period: validated.period,
           });
           throw new Error('该报告期数据暂未披露,请选择已披露的报告期');
         }
-        data = response.items[0] as CashflowData;
+        data = response[0] as CashflowData;
         text = formatCashflowText(data);
         break;
     }

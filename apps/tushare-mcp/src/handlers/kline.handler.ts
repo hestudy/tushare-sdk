@@ -76,14 +76,14 @@ export async function handleKline(args: unknown): Promise<ToolCallResponse> {
       token: process.env.TUSHARE_TOKEN || '',
     });
 
-    const response = await client.stock.daily({
+    const response = await client.getDailyQuote({
       ts_code: validated.ts_code,
       start_date: validated.start_date,
       end_date: validated.end_date,
     });
 
     // 4. 检查返回数据
-    if (!response || !response.items || response.items.length === 0) {
+    if (!response || response.length === 0) {
       logger.warn('未找到K线数据', {
         ts_code: validated.ts_code,
         start_date: validated.start_date,
@@ -93,7 +93,7 @@ export async function handleKline(args: unknown): Promise<ToolCallResponse> {
     }
 
     // 5. 数据处理和聚合
-    let klineData = response.items as KLineData[];
+    let klineData = response as KLineData[];
 
     // 按交易日期升序排序
     klineData.sort((a, b) =>

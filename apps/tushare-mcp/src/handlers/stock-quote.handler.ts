@@ -61,18 +61,18 @@ export async function handleStockQuote(
       token: process.env.TUSHARE_TOKEN || '',
     });
 
-    const response = await client.stock.daily({
+    const response = await client.getDailyQuote({
       ts_code: validated.ts_code,
       trade_date: validated.trade_date,
     });
 
     // 3. 检查返回数据
-    if (!response || !response.items || response.items.length === 0) {
+    if (!response || response.length === 0) {
       logger.warn('未找到股票行情数据', { ts_code: validated.ts_code });
       throw new Error('未找到股票行情数据,请检查股票代码或交易日期是否正确');
     }
 
-    const data = response.items[0] as StockQuoteData;
+    const data = response[0] as StockQuoteData;
 
     // 4. 格式化响应
     const text = formatStockQuoteText(data);

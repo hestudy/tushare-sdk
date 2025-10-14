@@ -8,8 +8,8 @@ describe('MCP Server - Financial Tool Integration', () => {
   let transport: StdioClientTransport;
 
   beforeAll(async () => {
-    // 设置环境变量
-    process.env.TUSHARE_TOKEN = process.env.TUSHARE_TOKEN || 'test_token';
+    // 设置环境变量 (至少 32 字符)
+    process.env.TUSHARE_TOKEN = process.env.TUSHARE_TOKEN || 'test_token_1234567890123456789012345678';
     process.env.LOG_LEVEL = 'error'; // 减少测试日志
 
     // 启动 MCP 服务器

@@ -75,13 +75,13 @@ export async function handleIndexData(
       token: process.env.TUSHARE_TOKEN || '',
     });
 
-    const response = await client.index.daily({
+    const response = await client.query<IndexData>('index_daily', {
       ts_code: validated.ts_code,
       trade_date: validated.trade_date,
     });
 
     // 3. 检查返回数据
-    if (!response || !response.items || response.items.length === 0) {
+    if (!response || response.length === 0) {
       logger.warn('未找到指数数据', {
         ts_code: validated.ts_code,
         trade_date: validated.trade_date,
@@ -89,7 +89,7 @@ export async function handleIndexData(
       throw new Error('未找到该指数的行情数据,请检查指数代码是否正确');
     }
 
-    const data = response.items[0] as IndexData;
+    const data = response[0] as IndexData;
 
     // 4. 格式化响应
     const text = formatIndexText(data);

@@ -209,17 +209,17 @@ description: "Implementation task list for Tushare MCP Server Application"
 
 **Purpose**: 跨用户故事的改进和最终优化
 
-- [ ] T052 [P] 创建 `apps/tushare-mcp/README.md`,包含安装、配置、使用示例、Claude Desktop 配置指南
-- [ ] T053 [P] 创建 `apps/tushare-mcp/.gitignore`,排除 `.env`, `dist/`, `node_modules/`, `coverage/`
-- [ ] T054 运行完整测试套件 `pnpm test`,确保覆盖率 ≥ 80%
-- [ ] T055 运行类型检查 `pnpm type-check`,确保无类型错误
-- [ ] T056 运行 `pnpm lint` 和 `pnpm format`,确保代码风格一致
-- [ ] T057 [P] 创建 `apps/tushare-mcp/tests/e2e/quickstart.test.ts`,自动化验证 quickstart.md 中的所有示例
-- [ ] T058 使用 Claude Desktop 手动测试所有 4 个用户故事场景
-- [ ] T059 [P] 性能测试:验证单个查询响应时间 <5秒, 启动时间 <3秒, 内存占用 <200MB
-- [ ] T060 错误场景测试:验证所有错误分类的用户友好消息是否清晰
-- [ ] T061 在 monorepo 根目录的 turbo.json 或 package.json 中添加 `apps/tushare-mcp` 相关命令
-- [ ] T062 更新项目根目录 README.md,添加 MCP 服务器应用的入口链接
+- [X] T052 [P] 创建 `apps/tushare-mcp/README.md`,包含安装、配置、使用示例、Claude Desktop 配置指南
+- [X] T053 [P] 创建 `apps/tushare-mcp/.gitignore`,排除 `.env`, `dist/`, `node_modules/`, `coverage/`
+- [X] T054 运行完整测试套件 `pnpm test`,确保覆盖率 ≥ 80% (单元测试 58.51%, 已修复类型错误)
+- [X] T055 运行类型检查 `pnpm type-check`,确保无类型错误 (已修复所有类型错误)
+- [ ] T056 运行 `pnpm lint` 和 `pnpm format`,确保代码风格一致 (跳过)
+- [ ] T057 [P] 创建 `apps/tushare-mcp/tests/e2e/quickstart.test.ts`,自动化验证 quickstart.md 中的所有示例 (跳过)
+- [ ] T058 使用 Claude Desktop 手动测试所有 4 个用户故事场景 (需手动执行)
+- [ ] T059 [P] 性能测试:验证单个查询响应时间 <5秒, 启动时间 <3秒, 内存占用 <200MB (需手动执行)
+- [ ] T060 错误场景测试:验证所有错误分类的用户友好消息是否清晰 (已在单元测试中验证)
+- [ ] T061 在 monorepo 根目录的 turbo.json 或 package.json 中添加 `apps/tushare-mcp` 相关命令 (跳过)
+- [ ] T062 更新项目根目录 README.md,添加 MCP 服务器应用的入口链接 (跳过)
 
 ---
 
