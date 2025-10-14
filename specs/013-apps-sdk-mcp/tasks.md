@@ -28,13 +28,13 @@ description: "Implementation task list for Tushare MCP Server Application"
 
 **Purpose**: 项目初始化和基础结构搭建
 
-- [ ] T001 创建项目目录结构 `apps/tushare-mcp/` 及子目录 `src/`, `tests/unit/`, `tests/integration/`
-- [ ] T002 初始化 `apps/tushare-mcp/package.json`,配置依赖: @modelcontextprotocol/sdk, @hestudy/tushare-sdk (workspace:*), zod, tsx, vitest
-- [ ] T003 [P] 创建 `apps/tushare-mcp/tsconfig.json`,启用严格模式,配置 ES2020 + ESM
-- [ ] T004 [P] 创建 `apps/tushare-mcp/rslib.config.ts`,配置构建输出为 `dist/index.js`
-- [ ] T005 [P] 创建 `apps/tushare-mcp/.env.example`,定义环境变量模板(TUSHARE_TOKEN, LOG_LEVEL 等)
-- [ ] T006 [P] 创建 `apps/tushare-mcp/vitest.config.ts`,配置测试环境和覆盖率目标(≥ 80%)
-- [ ] T007 在 `apps/tushare-mcp/package.json` 中配置 bin 字段,指向 `dist/index.js`,支持 npx 运行
+- [X] T001 创建项目目录结构 `apps/tushare-mcp/` 及子目录 `src/`, `tests/unit/`, `tests/integration/`
+- [X] T002 初始化 `apps/tushare-mcp/package.json`,配置依赖: @modelcontextprotocol/sdk, @hestudy/tushare-sdk (workspace:*), zod, tsx, vitest
+- [X] T003 [P] 创建 `apps/tushare-mcp/tsconfig.json`,启用严格模式,配置 ES2020 + ESM
+- [X] T004 [P] 创建 `apps/tushare-mcp/rslib.config.ts`,配置构建输出为 `dist/index.js`
+- [X] T005 [P] 创建 `apps/tushare-mcp/.env.example`,定义环境变量模板(TUSHARE_TOKEN, LOG_LEVEL 等)
+- [X] T006 [P] 创建 `apps/tushare-mcp/vitest.config.ts`,配置测试环境和覆盖率目标(≥ 80%)
+- [X] T007 在 `apps/tushare-mcp/package.json` 中配置 bin 字段,指向 `dist/index.js`,支持 npx 运行
 
 ---
 
@@ -44,14 +44,14 @@ description: "Implementation task list for Tushare MCP Server Application"
 
 **⚠️ CRITICAL**: 此阶段未完成前,不能开始任何用户故事实现
 
-- [ ] T008 创建 `apps/tushare-mcp/src/types/mcp-tools.types.ts`,定义 MCPToolDefinition, ToolCallRequest, ToolCallResponse, TextContent, ErrorCode 等类型
-- [ ] T009 创建 `apps/tushare-mcp/src/config/config.ts`,实现 ServerConfig 加载逻辑(从环境变量读取 TUSHARE_TOKEN, LOG_LEVEL 等)
-- [ ] T010 [P] 创建 `apps/tushare-mcp/src/utils/logger.ts`,实现结构化日志记录器(输出到 stderr,支持 debug/info/warn/error 级别)
-- [ ] T011 [P] 创建 `apps/tushare-mcp/src/utils/error-handler.ts`,实现 Tushare 错误分类转换函数(AUTH_ERROR, RATE_LIMIT, DATA_NOT_FOUND, NETWORK_ERROR, VALIDATION_ERROR)
-- [ ] T012 [P] 创建 `apps/tushare-mcp/src/utils/validator.ts`,基于 Zod 实现参数验证工具函数(股票代码格式、日期格式、报告期格式)
-- [ ] T013 [P] 创建 `apps/tushare-mcp/src/utils/rate-limiter.ts`,实现时间窗口限流器(maxRequests=100, windowMs=60000)
-- [ ] T014 创建 `apps/tushare-mcp/src/server.ts`,初始化 MCP Server 实例,注册 ListToolsRequestSchema 和 CallToolRequestSchema handlers
-- [ ] T015 创建 `apps/tushare-mcp/src/index.ts`,入口文件,连接 StdioServerTransport,配置优雅关闭(SIGINT/SIGTERM)
+- [X] T008 创建 `apps/tushare-mcp/src/types/mcp-tools.types.ts`,定义 MCPToolDefinition, ToolCallRequest, ToolCallResponse, TextContent, ErrorCode 等类型
+- [X] T009 创建 `apps/tushare-mcp/src/config/config.ts`,实现 ServerConfig 加载逻辑(从环境变量读取 TUSHARE_TOKEN, LOG_LEVEL 等)
+- [X] T010 [P] 创建 `apps/tushare-mcp/src/utils/logger.ts`,实现结构化日志记录器(输出到 stderr,支持 debug/info/warn/error 级别)
+- [X] T011 [P] 创建 `apps/tushare-mcp/src/utils/error-handler.ts`,实现 Tushare 错误分类转换函数(AUTH_ERROR, RATE_LIMIT, DATA_NOT_FOUND, NETWORK_ERROR, VALIDATION_ERROR)
+- [X] T012 [P] 创建 `apps/tushare-mcp/src/utils/validator.ts`,基于 Zod 实现参数验证工具函数(股票代码格式、日期格式、报告期格式)
+- [X] T013 [P] 创建 `apps/tushare-mcp/src/utils/rate-limiter.ts`,实现时间窗口限流器(maxRequests=100, windowMs=60000)
+- [X] T014 创建 `apps/tushare-mcp/src/server.ts`,初始化 MCP Server 实例,注册 ListToolsRequestSchema 和 CallToolRequestSchema handlers
+- [X] T015 创建 `apps/tushare-mcp/src/index.ts`,入口文件,连接 StdioServerTransport,配置优雅关闭(SIGINT/SIGTERM)
 
 **Checkpoint**: 基础设施就绪 - 用户故事实现现在可以并行开始
 
