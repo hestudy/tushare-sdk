@@ -25,27 +25,25 @@ describe('Stock Quote Handler', () => {
 
   describe('Stock Quote Query', () => {
     it('should return structured stock quote data for valid request', async () => {
-      const mockStockData = {
-        items: [
-          {
-            ts_code: '600519.SH',
-            trade_date: '20251014',
-            open: 1800.0,
-            high: 1820.0,
-            low: 1795.0,
-            close: 1810.0,
-            pre_close: 1800.0,
-            change: 10.0,
-            pct_chg: 0.56,
-            vol: 980000,
-            amount: 1770000,
-          },
-        ],
-      };
+      const mockStockData = [
+        {
+          ts_code: '600519.SH',
+          trade_date: '20251014',
+          open: 1800.0,
+          high: 1820.0,
+          low: 1795.0,
+          close: 1810.0,
+          pre_close: 1800.0,
+          change: 10.0,
+          pct_chg: 0.56,
+          vol: 980000,
+          amount: 1770000,
+        },
+      ];
 
-      const mockDaily = vi.fn().mockResolvedValue(mockStockData);
+      const mockGetDailyQuote = vi.fn().mockResolvedValue(mockStockData);
       (TushareClient as any).mockImplementation(() => ({
-        stock: { daily: mockDaily },
+        getDailyQuote: mockGetDailyQuote,
       }));
 
       const result = await handleStockQuote({
@@ -56,34 +54,32 @@ describe('Stock Quote Handler', () => {
       expect(result.content[0].type).toBe('text');
       expect(result.structuredContent).toBeDefined();
       expect(result.structuredContent.ts_code).toBe('600519.SH');
-      expect(mockDaily).toHaveBeenCalledWith({
+      expect(mockGetDailyQuote).toHaveBeenCalledWith({
         ts_code: '600519.SH',
         trade_date: undefined,
       });
     });
 
     it('should query stock with specific trade_date', async () => {
-      const mockStockData = {
-        items: [
-          {
-            ts_code: '600519.SH',
-            trade_date: '20251014',
-            open: 1800.0,
-            high: 1820.0,
-            low: 1795.0,
-            close: 1810.0,
-            pre_close: 1800.0,
-            change: 10.0,
-            pct_chg: 0.56,
-            vol: 980000,
-            amount: 1770000,
-          },
-        ],
-      };
+      const mockStockData = [
+        {
+          ts_code: '600519.SH',
+          trade_date: '20251014',
+          open: 1800.0,
+          high: 1820.0,
+          low: 1795.0,
+          close: 1810.0,
+          pre_close: 1800.0,
+          change: 10.0,
+          pct_chg: 0.56,
+          vol: 980000,
+          amount: 1770000,
+        },
+      ];
 
-      const mockDaily = vi.fn().mockResolvedValue(mockStockData);
+      const mockGetDailyQuote = vi.fn().mockResolvedValue(mockStockData);
       (TushareClient as any).mockImplementation(() => ({
-        stock: { daily: mockDaily },
+        getDailyQuote: mockGetDailyQuote,
       }));
 
       const result = await handleStockQuote({
@@ -92,7 +88,7 @@ describe('Stock Quote Handler', () => {
       });
 
       expect(result.structuredContent.trade_date).toBe('20251014');
-      expect(mockDaily).toHaveBeenCalledWith({
+      expect(mockGetDailyQuote).toHaveBeenCalledWith({
         ts_code: '600519.SH',
         trade_date: '20251014',
       });
@@ -122,9 +118,9 @@ describe('Stock Quote Handler', () => {
 
   describe('Data Not Found', () => {
     it('should return DATA_NOT_FOUND when API returns empty data', async () => {
-      const mockDaily = vi.fn().mockResolvedValue({ items: [] });
+      const mockGetDailyQuote = vi.fn().mockResolvedValue([]);
       (TushareClient as any).mockImplementation(() => ({
-        stock: { daily: mockDaily },
+        getDailyQuote: mockGetDailyQuote,
       }));
 
       const result = await handleStockQuote({
@@ -138,11 +134,11 @@ describe('Stock Quote Handler', () => {
 
   describe('Auth Error', () => {
     it('should handle authentication errors', async () => {
-      const mockDaily = vi
+      const mockGetDailyQuote = vi
         .fn()
         .mockRejectedValue(new Error('Token无效或已过期'));
       (TushareClient as any).mockImplementation(() => ({
-        stock: { daily: mockDaily },
+        getDailyQuote: mockGetDailyQuote,
       }));
 
       const result = await handleStockQuote({

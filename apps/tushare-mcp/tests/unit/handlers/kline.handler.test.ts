@@ -50,9 +50,9 @@ describe('K-Line Handler', () => {
         ],
       };
 
-      const mockDaily = vi.fn().mockResolvedValue(mockDailyData);
+      const mockGetDailyQuote = vi.fn().mockResolvedValue(mockDailyData.items);
       (TushareClient as any).mockImplementation(() => ({
-        stock: { daily: mockDaily },
+        getDailyQuote: mockGetDailyQuote,
       }));
 
       const result = await handleKline({
@@ -67,7 +67,7 @@ describe('K-Line Handler', () => {
       expect(result.structuredContent).toBeInstanceOf(Array);
       expect(result.structuredContent.length).toBe(2);
       expect(result.structuredContent[0].trade_date).toBe('20251001');
-      expect(mockDaily).toHaveBeenCalledWith({
+      expect(mockGetDailyQuote).toHaveBeenCalledWith({
         ts_code: '600519.SH',
         start_date: '20251001',
         end_date: '20251002',
@@ -102,9 +102,9 @@ describe('K-Line Handler', () => {
         ],
       };
 
-      const mockDaily = vi.fn().mockResolvedValue(mockDailyData);
+      const mockGetDailyQuote = vi.fn().mockResolvedValue(mockDailyData.items);
       (TushareClient as any).mockImplementation(() => ({
-        stock: { daily: mockDaily },
+        getDailyQuote: mockGetDailyQuote,
       }));
 
       const result = await handleKline({
@@ -136,9 +136,9 @@ describe('K-Line Handler', () => {
         ],
       };
 
-      const mockDaily = vi.fn().mockResolvedValue(mockDailyData);
+      const mockGetDailyQuote = vi.fn().mockResolvedValue(mockDailyData.items);
       (TushareClient as any).mockImplementation(() => ({
-        stock: { daily: mockDaily },
+        getDailyQuote: mockGetDailyQuote,
       }));
 
       const result = await handleKline({
@@ -189,9 +189,9 @@ describe('K-Line Handler', () => {
 
   describe('Data Not Found', () => {
     it('should return DATA_NOT_FOUND when API returns empty data', async () => {
-      const mockDaily = vi.fn().mockResolvedValue({ items: [] });
+      const mockGetDailyQuote = vi.fn().mockResolvedValue([]);
       (TushareClient as any).mockImplementation(() => ({
-        stock: { daily: mockDaily },
+        getDailyQuote: mockGetDailyQuote,
       }));
 
       const result = await handleKline({

@@ -43,9 +43,9 @@ describe('Index Data Handler', () => {
         ],
       };
 
-      const mockIndexDaily = vi.fn().mockResolvedValue(mockIndexData);
+      const mockQuery = vi.fn().mockResolvedValue(mockIndexData.items);
       (TushareClient as any).mockImplementation(() => ({
-        index: { daily: mockIndexDaily },
+        query: mockQuery,
       }));
 
       const result = await handleIndexData({
@@ -57,7 +57,7 @@ describe('Index Data Handler', () => {
       expect(result.structuredContent).toBeDefined();
       expect(result.structuredContent.ts_code).toBe('000001.SH');
       expect(result.structuredContent.close).toBe(3250.5);
-      expect(mockIndexDaily).toHaveBeenCalledWith({
+      expect(mockQuery).toHaveBeenCalledWith('index_daily', {
         ts_code: '000001.SH',
         trade_date: undefined,
       });
@@ -82,9 +82,9 @@ describe('Index Data Handler', () => {
         ],
       };
 
-      const mockIndexDaily = vi.fn().mockResolvedValue(mockIndexData);
+      const mockQuery = vi.fn().mockResolvedValue(mockIndexData.items);
       (TushareClient as any).mockImplementation(() => ({
-        index: { daily: mockIndexDaily },
+        query: mockQuery,
       }));
 
       const result = await handleIndexData({
@@ -93,7 +93,7 @@ describe('Index Data Handler', () => {
       });
 
       expect(result.structuredContent.trade_date).toBe('20231229');
-      expect(mockIndexDaily).toHaveBeenCalledWith({
+      expect(mockQuery).toHaveBeenCalledWith('index_daily', {
         ts_code: '399006.SZ',
         trade_date: '20231229',
       });
@@ -123,9 +123,9 @@ describe('Index Data Handler', () => {
 
   describe('Data Not Found', () => {
     it('should return DATA_NOT_FOUND when API returns empty data', async () => {
-      const mockIndexDaily = vi.fn().mockResolvedValue({ items: [] });
+      const mockQuery = vi.fn().mockResolvedValue([]);
       (TushareClient as any).mockImplementation(() => ({
-        index: { daily: mockIndexDaily },
+        query: mockQuery,
       }));
 
       const result = await handleIndexData({
@@ -139,11 +139,11 @@ describe('Index Data Handler', () => {
 
   describe('Network Error', () => {
     it('should handle network errors gracefully', async () => {
-      const mockIndexDaily = vi
+      const mockQuery = vi
         .fn()
         .mockRejectedValue(new Error('网络超时'));
       (TushareClient as any).mockImplementation(() => ({
-        index: { daily: mockIndexDaily },
+        query: mockQuery,
       }));
 
       const result = await handleIndexData({

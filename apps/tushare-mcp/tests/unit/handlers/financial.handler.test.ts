@@ -39,9 +39,9 @@ describe('Financial Handler', () => {
         ],
       };
 
-      const mockIncome = vi.fn().mockResolvedValue(mockIncomeData);
+      const mockGetIncomeStatement = vi.fn().mockResolvedValue(mockIncomeData.items);
       (TushareClient as any).mockImplementation(() => ({
-        stock: { income: mockIncome },
+        getIncomeStatement: mockGetIncomeStatement,
       }));
 
       const result = await handleFinancial({
@@ -55,7 +55,7 @@ describe('Financial Handler', () => {
       expect(result.structuredContent).toBeDefined();
       expect(result.structuredContent.ts_code).toBe('600519.SH');
       expect(result.structuredContent.end_date).toBe('20231231');
-      expect(mockIncome).toHaveBeenCalledWith({
+      expect(mockGetIncomeStatement).toHaveBeenCalledWith({
         ts_code: '600519.SH',
         period: '20231231',
       });
@@ -77,9 +77,9 @@ describe('Financial Handler', () => {
         ],
       };
 
-      const mockBalancesheet = vi.fn().mockResolvedValue(mockBalanceData);
+      const mockGetBalanceSheet = vi.fn().mockResolvedValue(mockBalanceData.items);
       (TushareClient as any).mockImplementation(() => ({
-        stock: { balancesheet: mockBalancesheet },
+        getBalanceSheet: mockGetBalanceSheet,
       }));
 
       const result = await handleFinancial({
@@ -91,7 +91,7 @@ describe('Financial Handler', () => {
       expect(result.content).toBeDefined();
       expect(result.structuredContent).toBeDefined();
       expect(result.structuredContent.ts_code).toBe('600519.SH');
-      expect(mockBalancesheet).toHaveBeenCalled();
+      expect(mockGetBalanceSheet).toHaveBeenCalled();
     });
   });
 
@@ -109,9 +109,9 @@ describe('Financial Handler', () => {
         ],
       };
 
-      const mockCashflow = vi.fn().mockResolvedValue(mockCashflowData);
+      const mockGetCashFlow = vi.fn().mockResolvedValue(mockCashflowData.items);
       (TushareClient as any).mockImplementation(() => ({
-        stock: { cashflow: mockCashflow },
+        getCashFlow: mockGetCashFlow,
       }));
 
       const result = await handleFinancial({
@@ -123,7 +123,7 @@ describe('Financial Handler', () => {
       expect(result.content).toBeDefined();
       expect(result.structuredContent).toBeDefined();
       expect(result.structuredContent.ts_code).toBe('600519.SH');
-      expect(mockCashflow).toHaveBeenCalled();
+      expect(mockGetCashFlow).toHaveBeenCalled();
     });
   });
 
@@ -163,9 +163,9 @@ describe('Financial Handler', () => {
 
   describe('Data Not Found', () => {
     it('should return DATA_NOT_FOUND when API returns empty data', async () => {
-      const mockIncome = vi.fn().mockResolvedValue({ items: [] });
+      const mockGetIncomeStatement = vi.fn().mockResolvedValue([]);
       (TushareClient as any).mockImplementation(() => ({
-        stock: { income: mockIncome },
+        getIncomeStatement: mockGetIncomeStatement,
       }));
 
       const result = await handleFinancial({
@@ -181,11 +181,11 @@ describe('Financial Handler', () => {
 
   describe('Auth Error', () => {
     it('should return AUTH_ERROR for permission errors', async () => {
-      const mockIncome = vi
+      const mockGetIncomeStatement = vi
         .fn()
         .mockRejectedValue(new Error('积分不足或权限不够'));
       (TushareClient as any).mockImplementation(() => ({
-        stock: { income: mockIncome },
+        getIncomeStatement: mockGetIncomeStatement,
       }));
 
       const result = await handleFinancial({
