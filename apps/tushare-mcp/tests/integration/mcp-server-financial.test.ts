@@ -3,13 +3,24 @@ import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
 import type { Tool } from '@modelcontextprotocol/sdk/types.js';
 
+// 检查是否有有效的 Tushare token (非测试用的假 token)
+const hasValidToken = () => {
+  const token = process.env.TUSHARE_TOKEN;
+  return token && token.length > 0 && !token.startsWith('test_token_');
+};
+
 describe('MCP Server - Financial Tool Integration', () => {
   let client: Client;
   let transport: StdioClientTransport;
 
   beforeAll(async () => {
-    // 设置环境变量 (至少 32 字符)
-    const tushareToken = process.env.TUSHARE_TOKEN || 'test_token_1234567890123456789012345678';
+    if (!hasValidToken()) {
+      console.warn('⚠️  跳过集成测试: 未设置有效的 TUSHARE_TOKEN 环境变量');
+      return;
+    }
+
+    // 设置环境变量
+    const tushareToken = process.env.TUSHARE_TOKEN!;
     const logLevel = 'error'; // 减少测试日志
 
     // 启动 MCP 服务器
@@ -38,10 +49,12 @@ describe('MCP Server - Financial Tool Integration', () => {
   }, 30000);
 
   afterAll(async () => {
-    await client.close();
+    if (client) {
+      await client.close();
+    }
   });
 
-  it('should list financial tool in available tools', async () => {
+  it.skipIf(!hasValidToken())('should list financial tool in available tools', async () => {
     const response = await client.listTools();
 
     const financialTool = response.tools.find(
@@ -52,7 +65,7 @@ describe('MCP Server - Financial Tool Integration', () => {
     expect(financialTool?.description).toContain('财务');
   });
 
-  it('should successfully query income statement', async () => {
+  it.skipIf(!hasValidToken())('should successfully query income statement', async () => {
     const response = await client.callTool({
       name: 'query_financial',
       arguments: {
@@ -67,7 +80,7 @@ describe('MCP Server - Financial Tool Integration', () => {
     expect(response.isError).not.toBe(true);
   }, 15000);
 
-  it('should return validation error for invalid period', async () => {
+  it.skipIf(!hasValidToken())('should return validation error for invalid period', async () => {
     const response = await client.callTool({
       name: 'query_financial',
       arguments: {

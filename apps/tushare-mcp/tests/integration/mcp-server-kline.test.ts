@@ -3,12 +3,23 @@ import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
 import type { Tool } from '@modelcontextprotocol/sdk/types.js';
 
+// 检查是否有有效的 Tushare token (非测试用的假 token)
+const hasValidToken = () => {
+  const token = process.env.TUSHARE_TOKEN;
+  return token && token.length > 0 && !token.startsWith('test_token_');
+};
+
 describe('MCP Server - K-Line Tool Integration', () => {
   let client: Client;
   let transport: StdioClientTransport;
 
   beforeAll(async () => {
-    const tushareToken = process.env.TUSHARE_TOKEN || 'test_token_1234567890123456789012345678';
+    if (!hasValidToken()) {
+      console.warn('⚠️  跳过集成测试: 未设置有效的 TUSHARE_TOKEN 环境变量');
+      return;
+    }
+
+    const tushareToken = process.env.TUSHARE_TOKEN!;
     const logLevel = 'error';
 
     transport = new StdioClientTransport({
@@ -36,10 +47,12 @@ describe('MCP Server - K-Line Tool Integration', () => {
   }, 30000);
 
   afterAll(async () => {
-    await client.close();
+    if (client) {
+      await client.close();
+    }
   });
 
-  it('should list kline tool in available tools', async () => {
+  it.skipIf(!hasValidToken())('should list kline tool in available tools', async () => {
     const response = await client.listTools();
 
     const klineTool = response.tools.find(
@@ -50,7 +63,7 @@ describe('MCP Server - K-Line Tool Integration', () => {
     expect(klineTool?.description).toContain('K线');
   });
 
-  it('should successfully query daily K-line data', async () => {
+  it.skipIf(!hasValidToken())('should successfully query daily K-line data', async () => {
     const response = await client.callTool({
       name: 'query_kline',
       arguments: {
@@ -66,7 +79,7 @@ describe('MCP Server - K-Line Tool Integration', () => {
     expect(response.isError).not.toBe(true);
   }, 15000);
 
-  it('should return validation error for invalid date range', async () => {
+  it.skipIf(!hasValidToken())('should return validation error for invalid date range', async () => {
     const response = await client.callTool({
       name: 'query_kline',
       arguments: {
