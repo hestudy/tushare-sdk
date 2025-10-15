@@ -1,8 +1,8 @@
 /**
  * 查询行情数据 API Step
- * 
+ *
  * 提供 HTTP API 查询历史行情数据
- * 
+ *
  * Contract: /specs/017-/contracts/query-quotes-api.step.json
  */
 

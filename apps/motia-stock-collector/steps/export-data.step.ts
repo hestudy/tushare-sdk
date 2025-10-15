@@ -1,6 +1,6 @@
 /**
  * 数据导出 API Step
- * 
+ *
  * 提供 HTTP API 导出查询数据为 CSV 或 JSON 格式
  */
 
@@ -38,22 +38,25 @@ function convertToCSV(data: DailyQuote[]): string {
     return 'ts_code,trade_date,open,high,low,close,pre_close,change,pct_chg,vol,amount\n';
   }
 
-  const headers = 'ts_code,trade_date,open,high,low,close,pre_close,change,pct_chg,vol,amount\n';
-  const rows = data.map((row) => {
-    return [
-      row.tsCode,
-      row.tradeDate,
-      row.open ?? '',
-      row.high ?? '',
-      row.low ?? '',
-      row.close ?? '',
-      row.preClose ?? '',
-      row.change ?? '',
-      row.pctChg ?? '',
-      row.vol ?? '',
-      row.amount ?? '',
-    ].join(',');
-  }).join('\n');
+  const headers =
+    'ts_code,trade_date,open,high,low,close,pre_close,change,pct_chg,vol,amount\n';
+  const rows = data
+    .map((row) => {
+      return [
+        row.tsCode,
+        row.tradeDate,
+        row.open ?? '',
+        row.high ?? '',
+        row.low ?? '',
+        row.close ?? '',
+        row.preClose ?? '',
+        row.change ?? '',
+        row.pctChg ?? '',
+        row.vol ?? '',
+        row.amount ?? '',
+      ].join(',');
+    })
+    .join('\n');
 
   return headers + rows;
 }
@@ -63,7 +66,13 @@ function convertToCSV(data: DailyQuote[]): string {
  */
 export const handler = async (req: any, { logger }: any) => {
   try {
-    const { tsCode, startDate, endDate, limit = '1000', format = 'json' } = req.query || {};
+    const {
+      tsCode,
+      startDate,
+      endDate,
+      limit = '1000',
+      format = 'json',
+    } = req.query || {};
 
     // 参数验证
     if (tsCode && !validateStockCode(tsCode)) {
