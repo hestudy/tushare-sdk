@@ -178,13 +178,13 @@
 
 ### US1 Step 实现
 
-- [ ] T025 [US1] 实现定时调度 Step `apps/motia-stock-collector/steps/schedule-daily-collection.step.ts`
+- [x] T025 [US1] 实现定时调度 Step `apps/motia-stock-collector/steps/schedule-daily-collection.step.ts`
   - 配置: type='cron', schedule='0 17 \* \* 1-5' (周一至周五17:00)
   - Handler: 获取当前日期
   - 调用 checkTradeCalendar() 判断是否交易日
   - 如果是交易日,Emit 'data.collection.triggered' 事件
   - 记录日志(跳过/触发)
-- [ ] T026 [US1] 实现日线行情采集 Step `apps/motia-stock-collector/steps/collect-daily-quotes.step.ts`
+- [x] T026 [US1] 实现日线行情采集 Step `apps/motia-stock-collector/steps/collect-daily-quotes.step.ts`
   - 配置: type='event', subscribes=['data.collection.triggered'], retries=3, retryDelay=60000
   - Handler: 接收 { tradeDate } 参数
   - 调用 TushareService.getDailyQuotes(tradeDate)
@@ -192,7 +192,7 @@
   - 记录 TaskLog(开始时间、结束时间、记录数、状态)
   - Emit 'quotes.collected' 事件
   - 错误处理: 抛出异常触发重试
-- [ ] T027 [US1] 实现历史数据补齐功能 `apps/motia-stock-collector/lib/backfill.ts`
+- [x] T027 [US1] 实现历史数据补齐功能 `apps/motia-stock-collector/lib/backfill.ts`
   - backfillHistoricalData(startDate, endDate): Promise<void>
   - 获取日期范围内所有交易日
   - 批次触发 'data.collection.triggered' 事件
@@ -201,13 +201,13 @@
 
 ### US1 契约测试
 
-- [ ] T028 [P] [US1] 定时调度 Step 契约测试 `apps/motia-stock-collector/tests/integration/schedule-daily-collection.test.ts`
+- [x] T028 [P] [US1] 定时调度 Step 契约测试 `apps/motia-stock-collector/tests/integration/schedule-daily-collection.test.ts`
   - 验证配置符合 contracts/schedule-daily-collection.step.json
   - 测试 Emit 事件格式正确
   - Mock 时间和交易日历
   - 测试交易日触发、非交易日跳过
   - **NOTE**: 先编写失败的测试
-- [ ] T029 [P] [US1] 日线采集 Step 契约测试 `apps/motia-stock-collector/tests/integration/collect-daily-quotes.test.ts`
+- [x] T029 [P] [US1] 日线采集 Step 契约测试 `apps/motia-stock-collector/tests/integration/collect-daily-quotes.test.ts`
   - Mock TushareService 返回测试数据
   - 验证数据正确保存到数据库
   - 验证 TaskLog 记录正确
@@ -216,7 +216,7 @@
 
 ### US1 集成测试
 
-- [ ] T030 [US1] 数据采集端到端测试 `apps/motia-stock-collector/tests/integration/collection-flow.test.ts`
+- [x] T030 [US1] 数据采集端到端测试 `apps/motia-stock-collector/tests/integration/collection-flow.test.ts`
   - 场景 1: Cron 触发 → 检查交易日 → 采集数据 → 保存数据库 → 验证可查询
   - 场景 2: 非交易日触发 → 跳过采集 → 验证日志记录
   - 场景 3: API 失败 → 自动重试 → 最终成功
