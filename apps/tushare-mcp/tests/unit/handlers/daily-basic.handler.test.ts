@@ -153,7 +153,9 @@ describe('Daily Basic Handler', () => {
       expect(result.content[0].text).toContain('共 5 个交易日数据');
       expect(result.content[0].text).toContain('统计摘要');
       expect(result.content[0].text).toContain('PE 均值');
-      expect(result.structuredContent).toHaveLength(5);
+      expect(result.structuredContent.query_type).toBe('date_range');
+      expect(result.structuredContent.count).toBe(5);
+      expect(result.structuredContent.data).toHaveLength(5);
       expect(mockGetDailyBasic).toHaveBeenCalledWith({
         ts_code: '600519.SH',
         start_date: '20251001',
@@ -185,7 +187,9 @@ describe('Daily Basic Handler', () => {
       });
 
       expect(result.content[0].text).toContain('...');
-      expect(result.structuredContent).toHaveLength(20);
+      expect(result.structuredContent.query_type).toBe('date_range');
+      expect(result.structuredContent.count).toBe(20);
+      expect(result.structuredContent.data).toHaveLength(20);
     });
   });
 

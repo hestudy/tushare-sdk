@@ -111,7 +111,13 @@ export async function handleStockBasic(
             text,
           } as TextContent,
         ],
-        structuredContent: response.slice(0, 50), // 限制返回数量
+        structuredContent: {
+          query_type: 'list',
+          filters: validated,
+          total_count: response.length,
+          returned_count: Math.min(response.length, 50),
+          stocks: response.slice(0, 50), // 限制返回数量
+        },
       };
     }
   } catch (error) {

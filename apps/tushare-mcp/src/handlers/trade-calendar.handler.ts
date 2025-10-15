@@ -80,7 +80,13 @@ export async function handleTradeCalendar(
             text,
           } as TextContent,
         ],
-        structuredContent: data,
+        structuredContent: {
+          query_type: 'single_day',
+          date: data.cal_date,
+          is_open: data.is_open,
+          exchange: data.exchange,
+          pretrade_date: data.pretrade_date,
+        },
       };
     } else {
       // 范围查询
@@ -91,6 +97,10 @@ export async function handleTradeCalendar(
       );
       logger.info('交易日历范围查询成功', { count: response.length });
 
+      // 统计交易日和休市日
+      const tradeDays = response.filter((item) => item.is_open === 1 || item.is_open === '1');
+      const closedDays = response.filter((item) => item.is_open === 0 || item.is_open === '0');
+
       return {
         content: [
           {
@@ -98,7 +108,18 @@ export async function handleTradeCalendar(
             text,
           } as TextContent,
         ],
-        structuredContent: response,
+        structuredContent: {
+          query_type: 'date_range',
+          start_date: validated.start_date,
+          end_date: validated.end_date,
+          exchange: validated.exchange,
+          total_days: response.length,
+          trade_days_count: tradeDays.length,
+          closed_days_count: closedDays.length,
+          trade_days: tradeDays.map((item) => item.cal_date),
+          closed_days: closedDays.map((item) => item.cal_date),
+          data: response,
+        },
       };
     }
   } catch (error) {

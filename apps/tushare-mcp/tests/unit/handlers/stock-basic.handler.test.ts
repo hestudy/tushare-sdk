@@ -142,7 +142,9 @@ describe('Stock Basic Handler', () => {
 
       expect(result.content[0].text).toContain('上交所');
       expect(result.content[0].text).toContain('股票列表');
-      expect(result.structuredContent).toHaveLength(10);
+      expect(result.structuredContent.query_type).toBe('list');
+      expect(result.structuredContent.total_count).toBe(10);
+      expect(result.structuredContent.stocks).toHaveLength(10);
       expect(mockGetStockBasic).toHaveBeenCalledWith({
         exchange: 'SSE',
       });
@@ -170,7 +172,10 @@ describe('Stock Basic Handler', () => {
         exchange: 'SSE',
       });
 
-      expect(result.structuredContent).toHaveLength(50);
+      expect(result.structuredContent.query_type).toBe('list');
+      expect(result.structuredContent.total_count).toBe(100);
+      expect(result.structuredContent.returned_count).toBe(50);
+      expect(result.structuredContent.stocks).toHaveLength(50);
       expect(result.content[0].text).toContain('前50条');
       expect(result.content[0].text).toContain('共找到 100 只股票');
     });

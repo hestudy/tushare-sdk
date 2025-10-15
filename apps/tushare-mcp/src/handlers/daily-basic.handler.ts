@@ -144,8 +144,14 @@ export async function handleDailyBasic(
       };
     } else {
       // 范围查询
-      const text = formatDateRangeText(response as DailyBasicData[]);
-      logger.info('每日技术指标范围查询成功', { count: response.length });
+      const data = response as DailyBasicData[];
+      const text = formatDateRangeText(data);
+      logger.info('每日技术指标范围查询成功', { count: data.length });
+
+      // 提取日期范围
+      const dates = data.map((item) => item.trade_date).sort();
+      const startDate = dates[0]!;
+      const endDate = dates[dates.length - 1]!;
 
       return {
         content: [
@@ -154,7 +160,14 @@ export async function handleDailyBasic(
             text,
           } as TextContent,
         ],
-        structuredContent: response,
+        structuredContent: {
+          query_type: 'date_range',
+          ts_code: validated.ts_code,
+          start_date: startDate,
+          end_date: endDate,
+          count: data.length,
+          data: data,
+        },
       };
     }
   } catch (error) {

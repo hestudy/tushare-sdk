@@ -49,7 +49,9 @@ describe('Trade Calendar Handler', () => {
       expect(result.content[0].text).toContain('2025-10-14');
       expect(result.content[0].text).toContain('是交易日');
       expect(result.structuredContent).toBeDefined();
-      expect(result.structuredContent.cal_date).toBe('20251014');
+      expect(result.structuredContent.query_type).toBe('single_day');
+      expect(result.structuredContent.date).toBe('20251014');
+      expect(result.structuredContent.is_open).toBe(1);
       expect(mockGetTradeCalendar).toHaveBeenCalledWith({
         start_date: '20251014',
         end_date: '20251014',
@@ -129,7 +131,11 @@ describe('Trade Calendar Handler', () => {
       expect(result.content[0].text).toContain('交易日历');
       expect(result.content[0].text).toContain('交易日 (共 3 天)');
       expect(result.content[0].text).toContain('休市日 (共 2 天)');
-      expect(result.structuredContent).toHaveLength(5);
+      expect(result.structuredContent.query_type).toBe('date_range');
+      expect(result.structuredContent.total_days).toBe(5);
+      expect(result.structuredContent.trade_days_count).toBe(3);
+      expect(result.structuredContent.closed_days_count).toBe(2);
+      expect(result.structuredContent.data).toHaveLength(5);
       expect(mockGetTradeCalendar).toHaveBeenCalledWith({
         start_date: '20251001',
         end_date: '20251005',
