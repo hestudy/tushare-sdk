@@ -98,8 +98,8 @@ export async function handleTradeCalendar(
       logger.info('交易日历范围查询成功', { count: response.length });
 
       // 统计交易日和休市日
-      const tradeDays = response.filter((item) => item.is_open === 1 || item.is_open === '1');
-      const closedDays = response.filter((item) => item.is_open === 0 || item.is_open === '0');
+      const tradeDays = response.filter((item) => item.is_open === 1);
+      const closedDays = response.filter((item) => item.is_open === 0);
 
       return {
         content: [
@@ -138,7 +138,7 @@ export async function handleTradeCalendar(
 function formatSingleDayText(data: TradeCalItem | any): string {
   const { cal_date, is_open, pretrade_date } = data;
   const formattedDate = formatDate(cal_date);
-  const isTradeDay = is_open === 1 || is_open === '1';
+  const isTradeDay = is_open === 1;
 
   if (isTradeDay) {
     let text = `${formattedDate} 是交易日 ✓\n\n交易状态: 正常交易`;
@@ -180,8 +180,8 @@ function formatDateRangeText(
   startDate: string,
   _endDate: string
 ): string {
-  const tradeDays = data.filter((item) => item.is_open === 1 || item.is_open === '1');
-  const closedDays = data.filter((item) => item.is_open === 0 || item.is_open === '0');
+  const tradeDays = data.filter((item) => item.is_open === 1);
+  const closedDays = data.filter((item) => item.is_open === 0);
 
   // 构建标题
   const startFormatted = formatDate(startDate);
