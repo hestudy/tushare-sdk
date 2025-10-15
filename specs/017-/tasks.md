@@ -109,7 +109,7 @@
   - 测试查询参数验证(无效股票代码、日期格式)
   - 测试成功和失败场景
   - **NOTE**: 编写后确保测试失败,再实现 T015
-- [ ] T018 [P] [US3] 数据导出契约测试 `apps/motia-stock-collector/tests/integration/export-data.test.ts`
+- [x] T018 [P] [US3] 数据导出契约测试 `apps/motia-stock-collector/tests/integration/export-data.test.ts`
   - 验证 CSV 格式输出正确性
   - 验证 JSON 格式输出正确性
   - 测试空结果处理
@@ -117,7 +117,7 @@
 
 ### US3 集成测试
 
-- [ ] T019 [US3] 存储与查询端到端测试 `apps/motia-stock-collector/tests/integration/storage-query-flow.test.ts`
+- [x] T019 [US3] 存储与查询端到端测试 `apps/motia-stock-collector/tests/integration/storage-query-flow.test.ts`
   - 场景 1: 插入测试数据 → 按时间范围查询 → 验证结果
   - 场景 2: 插入测试数据 → 按股票代码查询 → 验证结果
   - 场景 3: 查询并导出 CSV → 验证格式

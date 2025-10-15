@@ -276,6 +276,18 @@ export class DatabaseService {
   }
 
   /**
+   * 清除所有数据 (仅用于测试)
+   * 删除所有表中的数据
+   */
+  clearAllData(): void {
+    this.db.exec(`
+      DELETE FROM daily_quotes;
+      DELETE FROM trade_calendar;
+      DELETE FROM task_logs;
+    `);
+  }
+
+  /**
    * 关闭数据库连接
    */
   close(): void {
