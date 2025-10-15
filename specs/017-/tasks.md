@@ -68,7 +68,7 @@
   - 测试 Schema 初始化
   - 测试 CRUD 操作
   - 使用 `:memory:` 数据库
-- [ ] T013 [P] Tushare 客户端单元测试 `apps/motia-stock-collector/tests/unit/tushare-client.test.ts`
+- [x] T013 [P] Tushare 客户端单元测试 `apps/motia-stock-collector/tests/unit/tushare-client.test.ts`
   - Mock API 调用
   - 测试限流逻辑
   - 测试错误处理
@@ -91,12 +91,12 @@
 
 ### US3 Step 实现
 
-- [ ] T015 [P] [US3] 实现查询 API Step `apps/motia-stock-collector/steps/query-quotes-api.step.ts`
+- [x] T015 [P] [US3] 实现查询 API Step `apps/motia-stock-collector/steps/query-quotes-api.step.ts`
   - 配置: type='api', path='/api/quotes', method='GET'
   - Handler: 接收查询参数(tsCode, startDate, endDate, limit)
   - 调用 database.queryQuotes()
   - 返回 JSON 格式结果
-- [ ] T016 [P] [US3] 实现数据导出 Step `apps/motia-stock-collector/steps/export-data.step.ts`
+- [x] T016 [P] [US3] 实现数据导出 Step `apps/motia-stock-collector/steps/export-data.step.ts`
   - 配置: type='api', path='/api/export', method='GET'
   - Handler: 接收查询参数和导出格式(csv/json)
   - 调用 utils 格式化函数
@@ -104,7 +104,7 @@
 
 ### US3 契约测试
 
-- [ ] T017 [P] [US3] 查询 API 契约测试 `apps/motia-stock-collector/tests/integration/query-quotes-api.test.ts`
+- [x] T017 [P] [US3] 查询 API 契约测试 `apps/motia-stock-collector/tests/integration/query-quotes-api.test.ts`
   - 验证请求/响应 Schema 符合 contracts/query-quotes-api.step.json
   - 测试查询参数验证(无效股票代码、日期格式)
   - 测试成功和失败场景
