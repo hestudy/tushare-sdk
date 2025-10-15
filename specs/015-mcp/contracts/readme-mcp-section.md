@@ -59,7 +59,7 @@ pnpm add @hestudy/tushare-mcp
   "mcpServers": {
     "tushare": {
       "command": "npx",
-      "args": ["-y", "@hestudy/tushare-mcp"],
+      "args": ["-y", "@hestudy/tushare-mcp@latest"],
       "env": {
         "TUSHARE_TOKEN": "your_tushare_token_here"
       }

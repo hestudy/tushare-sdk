@@ -252,7 +252,7 @@ main().catch(console.error);
   "mcpServers": {
     "tushare": {
       "command": "npx",
-      "args": ["-y", "@hestudy/tushare-mcp"],
+      "args": ["-y", "@hestudy/tushare-mcp@latest"],
       "env": {
         "TUSHARE_TOKEN": "your_token_here"
       }

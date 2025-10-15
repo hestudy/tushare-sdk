@@ -181,7 +181,7 @@ Claude Desktop 是使用 MCP 服务最便捷的方式,以下是详细配置步�
       "command": "npx",
       "args": [
         "-y",
-        "@hestudy/tushare-mcp"
+        "@hestudy/tushare-mcp@latest"
       ],
       "env": {
         "TUSHARE_TOKEN": "your_tushare_token_here"
@@ -238,7 +238,7 @@ Claude Desktop 是使用 MCP 服务最便捷的方式,以下是详细配置步�
   "mcpServers": {
     "tushare": {
       "command": "npx",
-      "args": ["-y", "@hestudy/tushare-mcp"],
+      "args": ["-y", "@hestudy/tushare-mcp@latest"],
       "env": {
         "TUSHARE_TOKEN": "your_tushare_token_here"
       }
@@ -265,7 +265,7 @@ Claude Desktop 是使用 MCP 服务最便捷的方式,以下是详细配置步�
   "mcpServers": {
     "tushare": {
       "command": "npx",
-      "args": ["-y", "@hestudy/tushare-mcp"],
+      "args": ["-y", "@hestudy/tushare-mcp@latest"],
       "env": {
         "TUSHARE_TOKEN": "your_tushare_token_here"
       }
@@ -292,7 +292,7 @@ Claude Desktop 是使用 MCP 服务最便捷的方式,以下是详细配置步�
   "context_servers": {
     "tushare": {
       "command": "npx",
-      "args": ["-y", "@hestudy/tushare-mcp"],
+      "args": ["-y", "@hestudy/tushare-mcp@latest"],
       "env": {
         "TUSHARE_TOKEN": "your_tushare_token_here"
       }
@@ -566,7 +566,7 @@ AI 可以基于这些数据分析趋势、计算涨跌幅等。
   "mcpServers": {
     "tushare": {
       "command": "npx",
-      "args": ["-y", "@hestudy/tushare-mcp"],
+      "args": ["-y", "@hestudy/tushare-mcp@latest"],
       "env": {
         "TUSHARE_TOKEN": "your_token",
         "RATE_LIMIT_MAX_REQUESTS": "200",

@@ -130,7 +130,7 @@ Claude Desktop 是使用 MCP 服务最便捷的方式,以下是详细配置步�
       "command": "npx",
       "args": [
         "-y",
-        "@hestudy/tushare-mcp"
+        "@hestudy/tushare-mcp@latest"
       ],
       "env": {
         "TUSHARE_TOKEN": "your_tushare_token_here"
@@ -182,7 +182,7 @@ Claude Desktop 是使用 MCP 服务最便捷的方式,以下是详细配置步�
 ```bash
 claude mcp add --transport stdio tushare \
   --env TUSHARE_TOKEN=your_tushare_token_here \
-  -- npx -y @hestudy/tushare-mcp
+  -- npx -y @hestudy/tushare-mcp@latest
 ```
 
 **命令参数说明**:
@@ -193,7 +193,7 @@ claude mcp add --transport stdio tushare \
 | `tushare` | MCP 服务器名称,可以自定义 |
 | `--env TUSHARE_TOKEN=...` | 设置环境变量,配置 Tushare API Token |
 | `--` | 分隔符,后面跟服务器启动命令 |
-| `npx -y @hestudy/tushare-mcp` | 服务器启动命令,使用 npx 运行 |
+| `npx -y @hestudy/tushare-mcp@latest` | 服务器启动命令,使用 npx 运行 |
 
 **本地开发方式**:
 
@@ -237,7 +237,7 @@ claude mcp remove tushare
   "mcpServers": {
     "tushare": {
       "command": "npx",
-      "args": ["-y", "@hestudy/tushare-mcp"],
+      "args": ["-y", "@hestudy/tushare-mcp@latest"],
       "env": {
         "TUSHARE_TOKEN": "your_tushare_token_here"
       }
@@ -254,13 +254,13 @@ Claude Code 支持额外的配置选项:
 # 指定配置范围(local/project/user)
 claude mcp add --scope user --transport stdio tushare \
   --env TUSHARE_TOKEN=your_token \
-  -- npx -y @hestudy/tushare-mcp
+  -- npx -y @hestudy/tushare-mcp@latest
 
 # 添加多个环境变量
 claude mcp add --transport stdio tushare \
   --env TUSHARE_TOKEN=your_token \
   --env LOG_LEVEL=debug \
-  -- npx -y @hestudy/tushare-mcp
+  -- npx -y @hestudy/tushare-mcp@latest
 ```
 
 **配置范围说明**:
@@ -301,7 +301,7 @@ claude
   "mcpServers": {
     "tushare": {
       "command": "npx",
-      "args": ["-y", "@hestudy/tushare-mcp"],
+      "args": ["-y", "@hestudy/tushare-mcp@latest"],
       "env": {
         "TUSHARE_TOKEN": "your_tushare_token_here"
       }
@@ -328,7 +328,7 @@ claude
   "mcpServers": {
     "tushare": {
       "command": "npx",
-      "args": ["-y", "@hestudy/tushare-mcp"],
+      "args": ["-y", "@hestudy/tushare-mcp@latest"],
       "env": {
         "TUSHARE_TOKEN": "your_tushare_token_here"
       }
@@ -355,7 +355,7 @@ claude
   "context_servers": {
     "tushare": {
       "command": "npx",
-      "args": ["-y", "@hestudy/tushare-mcp"],
+      "args": ["-y", "@hestudy/tushare-mcp@latest"],
       "env": {
         "TUSHARE_TOKEN": "your_tushare_token_here"
       }
@@ -592,7 +592,7 @@ AI 可以基于这些数据分析趋势、计算涨跌幅等。
   "mcpServers": {
     "tushare": {
       "command": "npx",
-      "args": ["-y", "@hestudy/tushare-mcp"],
+      "args": ["-y", "@hestudy/tushare-mcp@latest"],
       "env": {
         "TUSHARE_TOKEN": "your_token",
         "RATE_LIMIT_MAX_REQUESTS": "200",

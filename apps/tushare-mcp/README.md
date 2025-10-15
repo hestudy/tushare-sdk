@@ -88,7 +88,7 @@ pnpm start
       "command": "npx",
       "args": [
         "-y",
-        "@hestudy/tushare-mcp"
+        "@hestudy/tushare-mcp@latest"
       ],
       "env": {
         "TUSHARE_TOKEN": "your_tushare_token_here"
@@ -106,7 +106,7 @@ pnpm start
 # 使用 claude mcp add 命令添加
 claude mcp add --transport stdio tushare \
   --env TUSHARE_TOKEN=your_tushare_token_here \
-  -- npx -y @hestudy/tushare-mcp
+  -- npx -y @hestudy/tushare-mcp@latest
 ```
 
 **参数说明**:
@@ -114,7 +114,7 @@ claude mcp add --transport stdio tushare \
 - `tushare`: MCP 服务器名称
 - `--env TUSHARE_TOKEN=...`: 设置 Tushare API Token 环境变量
 - `--`: 分隔符,后面跟服务器启动命令
-- `npx -y @hestudy/tushare-mcp`: 服务器启动命令
+- `npx -y @hestudy/tushare-mcp@latest`: 服务器启动命令
 
 **管理命令**:
 ```bash

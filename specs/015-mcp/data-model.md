@@ -179,7 +179,7 @@ description: 了解如何通过 MCP 协议在 AI 客户端中使用 Tushare 数�
   "mcpServers": {
     "tushare": {
       "command": "npx",
-      "args": ["-y", "@hestudy/tushare-mcp"],
+      "args": ["-y", "@hestudy/tushare-mcp@latest"],
       "env": {
         "TUSHARE_TOKEN": "your_tushare_token_here"
       }
