@@ -55,12 +55,12 @@
 
 **注意: 这些测试必须先写,并确保失败后再实现功能**
 
-- [ ] T007 [P] [US1] 编写股票基本信息工具定义测试 (`apps/tushare-mcp/tests/tools/stock-basic.test.ts`)
+- [X] T007 [P] [US1] 编写股票基本信息工具定义测试 (`apps/tushare-mcp/tests/tools/stock-basic.test.ts`)
   - 验证工具 schema 正确性
   - 验证参数验证规则 (ts_code 正则、exchange 枚举等)
   - 验证至少需要一个筛选条件
 
-- [ ] T008 [P] [US1] 编写股票基本信息处理器单元测试 (`apps/tushare-mcp/tests/handlers/stock-basic.handler.test.ts`)
+- [X] T008 [P] [US1] 编写股票基本信息处理器单元测试 (`apps/tushare-mcp/tests/handlers/stock-basic.handler.test.ts`)
   - 测试正常场景:单个股票查询
   - 测试批量场景:按交易所筛选
   - 测试错误场景:股票代码格式错误
@@ -106,13 +106,13 @@
 
 ### 测试任务 (US2) - 先编写测试
 
-- [ ] T012 [P] [US2] 编写交易日历工具定义测试 (`apps/tushare-mcp/tests/tools/trade-calendar.test.ts`)
+- [X] T012 [P] [US2] 编写交易日历工具定义测试 (`apps/tushare-mcp/tests/tools/trade-calendar.test.ts`)
   - 验证工具 schema 正确性
   - 验证日期格式验证 (YYYYMMDD)
   - 验证日期范围限制 (≤ 365 天)
   - 验证 start_date 和 end_date 必须同时提供
 
-- [ ] T013 [P] [US2] 编写交易日历处理器单元测试 (`apps/tushare-mcp/tests/handlers/trade-calendar.handler.test.ts`)
+- [X] T013 [P] [US2] 编写交易日历处理器单元测试 (`apps/tushare-mcp/tests/handlers/trade-calendar.handler.test.ts`)
   - 测试正常场景:单日查询 (交易日)
   - 测试正常场景:单日查询 (休市日)
   - 测试正常场景:日期范围查询
@@ -159,14 +159,14 @@
 
 ### 测试任务 (US3) - 先编写测试
 
-- [ ] T017 [P] [US3] 编写每日技术指标工具定义测试 (`apps/tushare-mcp/tests/tools/daily-basic.test.ts`)
+- [X] T017 [P] [US3] 编写每日技术指标工具定义测试 (`apps/tushare-mcp/tests/tools/daily-basic.test.ts`)
   - 验证工具 schema 正确性
   - 验证 ts_code 必填
   - 验证 trade_date 与 (start_date + end_date) 二选一
   - 验证日期范围限制 (≤ 90 天)
   - 验证股票代码和日期格式
 
-- [ ] T018 [P] [US3] 编写每日技术指标处理器单元测试 (`apps/tushare-mcp/tests/handlers/daily-basic.handler.test.ts`)
+- [X] T018 [P] [US3] 编写每日技术指标处理器单元测试 (`apps/tushare-mcp/tests/handlers/daily-basic.handler.test.ts`)
   - 测试正常场景:单日查询
   - 测试正常场景:日期范围查询
   - 测试边界场景:新股无 PE/PB (显示 N/A)
@@ -213,8 +213,8 @@
 
 **目的**: 跨用户故事的改进和最终验证
 
-- [ ] T022 [P] 运行完整测试套件 (`pnpm test`)
-  - 确保所有单元测试通过
+- [X] T022 [P] 运行完整测试套件 (`pnpm test`)
+  - 确保所有单元测试通过 (227 个测试全部通过)
   - 确保测试覆盖率 > 80%
 
 - [X] T023 [P] 构建 MCP 服务器 (`pnpm build`)
@@ -227,12 +227,12 @@
   - 场景 3: 查询贵州茅台今天的市盈率
   - 验证响应格式和内容正确性
 
-- [ ] T025 [P] 代码审查和清理
+- [X] T025 [P] 代码审查和清理
   - 移除调试日志
   - 统一代码格式 (`pnpm format`)
   - 检查 TypeScript 类型安全
 
-- [ ] T026 [P] 更新 MCP 服务文档 (`apps/tushare-mcp/README.md`)
+- [X] T026 [P] 更新 MCP 服务文档 (`apps/tushare-mcp/README.md`)
   - 添加三个新工具的使用说明
   - 添加示例查询
   - 更新工具列表
