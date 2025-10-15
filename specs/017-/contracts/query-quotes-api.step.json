@@ -1,0 +1,206 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Query Quotes API Step Contract",
+  "description": "提供 HTTP API 查询历史行情数据的 API Step",
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "const": "QueryQuotesAPI",
+          "description": "Step 名称"
+        },
+        "type": {
+          "type": "string",
+          "const": "api",
+          "description": "Step 类型: HTTP API"
+        },
+        "path": {
+          "type": "string",
+          "const": "/api/quotes",
+          "description": "API 路径"
+        },
+        "method": {
+          "type": "string",
+          "const": "GET",
+          "description": "HTTP 方法"
+        }
+      },
+      "required": ["name", "type", "path", "method"]
+    },
+    "handler": {
+      "type": "object",
+      "description": "Handler 函数签名",
+      "properties": {
+        "input": {
+          "type": "object",
+          "description": "HTTP 请求对象",
+          "properties": {
+            "query": {
+              "type": "object",
+              "properties": {
+                "tsCode": {
+                  "type": "string",
+                  "pattern": "^\\d{6}\\.(SH|SZ)$",
+                  "description": "股票代码,如 600519.SH (可选)"
+                },
+                "startDate": {
+                  "type": "string",
+                  "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+                  "description": "开始日期 YYYY-MM-DD (可选)"
+                },
+                "endDate": {
+                  "type": "string",
+                  "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+                  "description": "结束日期 YYYY-MM-DD (可选)"
+                },
+                "limit": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 1000,
+                  "default": 100,
+                  "description": "返回记录数限制 (可选,默认 100)"
+                }
+              }
+            }
+          }
+        },
+        "output": {
+          "type": "object",
+          "description": "HTTP 响应对象",
+          "properties": {
+            "status": {
+              "type": "integer",
+              "enum": [200, 400, 500],
+              "description": "HTTP 状态码"
+            },
+            "body": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean"
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer"
+                      },
+                      "tsCode": {
+                        "type": "string"
+                      },
+                      "tradeDate": {
+                        "type": "string"
+                      },
+                      "open": {
+                        "type": "number"
+                      },
+                      "high": {
+                        "type": "number"
+                      },
+                      "low": {
+                        "type": "number"
+                      },
+                      "close": {
+                        "type": "number"
+                      },
+                      "vol": {
+                        "type": "number"
+                      },
+                      "amount": {
+                        "type": "number"
+                      }
+                    }
+                  }
+                },
+                "count": {
+                  "type": "integer",
+                  "description": "返回记录数"
+                },
+                "error": {
+                  "type": "string",
+                  "description": "错误信息 (失败时)"
+                }
+              },
+              "required": ["success"]
+            }
+          },
+          "required": ["status", "body"]
+        }
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "查询贵州茅台 2024 年 1 月的行情",
+      "request": {
+        "method": "GET",
+        "path": "/api/quotes",
+        "query": {
+          "tsCode": "600519.SH",
+          "startDate": "2024-01-01",
+          "endDate": "2024-01-31"
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "success": true,
+          "data": [
+            {
+              "id": 1,
+              "tsCode": "600519.SH",
+              "tradeDate": "2024-01-02",
+              "open": 1650.0,
+              "high": 1680.0,
+              "low": 1645.0,
+              "close": 1670.0,
+              "vol": 150000,
+              "amount": 250000000
+            }
+          ],
+          "count": 1
+        }
+      }
+    },
+    {
+      "description": "查询所有股票最近 10 条记录",
+      "request": {
+        "method": "GET",
+        "path": "/api/quotes",
+        "query": {
+          "limit": 10
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "success": true,
+          "data": [],
+          "count": 10
+        }
+      }
+    },
+    {
+      "description": "参数错误示例",
+      "request": {
+        "method": "GET",
+        "path": "/api/quotes",
+        "query": {
+          "tsCode": "invalid"
+        }
+      },
+      "response": {
+        "status": 400,
+        "body": {
+          "success": false,
+          "error": "Invalid stock code format"
+        }
+      }
+    }
+  ]
+}
