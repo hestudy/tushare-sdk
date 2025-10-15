@@ -135,30 +135,30 @@
 
 ### US2 Step 实现
 
-- [ ] T020 [US2] 实现交易日历采集 Step `apps/motia-stock-collector/steps/collect-trade-calendar.step.ts`
+- [x] T020 [US2] 实现交易日历采集 Step `apps/motia-stock-collector/steps/collect-trade-calendar.step.ts`
   - 配置: type='event', subscribes=['calendar.update.needed'], retries=3
   - Handler: 调用 TushareService.getTradeCalendar()
   - 获取指定年度交易日历(默认最近3年)
   - 保存到 trade_calendar 表
   - Emit 'calendar.updated' 事件
-- [ ] T021 [US2] 实现交易日检查工具函数 `apps/motia-stock-collector/lib/utils.ts` (扩展)
+- [x] T021 [US2] 实现交易日检查工具函数 `apps/motia-stock-collector/lib/utils.ts` (扩展)
   - checkTradeCalendar(date: string): Promise<boolean>
   - 查询数据库判断是否为交易日
   - 自动检测缺失年度并触发更新
 
 ### US2 测试
 
-- [ ] T022 [P] [US2] 交易日历 Step 单元测试 `apps/motia-stock-collector/tests/unit/collect-trade-calendar.test.ts`
+- [x] T022 [P] [US2] 交易日历 Step 单元测试 `apps/motia-stock-collector/tests/unit/collect-trade-calendar.test.ts`
   - Mock TushareService
   - 验证日历数据正确保存
   - 测试重复数据处理(INSERT OR REPLACE)
   - **NOTE**: 先编写失败的测试
-- [ ] T023 [P] [US2] 交易日检查函数测试 `apps/motia-stock-collector/tests/unit/utils.test.ts` (扩展)
+- [x] T023 [P] [US2] 交易日检查函数测试 `apps/motia-stock-collector/tests/unit/utils.test.ts` (扩展)
   - 测试交易日返回 true
   - 测试非交易日返回 false
   - 测试缺失数据自动触发更新
   - **NOTE**: 先编写失败的测试
-- [ ] T024 [US2] 交易日历集成测试 `apps/motia-stock-collector/tests/integration/trade-calendar-flow.test.ts`
+- [x] T024 [US2] 交易日历集成测试 `apps/motia-stock-collector/tests/integration/trade-calendar-flow.test.ts`
   - 场景 1: 首次启动获取3年日历
   - 场景 2: 跨年自动检测并补充下一年度
   - 场景 3: 查询不存在的日期触发更新

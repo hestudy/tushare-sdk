@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import {
   formatDateToTushare,
   formatDateFromTushare,
@@ -10,6 +10,9 @@ import {
   getToday,
   getDaysAgo,
   getYearRange,
+  checkTradeCalendar,
+  isCalendarYearMissing,
+  autoUpdateMissingCalendarYears,
 } from '../../lib/utils';
 import type { DailyQuote } from '../../types/index.js';
 
@@ -145,6 +148,153 @@ describe('Utils', () => {
       const range = getYearRange(2024);
       expect(range.start).toBe('20240101');
       expect(range.end).toBe('20241231');
+    });
+  });
+
+  describe('交易日检查函数', () => {
+    let mockDb: any;
+    let mockEmit: any;
+
+    beforeEach(() => {
+      mockEmit = vi.fn();
+      mockDb = {
+        isTradeDay: vi.fn(),
+      };
+
+      vi.mock('../../lib/database.js', () => ({
+        db: mockDb,
+      }));
+    });
+
+    afterEach(() => {
+      vi.clearAllMocks();
+      vi.resetModules();
+    });
+
+    describe('checkTradeCalendar', () => {
+      it('应该返回 true 当日期为交易日', async () => {
+        mockDb.isTradeDay.mockReturnValue(true);
+
+        const result = await checkTradeCalendar('2024-01-02');
+
+        expect(result).toBe(true);
+        expect(mockDb.isTradeDay).toHaveBeenCalledWith('2024-01-02');
+      });
+
+      it('应该返回 false 当日期为非交易日', async () => {
+        mockDb.isTradeDay.mockReturnValue(false);
+
+        const result = await checkTradeCalendar('2024-01-01');
+
+        expect(result).toBe(false);
+        expect(mockDb.isTradeDay).toHaveBeenCalledWith('2024-01-01');
+      });
+
+      it('应该触发日历更新事件当数据不存在', async () => {
+        mockDb.isTradeDay.mockReturnValue(undefined);
+
+        const result = await checkTradeCalendar('2024-01-02', mockEmit);
+
+        expect(result).toBe(false);
+        expect(mockEmit).toHaveBeenCalledWith({
+          topic: 'calendar.update.needed',
+          data: {
+            startYear: 2024,
+            endYear: 2024,
+          },
+        });
+      });
+
+      it('应该处理 null 返回值', async () => {
+        mockDb.isTradeDay.mockReturnValue(null);
+
+        const result = await checkTradeCalendar('2024-01-02', mockEmit);
+
+        expect(result).toBe(false);
+        expect(mockEmit).toHaveBeenCalled();
+      });
+
+      it('应该不触发事件当 emit 未提供', async () => {
+        mockDb.isTradeDay.mockReturnValue(undefined);
+
+        const result = await checkTradeCalendar('2024-01-02');
+
+        expect(result).toBe(false);
+        // mockEmit 不应该被调用
+      });
+    });
+
+    describe('isCalendarYearMissing', () => {
+      it('应该返回 true 当年份数据缺失', async () => {
+        mockDb.isTradeDay.mockReturnValue(undefined);
+
+        const result = await isCalendarYearMissing(2024);
+
+        expect(result).toBe(true);
+        expect(mockDb.isTradeDay).toHaveBeenCalledWith('2024-01-01');
+      });
+
+      it('应该返回 false 当年份数据存在', async () => {
+        mockDb.isTradeDay.mockReturnValue(false); // 即使是非交易日，也表示有数据
+
+        const result = await isCalendarYearMissing(2024);
+
+        expect(result).toBe(false);
+      });
+
+      it('应该处理 null 返回值为缺失', async () => {
+        mockDb.isTradeDay.mockReturnValue(null);
+
+        const result = await isCalendarYearMissing(2024);
+
+        expect(result).toBe(true);
+      });
+    });
+
+    describe('autoUpdateMissingCalendarYears', () => {
+      it('应该检测并更新缺失的年份', async () => {
+        const currentYear = new Date().getFullYear();
+
+        // Mock: 当前年份缺失，其他年份存在
+        mockDb.isTradeDay.mockImplementation((date: string) => {
+          const year = new Date(date).getFullYear();
+          return year === currentYear ? undefined : true;
+        });
+
+        await autoUpdateMissingCalendarYears(mockEmit);
+
+        // 应该只为当前年份触发更新
+        expect(mockEmit).toHaveBeenCalledWith({
+          topic: 'calendar.update.needed',
+          data: {
+            startYear: currentYear,
+            endYear: currentYear,
+          },
+        });
+
+        // 确认检查了3个年份
+        expect(mockDb.isTradeDay).toHaveBeenCalledTimes(3);
+      });
+
+      it('应该为所有缺失年份触发更新', async () => {
+        // Mock: 所有年份都缺失
+        mockDb.isTradeDay.mockReturnValue(undefined);
+
+        await autoUpdateMissingCalendarYears(mockEmit);
+
+        // 应该为3个年份都触发更新
+        expect(mockEmit).toHaveBeenCalledTimes(3);
+      });
+
+      it('应该不触发更新当所有年份都存在', async () => {
+        // Mock: 所有年份都存在
+        mockDb.isTradeDay.mockReturnValue(true);
+
+        await autoUpdateMissingCalendarYears(mockEmit);
+
+        // 不应该触发任何更新
+        expect(mockEmit).not.toHaveBeenCalled();
+      });
     });
   });
 });

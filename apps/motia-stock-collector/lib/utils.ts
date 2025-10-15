@@ -167,3 +167,92 @@ export function getYearRange(year: number): { start: string; end: string } {
     end: `${year}1231`,
   };
 }
+
+/**
+ * 别名：formatDateToTushare 的简写版本
+ */
+export const formatToTushareDate = formatDateToTushare;
+
+/**
+ * 检查指定日期是否为交易日
+ * @param date 日期 YYYY-MM-DD
+ * @param emit 事件触发器 (可选，用于自动触发日历更新)
+ * @returns Promise<boolean> 是否为交易日
+ */
+export async function checkTradeCalendar(
+  date: string,
+  emit?: any
+): Promise<boolean> {
+  const { db } = await import('./database.js');
+
+  // 先查询数据库
+  const isTradeDay = db.isTradeDay(date);
+
+  // 如果数据库中有记录，直接返回
+  if (isTradeDay !== undefined && isTradeDay !== null) {
+    // 注意：SQLite 返回 0 表示 false，1 表示 true
+    // isTradeDay 方法已经处理了这个转换
+    return isTradeDay;
+  }
+
+  // 如果数据库中没有记录，需要触发日历更新
+  const year = new Date(date).getFullYear();
+
+  // 触发日历更新事件 (如果提供了 emit 函数)
+  if (emit) {
+    await emit({
+      topic: 'calendar.update.needed',
+      data: {
+        startYear: year,
+        endYear: year,
+      },
+    });
+  }
+
+  // 返回 false，因为当前没有数据
+  // 下次检查时，如果日历已更新，就能得到正确的结果
+  return false;
+}
+
+/**
+ * 检测日历数据是否缺失指定年份
+ * @param year 年份
+ * @returns Promise<boolean> 是否缺失
+ */
+export async function isCalendarYearMissing(year: number): Promise<boolean> {
+  const { db } = await import('./database.js');
+
+  // 检查该年份的1月1日数据是否存在
+  const janFirst = `${year}-01-01`;
+  const hasData = db.isTradeDay(janFirst);
+
+  // 如果返回 undefined 或 null，说明没有数据
+  return hasData === undefined || hasData === null;
+}
+
+/**
+ * 自动检测并触发缺失年份的日历更新
+ * @param emit 事件触发器
+ * @returns Promise<void>
+ */
+export async function autoUpdateMissingCalendarYears(emit: any): Promise<void> {
+  const currentYear = new Date().getFullYear();
+
+  // 检查当前年份及前后各1年的数据
+  const yearsToCheck = [currentYear - 1, currentYear, currentYear + 1];
+
+  for (const year of yearsToCheck) {
+    const isMissing = await isCalendarYearMissing(year);
+
+    if (isMissing) {
+      // 触发更新事件
+      await emit({
+        topic: 'calendar.update.needed',
+        data: {
+          startYear: year,
+          endYear: year,
+        },
+      });
+    }
+  }
+}
