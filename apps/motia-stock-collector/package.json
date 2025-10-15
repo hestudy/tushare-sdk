@@ -4,20 +4,30 @@
   "scripts": {
     "postinstall": "motia install",
     "dev": "motia dev",
+    "start": "motia start",
     "generate-types": "motia generate-types",
     "build": "motia build",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
     "clean": "rm -rf dist node_modules python_modules .motia .mermaid"
   },
   "keywords": [
     "motia"
   ],
   "dependencies": {
+    "@hestudy/tushare-sdk": "^1.0.0",
+    "better-sqlite3": "^12.4.1",
+    "dotenv": "^17.2.3",
     "motia": "^0.8.2-beta.139",
+    "p-limit": "^7.1.1",
     "zod": "^3.24.4"
   },
   "devDependencies": {
+    "@types/better-sqlite3": "^7.6.13",
     "@types/react": "^18.3.18",
     "ts-node": "^10.9.2",
-    "typescript": "^5.7.3"
+    "typescript": "^5.7.3",
+    "vitest": "^3.2.4"
   }
 }

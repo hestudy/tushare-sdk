@@ -30,13 +30,13 @@
 
 **Purpose**: 初始化 Motia 应用项目结构和基础配置
 
-- [ ] T001 创建 Motia 应用目录结构 `apps/motia-stock-collector/{steps,lib,types,tests,data}`
-- [ ] T002 初始化 package.json,添加依赖: @motiadev/motia, @hestudy/tushare-sdk, better-sqlite3, p-limit, dotenv
-- [ ] T003 [P] 创建 TypeScript 配置文件 `apps/motia-stock-collector/tsconfig.json`
-- [ ] T004 [P] 创建环境变量示例文件 `.env.example`,包含 TUSHARE_TOKEN, DATABASE_PATH, LOG_LEVEL 等
-- [ ] T005 [P] 创建 Motia 配置文件 `apps/motia-stock-collector/motia.config.ts`
-- [ ] T006 [P] 创建项目 README.md,说明项目用途和快速启动方法
-- [ ] T007 [P] 配置 Vitest 测试框架 `apps/motia-stock-collector/vitest.config.ts`
+- [x] T001 创建 Motia 应用目录结构 `apps/motia-stock-collector/{steps,lib,types,tests,data}`
+- [x] T002 初始化 package.json,添加依赖: @motiadev/motia, @hestudy/tushare-sdk, better-sqlite3, p-limit, dotenv
+- [x] T003 [P] 创建 TypeScript 配置文件 `apps/motia-stock-collector/tsconfig.json`
+- [x] T004 [P] 创建环境变量示例文件 `.env.example`,包含 TUSHARE_TOKEN, DATABASE_PATH, LOG_LEVEL 等
+- [x] T005 [P] 创建 Motia 配置文件 `apps/motia-stock-collector/motia.config.ts`
+- [x] T006 [P] 创建项目 README.md,说明项目用途和快速启动方法
+- [x] T007 [P] 配置 Vitest 测试框架 `apps/motia-stock-collector/vitest.config.ts`
 
 ---
 
@@ -48,23 +48,23 @@
 
 ### 基础设施组件
 
-- [ ] T008 定义核心数据类型 `apps/motia-stock-collector/types/index.ts` (TradeCalendar, DailyQuote, TaskLog)
-- [ ] T009 实现数据库服务 `apps/motia-stock-collector/lib/database.ts`
+- [x] T008 定义核心数据类型 `apps/motia-stock-collector/types/index.ts` (TradeCalendar, DailyQuote, TaskLog)
+- [x] T009 实现数据库服务 `apps/motia-stock-collector/lib/database.ts`
   - 包含 Schema 初始化(trade_calendar, daily_quotes, task_logs 表)
   - 索引创建(idx_quotes_ts_code, idx_quotes_trade_date)
   - CRUD 操作方法
-- [ ] T010 [P] 实现 Tushare 客户端封装 `apps/motia-stock-collector/lib/tushare-client.ts`
+- [x] T010 [P] 实现 Tushare 客户端封装 `apps/motia-stock-collector/lib/tushare-client.ts`
   - 包含 API Token 管理
   - 限流控制(p-limit,并发数=5)
   - 错误处理和重试逻辑
-- [ ] T011 [P] 实现工具函数库 `apps/motia-stock-collector/lib/utils.ts`
+- [x] T011 [P] 实现工具函数库 `apps/motia-stock-collector/lib/utils.ts`
   - 日期格式转换(YYYY-MM-DD ⟷ YYYYMMDD)
   - 数据验证函数(股票代码格式、日期格式)
   - 导出格式化函数(CSV/JSON)
 
 ### 基础设施测试
 
-- [ ] T012 [P] 数据库服务单元测试 `apps/motia-stock-collector/tests/unit/database.test.ts`
+- [x] T012 [P] 数据库服务单元测试 `apps/motia-stock-collector/tests/unit/database.test.ts`
   - 测试 Schema 初始化
   - 测试 CRUD 操作
   - 使用 `:memory:` 数据库
@@ -72,7 +72,7 @@
   - Mock API 调用
   - 测试限流逻辑
   - 测试错误处理
-- [ ] T014 [P] 工具函数单元测试 `apps/motia-stock-collector/tests/unit/utils.test.ts`
+- [x] T014 [P] 工具函数单元测试 `apps/motia-stock-collector/tests/unit/utils.test.ts`
   - 测试日期转换
   - 测试数据验证
   - 测试导出格式化

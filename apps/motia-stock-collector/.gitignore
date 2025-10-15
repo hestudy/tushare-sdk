@@ -1,8 +1,47 @@
+# Dependencies
 node_modules
 python_modules
 .venv
 venv
+
+# Motia
 .motia
 .mermaid
+
+# Build
 dist
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Database
+data/*.db
+data/*.db-*
+!data/.gitkeep
+
+# Coverage
+coverage/
+.nyc_output/
+
+# OS
+.DS_Store
+Thumbs.db
+*.swp
+*.tmp
+
+# IDE
+.vscode/
+.idea/
+*.suo
+*.user
+
+# Python
 *.pyc
+__pycache__/
