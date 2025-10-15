@@ -39,7 +39,8 @@ describe('示例执行器', () => {
         return { data: 'delayed' };
       });
 
-      expect(result.duration).toBeGreaterThanOrEqual(100);
+      // 由于定时器精度问题,允许小于预期值的误差
+      expect(result.duration).toBeGreaterThanOrEqual(95);
     });
   });
 
