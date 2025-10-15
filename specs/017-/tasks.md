@@ -237,16 +237,16 @@
 
 ### US4 Step 实现
 
-- [ ] T031 [P] [US4] 实现任务列表查询 API `apps/motia-stock-collector/steps/list-tasks-api.step.ts`
+- [x] T031 [P] [US4] 实现任务列表查询 API `apps/motia-stock-collector/steps/list-tasks-api.step.ts`
   - 配置: type='api', path='/api/tasks', method='GET'
   - Handler: 返回所有 Cron Steps 配置
   - 包含任务名称、下次执行时间、历史执行记录
-- [ ] T032 [P] [US4] 实现任务日志查询 API `apps/motia-stock-collector/steps/query-task-logs-api.step.ts`
+- [x] T032 [P] [US4] 实现任务日志查询 API `apps/motia-stock-collector/steps/query-task-logs-api.step.ts`
   - 配置: type='api', path='/api/task-logs', method='GET'
   - Handler: 查询 task_logs 表
   - 支持按任务名称、状态、时间范围筛选
   - 返回分页结果
-- [ ] T033 [US4] 实现任务配置热更新功能 `apps/motia-stock-collector/lib/task-config.ts`
+- [x] T033 [US4] 实现任务配置热更新功能 `apps/motia-stock-collector/lib/task-config.ts`
   - updateTaskSchedule(taskName, newSchedule): Promise<void>
   - 更新 Motia Step 配置
   - 触发调度器重新加载(如果 Motia 支持)
@@ -254,16 +254,16 @@
 
 ### US4 测试
 
-- [ ] T034 [P] [US4] 任务列表 API 测试 `apps/motia-stock-collector/tests/integration/list-tasks-api.test.ts`
+- [x] T034 [P] [US4] 任务列表 API 测试 `apps/motia-stock-collector/tests/integration/list-tasks-api.test.ts`
   - 验证返回所有任务配置
   - 测试下次执行时间计算正确
   - **NOTE**: 先编写失败的测试
-- [ ] T035 [P] [US4] 任务日志查询测试 `apps/motia-stock-collector/tests/integration/query-task-logs-api.test.ts`
+- [x] T035 [P] [US4] 任务日志查询测试 `apps/motia-stock-collector/tests/integration/query-task-logs-api.test.ts`
   - 插入测试日志
   - 测试各种筛选条件
   - 测试分页功能
   - **NOTE**: 先编写失败的测试
-- [ ] T036 [US4] 任务管理集成测试 `apps/motia-stock-collector/tests/integration/task-management-flow.test.ts`
+- [x] T036 [US4] 任务管理集成测试 `apps/motia-stock-collector/tests/integration/task-management-flow.test.ts`
   - 场景 1: 查询任务列表 → 验证配置
   - 场景 2: 修改调度时间 → 验证更新成功
   - 场景 3: 查询执行历史 → 验证记录完整

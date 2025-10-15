@@ -5,6 +5,7 @@ import type {
   DailyQuote,
   TaskLog,
   QueryQuotesFilters,
+  QueryTaskLogsFilters,
 } from '../types/index.js';
 
 /**
@@ -244,26 +245,61 @@ export class DatabaseService {
   }
 
   /**
-   * 查询任务日志
-   * @param taskName 任务名称 (可选)
-   * @param limit 返回记录数限制
-   * @returns 任务日志数组
+   * 查询任务日志 (支持多条件筛选和分页)
+   * @param filters 查询条件
+   * @returns 任务日志数组和总数
    */
-  queryTaskLogs(taskName?: string, limit: number = 100): TaskLog[] {
-    let sql = 'SELECT * FROM task_logs';
+  queryTaskLogs(
+    filters: QueryTaskLogsFilters = {}
+  ): { logs: TaskLog[]; total: number } {
+    const {
+      taskName,
+      status,
+      startTime,
+      endTime,
+      limit = 100,
+      page = 1,
+    } = filters;
+
+    // 构建查询条件
+    let sql = 'SELECT * FROM task_logs WHERE 1=1';
     const params: any[] = [];
 
     if (taskName) {
-      sql += ' WHERE task_name = ?';
+      sql += ' AND task_name = ?';
       params.push(taskName);
     }
 
-    sql += ' ORDER BY created_at DESC LIMIT ?';
+    if (status) {
+      sql += ' AND status = ?';
+      params.push(status);
+    }
+
+    if (startTime) {
+      sql += ' AND created_at >= ?';
+      params.push(startTime);
+    }
+
+    if (endTime) {
+      sql += ' AND created_at <= ?';
+      params.push(endTime);
+    }
+
+    // 计算总数
+    const countSql = sql.replace('SELECT *', 'SELECT COUNT(*) as total');
+    const countResult = this.db.prepare(countSql).get(...params) as {
+      total: number;
+    };
+    const total = countResult.total;
+
+    // 分页查询
+    sql += ' ORDER BY created_at DESC LIMIT ? OFFSET ?';
     params.push(limit);
+    params.push((page - 1) * limit);
 
     const results = this.db.prepare(sql).all(...params) as any[];
 
-    return results.map((row) => ({
+    const logs = results.map((row) => ({
       id: row.id,
       taskName: row.task_name,
       startTime: row.start_time,
@@ -273,6 +309,18 @@ export class DatabaseService {
       errorMessage: row.error_message,
       createdAt: row.created_at,
     }));
+
+    return { logs, total };
+  }
+
+  /**
+   * 查询任务日志 (简化版本, 兼容旧API)
+   * @param taskName 任务名称 (可选)
+   * @param limit 返回记录数限制
+   * @returns 任务日志数组
+   */
+  queryTaskLogsByName(taskName?: string, limit: number = 100): TaskLog[] {
+    return this.queryTaskLogs({ taskName, limit }).logs;
   }
 
   /**

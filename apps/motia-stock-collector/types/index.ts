@@ -83,6 +83,24 @@ export interface QueryQuotesFilters {
 }
 
 /**
+ * 查询任务日志的筛选条件
+ */
+export interface QueryTaskLogsFilters {
+  /** 任务名称 (可选) */
+  taskName?: string;
+  /** 任务状态 (可选) */
+  status?: 'SUCCESS' | 'FAILED';
+  /** 开始时间 ISO 8601 (可选) */
+  startTime?: string;
+  /** 结束时间 ISO 8601 (可选) */
+  endTime?: string;
+  /** 返回记录数限制 (默认 100) */
+  limit?: number;
+  /** 页码 (用于分页, 默认 1) */
+  page?: number;
+}
+
+/**
  * 数据导出格式
  */
 export type ExportFormat = 'csv' | 'json';
