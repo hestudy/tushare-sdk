@@ -5,6 +5,9 @@
 ## 功能特性
 
 - **股票行情查询**: 查询实时股票行情数据,包括最新价、涨跌幅、成交量等
+- **股票基本信息查询**: 查询股票基本属性,包括名称、行业、上市日期等
+- **交易日历查询**: 判断指定日期是否为交易日,查询时间段内的所有交易日
+- **每日技术指标查询**: 查询股票技术指标,包括市盈率、市净率、换手率、流通市值等
 - **财务数据查询**: 查询公司财务报表数据(利润表、资产负债表、现金流量表)
 - **K线数据查询**: 查询历史 K 线数据,支持日线、周线、月线
 - **市场指数查询**: 查询市场指数行情数据(上证指数、深证成指、创业板指等)
@@ -95,6 +98,48 @@ pnpm start
 }
 ```
 
+### Claude Code 配置
+
+在 Claude Code 中,您可以使用命令行快速添加此 MCP 服务器:
+
+```bash
+# 使用 claude mcp add 命令添加
+claude mcp add --transport stdio tushare \
+  --env TUSHARE_TOKEN=your_tushare_token_here \
+  -- npx -y @hestudy/tushare-mcp
+```
+
+**参数说明**:
+- `--transport stdio`: 使用标准输入输出传输协议
+- `tushare`: MCP 服务器名称
+- `--env TUSHARE_TOKEN=...`: 设置 Tushare API Token 环境变量
+- `--`: 分隔符,后面跟服务器启动命令
+- `npx -y @hestudy/tushare-mcp`: 服务器启动命令
+
+**管理命令**:
+```bash
+# 查看已配置的 MCP 服务器
+claude mcp list
+
+# 查看特定服务器详情
+claude mcp get tushare
+
+# 删除 MCP 服务器
+claude mcp remove tushare
+```
+
+**本地开发方式**:
+
+如果您在本地开发,可以使用本地路径:
+
+```bash
+claude mcp add --transport stdio tushare \
+  --env TUSHARE_TOKEN=your_tushare_token_here \
+  -- node /absolute/path/to/tushare-sdk/apps/tushare-mcp/dist/index.js
+```
+
+**注意**: 请将 `your_tushare_token_here` 替换为您的实际 Tushare Token。
+
 ## 可用工具
 
 ### 1. query_stock_quote - 股票行情查询
@@ -151,7 +196,91 @@ pnpm start
 }
 ```
 
-### 4. query_index - 市场指数查询
+### 4. query_stock_basic - 股票基本信息查询
+
+查询股票基本信息,包括名称、行业、上市日期等基础属性。
+
+**参数**:
+- `ts_code` (可选): 股票代码,格式如 "600519.SH"
+- `exchange` (可选): 交易所代码,可选 "SSE"(上交所)、"SZSE"(深交所)
+- `list_status` (可选): 上市状态,可选 "L"(上市)、"D"(退市)、"P"(暂停)
+
+**注意**: 至少需要提供一个筛选条件
+
+**示例**:
+```json
+{
+  "ts_code": "600519.SH"
+}
+```
+
+或查询特定交易所的股票:
+```json
+{
+  "exchange": "SSE",
+  "list_status": "L"
+}
+```
+
+### 5. query_trade_calendar - 交易日历查询
+
+查询交易所交易日历,判断指定日期是否为交易日。
+
+**参数**:
+- `start_date` (必需): 开始日期,格式如 "20251014"
+- `end_date` (必需): 结束日期,格式如 "20251014"
+- `exchange` (可选): 交易所代码,默认 "SSE"。沪深两市交易日历相同。
+
+**注意**: 日期范围不能超过 1 年(365 天)
+
+**示例**(查询单日):
+```json
+{
+  "start_date": "20251014",
+  "end_date": "20251014"
+}
+```
+
+或查询日期范围:
+```json
+{
+  "start_date": "20251001",
+  "end_date": "20251031"
+}
+```
+
+### 6. query_daily_basic - 每日技术指标查询
+
+查询股票每日技术指标,包括市盈率、市净率、换手率、流通市值等。
+
+**参数**:
+- `ts_code` (必需): 股票代码,格式如 "600519.SH"
+- `trade_date` (可选): 单日查询,交易日期,格式如 "20251014"
+- `start_date` (可选): 范围查询,开始日期
+- `end_date` (可选): 范围查询,结束日期
+
+**注意**:
+- `trade_date` 与 (`start_date` + `end_date`) 二选一
+- 日期范围不能超过 3 个月(90 天)
+
+**示例**(单日查询):
+```json
+{
+  "ts_code": "600519.SH",
+  "trade_date": "20251014"
+}
+```
+
+或范围查询:
+```json
+{
+  "ts_code": "600519.SH",
+  "start_date": "20251001",
+  "end_date": "20251014"
+}
+```
+
+### 7. query_index - 市场指数查询
 
 查询市场指数行情数据。
 

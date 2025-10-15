@@ -1,0 +1,199 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "query_daily_basic",
+  "description": "查询股票每日技术指标,包括市盈率、市净率、换手率、流通市值等。支持单日查询或日期范围查询。",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "const": "query_daily_basic",
+      "description": "MCP 工具名称"
+    },
+    "description": {
+      "type": "string",
+      "description": "工具功能描述"
+    },
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "ts_code": {
+          "type": "string",
+          "description": "股票代码,格式: 代码.市场后缀(如 600519.SH 表示上交所, 000001.SZ 表示深交所)。必填参数。",
+          "pattern": "^\\d{6}\\.(SH|SZ)$",
+          "examples": ["600519.SH", "000001.SZ"]
+        },
+        "trade_date": {
+          "type": "string",
+          "description": "单日查询:指定交易日期,格式 YYYYMMDD。与 start_date/end_date 二选一。",
+          "pattern": "^\\d{8}$",
+          "examples": ["20251014"]
+        },
+        "start_date": {
+          "type": "string",
+          "description": "范围查询:开始日期,格式 YYYYMMDD。必须与 end_date 配合使用。",
+          "pattern": "^\\d{8}$",
+          "examples": ["20251001"]
+        },
+        "end_date": {
+          "type": "string",
+          "description": "范围查询:结束日期,格式 YYYYMMDD。必须与 start_date 配合使用。",
+          "pattern": "^\\d{8}$",
+          "examples": ["20251031"]
+        }
+      },
+      "required": ["ts_code"],
+      "oneOf": [
+        {
+          "required": ["trade_date"],
+          "not": { "anyOf": [{ "required": ["start_date"] }, { "required": ["end_date"] }] }
+        },
+        {
+          "required": ["start_date", "end_date"],
+          "not": { "required": ["trade_date"] }
+        }
+      ]
+    }
+  },
+  "validationRules": {
+    "dateRange": "end_date - start_date 必须 ≤ 90 天",
+    "dateOrder": "start_date 必须 ≤ end_date",
+    "tradeDateOnly": "只能查询交易日数据,非交易日将返回空结果并提示"
+  },
+  "examples": [
+    {
+      "request": {
+        "name": "query_daily_basic",
+        "arguments": {
+          "ts_code": "600519.SH",
+          "trade_date": "20251014"
+        }
+      },
+      "response": {
+        "content": [
+          {
+            "type": "text",
+            "text": "贵州茅台 (600519.SH) 2025-10-14 技术指标:\n\n估值指标:\n- 市盈率(PE): 35.60 倍\n- 市净率(PB): 12.30 倍\n- 市销率(PS): 10.50 倍\n\n市值指标:\n- 总市值: 2261.24 亿元\n- 流通市值: 2261.24 亿元\n\n交易指标:\n- 换手率: 0.85%\n- 量比: 1.15\n\n股本信息:\n- 总股本: 12.56 亿股\n- 流通股本: 12.56 亿股"
+          }
+        ],
+        "structuredContent": {
+          "ts_code": "600519.SH",
+          "trade_date": "20251014",
+          "close": 1800.50,
+          "turnover_rate": 0.85,
+          "volume_ratio": 1.15,
+          "pe": 35.60,
+          "pe_ttm": 36.20,
+          "pb": 12.30,
+          "ps": 10.50,
+          "total_share": 125619,
+          "float_share": 125619,
+          "total_mv": 22612420,
+          "circ_mv": 22612420
+        }
+      }
+    },
+    {
+      "request": {
+        "name": "query_daily_basic",
+        "arguments": {
+          "ts_code": "301XXX.SZ",
+          "trade_date": "20251014"
+        }
+      },
+      "response": {
+        "content": [
+          {
+            "type": "text",
+            "text": "XXX股份 (301XXX.SZ) 2025-10-14 技术指标:\n\n估值指标:\n- 市盈率(PE): N/A (新股暂无历史数据)\n- 市净率(PB): N/A (新股暂无历史数据)\n- 市销率(PS): N/A\n\n市值指标:\n- 总市值: 50.00 亿元\n- 流通市值: 12.50 亿元\n\n交易指标:\n- 换手率: 15.20%\n- 量比: 2.50\n\n提示:该股为新股,部分估值指标暂无历史数据。"
+          }
+        ],
+        "structuredContent": {
+          "ts_code": "301XXX.SZ",
+          "trade_date": "20251014",
+          "pe": null,
+          "pb": null,
+          "turnover_rate": 15.20,
+          "total_mv": 500000,
+          "circ_mv": 125000
+        }
+      }
+    },
+    {
+      "request": {
+        "name": "query_daily_basic",
+        "arguments": {
+          "ts_code": "600519.SH",
+          "start_date": "20251001",
+          "end_date": "20251031"
+        }
+      },
+      "response": {
+        "content": [
+          {
+            "type": "text",
+            "text": "贵州茅台 (600519.SH) 2025年10月技术指标趋势:\n\n共 20 个交易日数据:\n\n日期          | PE(倍) | PB(倍) | 换手率(%) | 总市值(亿元)\n-------------|--------|--------|-----------|-------------\n2025-10-01   | 35.20  | 12.10  | 0.65      | 2250.00\n2025-10-08   | 35.40  | 12.20  | 0.75      | 2255.00\n...\n2025-10-31   | 35.80  | 12.40  | 0.90      | 2270.00\n\n统计摘要:\n- PE 均值: 35.50 倍\n- PB 均值: 12.25 倍\n- 平均换手率: 0.80%\n- 平均总市值: 2260.00 亿元"
+          }
+        ]
+      }
+    }
+  ],
+  "errorScenarios": [
+    {
+      "scenario": "股票代码格式错误",
+      "request": {
+        "ts_code": "600519",
+        "trade_date": "20251014"
+      },
+      "error": {
+        "code": "VALIDATION_ERROR",
+        "message": "参数格式错误: 股票代码格式错误,示例: 600519.SH"
+      }
+    },
+    {
+      "scenario": "非交易日查询",
+      "request": {
+        "ts_code": "600519.SH",
+        "trade_date": "20251012"
+      },
+      "error": {
+        "code": "DATA_NOT_FOUND",
+        "message": "2025-10-12 为非交易日,无技术指标数据。\n\n最近交易日:\n- 上一交易日: 2025-10-11\n- 下一交易日: 2025-10-13\n\n提示: 可使用 query_trade_calendar 工具查询交易日历。"
+      }
+    },
+    {
+      "scenario": "日期范围超过 3 个月",
+      "request": {
+        "ts_code": "600519.SH",
+        "start_date": "20250101",
+        "end_date": "20251231"
+      },
+      "error": {
+        "code": "VALIDATION_ERROR",
+        "message": "查询范围不能超过 3 个月(90 天),当前范围: 365 天。请分批查询。"
+      }
+    },
+    {
+      "scenario": "缺少必填参数 ts_code",
+      "request": {
+        "trade_date": "20251014"
+      },
+      "error": {
+        "code": "VALIDATION_ERROR",
+        "message": "参数格式错误: ts_code 为必填参数"
+      }
+    },
+    {
+      "scenario": "同时提供 trade_date 和 start_date/end_date",
+      "request": {
+        "ts_code": "600519.SH",
+        "trade_date": "20251014",
+        "start_date": "20251001",
+        "end_date": "20251031"
+      },
+      "error": {
+        "code": "VALIDATION_ERROR",
+        "message": "参数格式错误: trade_date 与 (start_date + end_date) 不能同时提供,请选择单日查询或范围查询"
+      }
+    }
+  ]
+}
