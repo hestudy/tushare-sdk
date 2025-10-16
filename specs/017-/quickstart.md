@@ -2,12 +2,14 @@
 
 本指南将帮助你在 15 分钟内完成从安装到首次成功运行股市数据采集任务的完整流程。
 
+> **状态更新**: 本项目已完成全部核心功能实现,包括数据采集、存储、查询和任务管理。
+
 ## Prerequisites
 
 在开始之前,请确保你的环境满足以下要求:
 
 - **Node.js**: 18.0.0 或更高版本 (LTS 推荐)
-- **pnpm**: 8.0.0 或更高版本
+- **npm**: 8.0.0 或更高版本 (使用项目本地 npm,不需要 pnpm)
 - **Tushare Token**: 有效的 Tushare Pro API Token ([获取方式](https://tushare.pro/register))
 - **磁盘空间**: 至少 5GB 可用空间
 
@@ -15,392 +17,274 @@
 
 ```bash
 node --version  # 应显示 v18.x.x 或更高
-pnpm --version  # 应显示 8.x.x 或更高
+npm --version   # 应显示 8.x.x 或更高
 ```
 
-## Step 1: 初始化 Motia 项目
+## Step 1: 进入项目目录
 
-在 `apps` 目录下创建新的 Motia 应用:
+项目已完成搭建,直接进入应用目录:
 
 ```bash
-cd /Users/hestudy/Documents/project/tushare-sdk/apps
-npx motia@latest create
+cd apps/motia-stock-collector
 ```
 
-安装向导会询问以下问题:
+## Step 2: 安装依赖
 
-1. **Project name**: 输入 `motia-stock-collector`
-2. **Select a template**: 选择 `Blank` (我们将从零开始构建)
-3. **Package manager**: 选择 `pnpm`
-
-等待依赖安装完成。
-
-## Step 2: 安装项目依赖
-
-进入项目目录并安装额外依赖:
+使用 npm 安装所有依赖:
 
 ```bash
-cd motia-stock-collector
-
-# 安装 Tushare SDK 和数据库库
-pnpm add @hestudy/tushare-sdk better-sqlite3
-pnpm add -D @types/better-sqlite3
-
-# 安装工具库
-pnpm add p-limit dotenv
+npm install
 ```
+
+这将安装以下核心依赖:
+- `@hestudy/tushare-sdk` - Tushare 数据源
+- `better-sqlite3` - SQLite 数据库
+- `motia` - Motia 框架
+- `p-limit` - API 限流控制
+- `dotenv` - 环境变量管理
+- `zod` - 数据验证
 
 ## Step 3: 配置环境变量
 
-创建 `.env` 文件配置 Tushare API Token:
+复制环境变量示例文件:
 
 ```bash
 cp .env.example .env
 ```
 
-编辑 `.env` 文件,填入你的配置:
+编辑 `.env` 文件,填入你的 Tushare Token:
 
 ```env
 # Tushare API Token (必填)
 TUSHARE_TOKEN=your_32_character_token_here
 
-# 数据库路径
+# 数据库路径 (可选,默认为 ./data/stock.db)
 DATABASE_PATH=./data/stock.db
 
-# 日志级别
+# 日志级别 (可选,默认为 info)
 LOG_LEVEL=info
 
-# API 限流配置
+# API 限流配置 (可选)
 RATE_LIMIT_CONCURRENT=5
 RATE_LIMIT_RETRY_DELAY=60000
 ```
 
-> **安全提示**: 不要将 `.env` 文件提交到版本控制系统。
+> **安全提示**: `.env` 文件已在 `.gitignore` 中,不会被提交到版本控制系统。
 
-## Step 4: 创建项目结构
+## Step 4: 初始化数据库
 
-创建必要的目录:
+确保数据目录存在:
 
 ```bash
-mkdir -p steps lib types tests/unit tests/integration data
+mkdir -p data
 ```
 
-## Step 5: 创建数据库服务
+数据库将在首次运行时自动创建和初始化。
 
-创建 `lib/database.ts` 文件,实现数据库操作:
-
-```typescript
-import Database from 'better-sqlite3';
-import path from 'path';
-
-const DB_PATH = process.env.DATABASE_PATH || './data/stock.db';
-
-export class DatabaseService {
-  private db: Database.Database;
-
-  constructor() {
-    this.db = new Database(DB_PATH);
-    this.initSchema();
-  }
-
-  private initSchema() {
-    // 创建交易日历表
-    this.db.exec(`
-      CREATE TABLE IF NOT EXISTS trade_calendar (
-        cal_date TEXT PRIMARY KEY,
-        exchange TEXT NOT NULL CHECK(exchange IN ('SSE', 'SZSE')),
-        is_open INTEGER NOT NULL CHECK(is_open IN (0, 1)),
-        pretrade_date TEXT,
-        created_at TEXT DEFAULT (datetime('now'))
-      );
-    `);
-
-    // 创建日线行情表
-    this.db.exec(`
-      CREATE TABLE IF NOT EXISTS daily_quotes (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        ts_code TEXT NOT NULL,
-        trade_date TEXT NOT NULL,
-        open REAL,
-        high REAL,
-        low REAL,
-        close REAL,
-        pre_close REAL,
-        change REAL,
-        pct_chg REAL,
-        vol REAL,
-        amount REAL,
-        created_at TEXT DEFAULT (datetime('now')),
-        UNIQUE(ts_code, trade_date)
-      );
-      
-      CREATE INDEX IF NOT EXISTS idx_quotes_ts_code ON daily_quotes(ts_code);
-      CREATE INDEX IF NOT EXISTS idx_quotes_trade_date ON daily_quotes(trade_date);
-    `);
-
-    // 创建任务日志表
-    this.db.exec(`
-      CREATE TABLE IF NOT EXISTS task_logs (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        task_name TEXT NOT NULL,
-        start_time TEXT NOT NULL,
-        end_time TEXT,
-        status TEXT NOT NULL CHECK(status IN ('SUCCESS', 'FAILED')),
-        records_count INTEGER DEFAULT 0,
-        error_message TEXT,
-        created_at TEXT DEFAULT (datetime('now'))
-      );
-    `);
-  }
-
-  // 查询行情数据
-  queryQuotes(filters: {
-    tsCode?: string;
-    startDate?: string;
-    endDate?: string;
-    limit?: number;
-  }) {
-    let sql = 'SELECT * FROM daily_quotes WHERE 1=1';
-    const params: any[] = [];
-
-    if (filters.tsCode) {
-      sql += ' AND ts_code = ?';
-      params.push(filters.tsCode);
-    }
-    if (filters.startDate) {
-      sql += ' AND trade_date >= ?';
-      params.push(filters.startDate);
-    }
-    if (filters.endDate) {
-      sql += ' AND trade_date <= ?';
-      params.push(filters.endDate);
-    }
-
-    sql += ' ORDER BY trade_date DESC';
-
-    if (filters.limit) {
-      sql += ' LIMIT ?';
-      params.push(filters.limit);
-    }
-
-    return this.db.prepare(sql).all(...params);
-  }
-
-  // 保存行情数据
-  saveQuotes(quotes: any[]) {
-    const stmt = this.db.prepare(`
-      INSERT OR REPLACE INTO daily_quotes 
-      (ts_code, trade_date, open, high, low, close, pre_close, change, pct_chg, vol, amount)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    `);
-
-    const transaction = this.db.transaction((quotes: any[]) => {
-      for (const quote of quotes) {
-        stmt.run(
-          quote.ts_code,
-          quote.trade_date,
-          quote.open,
-          quote.high,
-          quote.low,
-          quote.close,
-          quote.pre_close,
-          quote.change,
-          quote.pct_chg,
-          quote.vol,
-          quote.amount
-        );
-      }
-    });
-
-    transaction(quotes);
-    return quotes.length;
-  }
-
-  close() {
-    this.db.close();
-  }
-}
-
-export const db = new DatabaseService();
-```
-
-## Step 6: 创建第一个 Step - 查询 API
-
-创建 `steps/query-quotes-api.step.ts`:
-
-```typescript
-export const config = {
-  name: 'QueryQuotesAPI',
-  type: 'api',
-  path: '/api/quotes',
-  method: 'GET',
-};
-
-export const handler = async (req: any, { logger }: any) => {
-  const { tsCode, startDate, endDate, limit = 100 } = req.query;
-
-  try {
-    const { db } = await import('../lib/database');
-
-    const results = db.queryQuotes({
-      tsCode,
-      startDate,
-      endDate,
-      limit: parseInt(limit),
-    });
-
-    return {
-      status: 200,
-      body: {
-        success: true,
-        data: results,
-        count: results.length,
-      },
-    };
-  } catch (error: any) {
-    logger.error('Query failed', { error: error.message });
-    return {
-      status: 500,
-      body: {
-        success: false,
-        error: error.message,
-      },
-    };
-  }
-};
-```
-
-## Step 7: 启动开发服务器
+## Step 5: 启动开发服务器
 
 启动 Motia 开发服务器:
 
 ```bash
-pnpm dev
+npm run dev
 ```
 
-你应该看到以下输出:
+你应该看到类似以下的输出:
 
 ```
 ✓ Motia runtime started
 ✓ Workbench available at http://localhost:3000
-✓ Discovered 1 steps
+✓ Discovered 8 steps:
+  - ScheduleDailyCollection (cron)
+  - CollectDailyQuotes (event)
+  - CollectTradeCalendar (event)
   - QueryQuotesAPI (api)
+  - ExportData (api)
+  - ListTasksAPI (api)
+  - QueryTaskLogsAPI (api)
 ```
 
-## Step 8: 测试查询接口
+## Step 6: 访问 Motia Workbench
 
-打开浏览器访问 Workbench: http://localhost:3000
+打开浏览器访问:
 
-在 Workbench 中:
+```
+http://localhost:3000
+```
 
-1. 点击左侧的 "Steps" 标签
-2. 找到 "QueryQuotesAPI" Step
-3. 点击 "Test" 按钮
-4. 输入测试参数 (例如: `{ "limit": 10 }`)
-5. 点击 "Run" 查看结果
+Workbench 提供以下功能:
 
-或者使用 curl 测试:
+- **Dashboard**: 查看系统概览和实时状态
+- **Steps**: 查看所有已注册的 Steps
+- **Workflow**: 可视化 Steps 之间的数据流和事件订阅关系
+- **Logs**: 实时查看应用日志
+- **Traces**: 查看 Step 执行历史和追踪
+
+## Step 7: 初始化交易日历
+
+首次运行需要获取交易日历数据。在 Workbench 中:
+
+1. 进入 **Steps** 页面
+2. 找到 `CollectTradeCalendar` Step
+3. 点击 **Trigger** 按钮
+4. 输入参数:
+   ```json
+   {
+     "startYear": 2023,
+     "endYear": 2025
+   }
+   ```
+5. 点击 **Run** 执行
+
+或使用 curl:
 
 ```bash
+# 触发交易日历采集事件
+curl -X POST http://localhost:3000/api/events \
+  -H "Content-Type: application/json" \
+  -d '{"topic": "calendar.update.needed", "data": {"startYear": 2023, "endYear": 2025}}'
+```
+
+## Step 8: 测试数据查询 API
+
+交易日历初始化后,可以测试查询功能:
+
+### 查询行情数据
+
+```bash
+# 查询最新 10 条行情记录
 curl "http://localhost:3000/api/quotes?limit=10"
+
+# 查询指定股票的行情
+curl "http://localhost:3000/api/quotes?tsCode=600519.SH&limit=20"
+
+# 查询指定日期范围
+curl "http://localhost:3000/api/quotes?startDate=2024-01-01&endDate=2024-01-31"
 ```
 
-## Step 9: 创建数据采集 Step (可选)
+### 查看任务日志
 
-创建 `steps/schedule-daily-collection.step.ts`:
+```bash
+# 查询所有任务日志
+curl "http://localhost:3000/api/task-logs"
 
-```typescript
-export const config = {
-  name: 'ScheduleDailyCollection',
-  type: 'cron',
-  schedule: '0 17 * * 1-5', // 周一到周五 17:00
-  emits: ['data.collection.triggered'],
-};
-
-export const handler = async (_input: any, { emit, logger }: any) => {
-  const today = new Date().toISOString().split('T')[0];
-
-  logger.info('Triggering daily collection', { tradeDate: today });
-
-  await emit({
-    topic: 'data.collection.triggered',
-    data: { tradeDate: today },
-  });
-};
+# 查询指定任务的日志
+curl "http://localhost:3000/api/task-logs?taskName=CollectDailyQuotes"
 ```
 
-创建 `steps/collect-daily-quotes.step.ts`:
+### 导出数据
 
-```typescript
-export const config = {
-  name: 'CollectDailyQuotes',
-  type: 'event',
-  subscribes: ['data.collection.triggered'],
-  retries: 3,
-  retryDelay: 60000,
-};
+```bash
+# 导出为 CSV 格式
+curl "http://localhost:3000/api/export?format=csv&tsCode=600519.SH" > quotes.csv
 
-export const handler = async (input: any, { logger, emit }: any) => {
-  const { tradeDate } = input;
-
-  try {
-    // TODO: 调用 Tushare SDK 获取数据
-    // TODO: 保存到数据库
-
-    logger.info('Collection completed', { tradeDate, count: 0 });
-
-    await emit({
-      topic: 'quotes.collected',
-      data: { tradeDate, count: 0 },
-    });
-  } catch (error: any) {
-    logger.error('Collection failed', { error: error.message });
-    throw error; // 触发重试
-  }
-};
+# 导出为 JSON 格式
+curl "http://localhost:3000/api/export?format=json&startDate=2024-01-01" > quotes.json
 ```
 
-## Step 10: 验证 Motia 工作流
+## Step 9: 手动触发数据采集
 
-重启开发服务器后:
+测试数据采集功能(需要有效的 Tushare Token):
 
-1. 打开 Workbench (http://localhost:3000)
-2. 查看 "Workflow" 标签,应该看到 Steps 之间的连接关系
-3. 查看 "Logs" 标签,可以看到实时日志输出
+```bash
+# 触发采集指定日期的行情数据
+curl -X POST http://localhost:3000/api/events \
+  -H "Content-Type: application/json" \
+  -d '{"topic": "data.collection.triggered", "data": {"tradeDate": "2024-10-15"}}'
+```
+
+在 Workbench 的 **Logs** 页面可以实时查看采集进度。
+
+## Step 10: 验证定时任务
+
+定时任务配置为每周一至周五 17:00 自动执行。在 Workbench 中:
+
+1. 进入 **Steps** 页面
+2. 找到 `ScheduleDailyCollection` Step
+3. 查看 **Next Run** 时间,确认调度正常
+4. 查看 **Logs** 可以看到定时触发的记录
 
 ## Next Steps
 
-现在你已经成功运行了基于 Motia 的股市数据采集应用基础框架!接下来可以:
+恭喜!你已经成功运行了完整的 Motia 股市数据采集应用。接下来可以:
 
-1. **完善数据采集逻辑**: 集成 Tushare SDK,实现真实的数据获取
-2. **添加更多 Steps**: 如数据导出、历史数据补齐等
-3. **编写测试**: 使用 Vitest 为 Steps 编写单元测试和集成测试
-4. **部署到生产**: 参考 Motia 部署文档,将应用部署到服务器
+### 1. 历史数据补齐
+
+使用内置的历史数据补齐功能:
+
+```bash
+# 在 Node.js REPL 中执行
+node
+> const { backfillHistoricalData } = require('./lib/backfill');
+> backfillHistoricalData('2024-01-01', '2024-12-31');
+```
+
+### 2. 自定义数据采集
+
+修改 `steps/collect-daily-quotes.step.ts` 调整采集逻辑:
+- 修改股票列表范围
+- 调整 API 限流参数
+- 添加自定义过滤规则
+
+### 3. 扩展查询功能
+
+在 `steps/query-quotes-api.step.ts` 中添加更多查询条件:
+- 按涨跌幅筛选
+- 按成交量排序
+- 计算技术指标 (MA, MACD 等)
+
+### 4. 部署到生产环境
+
+参考 `docs/deployment.md` 了解:
+- 使用 PM2 进程管理
+- 配置系统服务 (systemd)
+- 设置日志轮转
+- 数据库备份策略
+
+### 5. 监控和告警
+
+参考 `docs/operations.md` 配置:
+- 任务失败告警
+- 数据完整性检查
+- 性能监控指标
 
 ## Troubleshooting
 
-### 问题 1: "Tushare Token 无效"
+### 问题 1: "Tushare Token 无效" 或 "API 调用失败"
 
 **解决方案**:
 
-- 检查 `.env` 文件中的 Token 是否正确
-- 确认 Token 没有过期
+1. 检查 `.env` 文件中的 Token 是否正确(32位字符串)
+2. 确认 Token 没有过期,登录 [Tushare](https://tushare.pro) 查看权限
+3. 验证 Token 权限足够(免费用户有部分接口限制)
+4. 检查网络连接,确保能访问 https://api.tushare.pro
 
-### 问题 2: "数据库文件无法创建"
+### 问题 2: "数据库文件无法创建" 或 "SQLITE_ERROR"
 
 **解决方案**:
 
-- 确保 `data/` 目录存在
-- 检查磁盘空间是否充足
-- 检查文件权限
+1. 确保 `data/` 目录存在且有写入权限: `mkdir -p data && chmod 755 data`
+2. 检查磁盘空间是否充足: `df -h .`
+3. 删除损坏的数据库文件重新初始化: `rm data/stock.db && npm run dev`
+4. 检查 better-sqlite3 是否正确安装: `npm list better-sqlite3`
 
 ### 问题 3: "Motia 服务无法启动"
 
 **解决方案**:
 
-- 检查端口 3000 是否被占用
-- 查看控制台错误日志
-- 确认所有依赖已正确安装
+1. 检查端口 3000 是否被占用: `lsof -i :3000`
+2. 清除 Motia 缓存重新启动: `rm -rf .motia && npm run dev`
+3. 检查 Node.js 版本: `node --version` (需要 >= 18.0.0)
+4. 重新安装依赖: `rm -rf node_modules package-lock.json && npm install`
+
+### 问题 4: "Step 没有被发现" 或 "Workflow 不显示"
+
+**解决方案**:
+
+1. 确认 Step 文件格式正确(必须导出 `config` 和 `handler`)
+2. 检查 Step 文件是否在 `steps/` 目录下
+3. 重启开发服务器: Ctrl+C 停止,然后 `npm run dev`
+4. 查看启动日志,确认 Step 被发现
 
 ## FAQ
 
@@ -414,8 +298,25 @@ A: 直接复制 `data/stock.db` 文件即可。建议定期备份到其他位置
 
 **Q: 如何查看任务执行历史?**
 
-A: 在 Workbench 的 "Traces" 标签中可以查看所有 Step 的执行历史和详细日志。
+A: 多种方式:
+1. Workbench **Traces** 标签 - 可视化查看所有 Step 执行历史
+2. Workbench **Logs** 标签 - 实时日志流
+3. API 查询 - `GET /api/task-logs`
+
+**Q: 如何在生产环境运行?**
+
+A: 参考 `docs/deployment.md`,关键步骤:
+
+```bash
+# 构建并使用 PM2 启动
+npm run build
+npm install -g pm2
+pm2 start "npm run start" --name motia-stock-collector
+pm2 startup && pm2 save
+```
 
 ---
 
-**Quick Start Complete!** 如有其他问题,请参考完整文档或提交 Issue。
+**Quick Start Complete!** 🎉
+
+如有其他问题,请查看 `README.md` 或 `docs/` 目录。
