@@ -6,7 +6,7 @@
  * Contract: /specs/017-/contracts/query-quotes-api.step.json
  */
 
-import type { DailyQuote } from '../types/index.js';
+import type { DailyQuote } from '../types/index';
 
 /**
  * Step 配置
@@ -16,6 +16,8 @@ export const config = {
   type: 'api',
   path: '/api/quotes',
   method: 'GET',
+  flows: ['basic-tutorial'],
+  emits: [],
 };
 
 /**
@@ -86,7 +88,7 @@ export const handler = async (req: any, { logger }: any) => {
     }
 
     // 动态导入数据库服务 (避免循环依赖)
-    const { db } = await import('../lib/database.js');
+    const { db } = await import('../lib/database');
 
     // 查询数据
     const results = db.queryQuotes({

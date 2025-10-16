@@ -7,7 +7,7 @@
  * - 触发 Motia 调度器重新加载 (如果支持)
  */
 
-import { db } from './database.js';
+import { db } from './database';
 
 /**
  * 任务配置类型

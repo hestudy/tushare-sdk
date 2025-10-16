@@ -6,7 +6,7 @@ import type {
   TaskLog,
   QueryQuotesFilters,
   QueryTaskLogsFilters,
-} from '../types/index.js';
+} from '../types/index';
 
 /**
  * 数据库服务类

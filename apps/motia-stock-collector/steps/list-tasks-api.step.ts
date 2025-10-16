@@ -25,6 +25,8 @@ export const config = {
   type: 'api',
   path: '/api/tasks',
   method: 'GET',
+  flows: ['basic-tutorial'],
+  emits: [],
 };
 
 interface TaskInfo {
@@ -37,7 +39,7 @@ interface TaskInfo {
 
 export const handler = async (req: any, { logger }: any) => {
   try {
-    const { db } = await import('../lib/database.js');
+    const { db } = await import('../lib/database');
 
     // 目前硬编码已知的任务配置
     // TODO: 如果 Motia 提供 Step 元数据 API,可以动态获取

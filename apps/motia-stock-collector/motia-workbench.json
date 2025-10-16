@@ -8,20 +8,36 @@
         "sourceHandlePosition": "right"
       },
       "steps/petstore/process-food-order.step.ts": {
-        "x": 211,
-        "y": 17,
+        "x": 213,
+        "y": -17,
         "sourceHandlePosition": "bottom",
-        "targetHandlePosition": "left"
-      },
-      "steps/petstore/api.step.ts": {
-        "x": -100,
-        "y": 3,
-        "sourceHandlePosition": "right",
         "targetHandlePosition": "left"
       },
       "steps/petstore/notification.step.ts": {
         "x": 300,
         "y": 264
+      },
+      "steps/petstore/api.step.ts": {
+        "x": -105,
+        "y": -55,
+        "sourceHandlePosition": "right",
+        "targetHandlePosition": "left"
+      },
+      "steps/list-tasks-api.step.ts": {
+        "x": 21,
+        "y": 410
+      },
+      "steps/query-task-logs-api.step.ts": {
+        "x": 0,
+        "y": 562
+      },
+      "steps/export-data.step.ts": {
+        "x": 13,
+        "y": 714
+      },
+      "steps/query-quotes-api.step.ts": {
+        "x": 6,
+        "y": 866
       }
     }
   }

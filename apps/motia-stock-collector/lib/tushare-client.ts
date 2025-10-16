@@ -1,6 +1,6 @@
 import { TushareClient } from '@hestudy/tushare-sdk';
 import pLimit from 'p-limit';
-import type { DailyQuote, TradeCalendar } from '../types/index.js';
+import type { DailyQuote, TradeCalendar } from '../types/index';
 
 /**
  * Tushare 服务封装

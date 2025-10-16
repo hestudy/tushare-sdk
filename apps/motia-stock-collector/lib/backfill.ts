@@ -16,8 +16,8 @@
  * - 修复采集失败的日期数据
  */
 
-import { db } from './database.js';
-import { formatDateToTushare, formatDateFromTushare } from './utils.js';
+import { db } from './database';
+import { formatDateToTushare, formatDateFromTushare } from './utils';
 
 /**
  * 补齐结果接口

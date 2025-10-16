@@ -16,8 +16,7 @@ export const config = {
   name: 'CollectTradeCalendar',
   type: 'event',
   subscribes: ['calendar.update.needed'],
-  retries: 3,
-  retryDelay: 5000,
+  emits: ['calendar.updated'],
 };
 
 interface CalendarUpdateInput {
@@ -45,9 +44,9 @@ export const handler = async (
   });
 
   try {
-    const { TushareService } = await import('../lib/tushare-client.js');
-    const { db } = await import('../lib/database.js');
-    const { formatToTushareDate } = await import('../lib/utils.js');
+    const { TushareService } = await import('../lib/tushare-client');
+    const { db } = await import('../lib/database');
+    const { formatToTushareDate } = await import('../lib/utils');
 
     // 初始化 Tushare 服务
     const tushareService = new TushareService();
@@ -110,7 +109,7 @@ export const handler = async (
     });
 
     // 记录失败日志
-    const { db } = await import('../lib/database.js');
+    const { db } = await import('../lib/database');
     db.logTask({
       taskName: 'CollectTradeCalendar',
       startTime,

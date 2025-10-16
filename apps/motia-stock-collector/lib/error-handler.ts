@@ -1,5 +1,5 @@
-import { db } from './database.js';
-import type { TaskLog } from '../types/index.js';
+import { db } from './database';
+import type { TaskLog } from '../types/index';
 
 /**
  * 错误处理工具库

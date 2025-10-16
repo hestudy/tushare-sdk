@@ -1,4 +1,4 @@
-import type { DailyQuote, ExportFormat } from '../types/index.js';
+import type { DailyQuote, ExportFormat } from '../types/index';
 
 /**
  * 日期格式转换：YYYY-MM-DD → YYYYMMDD
@@ -183,7 +183,7 @@ export async function checkTradeCalendar(
   date: string,
   emit?: any
 ): Promise<boolean> {
-  const { db } = await import('./database.js');
+  const { db } = await import('./database');
 
   // 先查询数据库
   const isTradeDay = db.isTradeDay(date);
@@ -220,7 +220,7 @@ export async function checkTradeCalendar(
  * @returns Promise<boolean> 是否缺失
  */
 export async function isCalendarYearMissing(year: number): Promise<boolean> {
-  const { db } = await import('./database.js');
+  const { db } = await import('./database');
 
   // 检查该年份的1月1日数据是否存在
   const janFirst = `${year}-01-01`;

@@ -12,6 +12,13 @@ declare module 'motia' {
   }
 
   interface Handlers {
+    'ScheduleDailyCollection': CronHandler<{ topic: 'data.collection.triggered'; data: never }>
+    'QueryTaskLogsAPI': ApiRouteHandler<Record<string, unknown>, unknown, never>
+    'QueryQuotesAPI': ApiRouteHandler<Record<string, unknown>, unknown, never>
+    'ListTasksAPI': ApiRouteHandler<Record<string, unknown>, unknown, never>
+    'ExportDataAPI': ApiRouteHandler<Record<string, unknown>, unknown, never>
+    'CollectTradeCalendar': EventHandler<never, never>
+    'CollectDailyQuotes': EventHandler<never, never>
     'StateAuditJob': CronHandler<{ topic: 'notification'; data: { templateId: string; email: string; templateData: Record<string, unknown> } }>
     'ProcessFoodOrder': EventHandler<{ email: string; quantity: number; petId: number }, { topic: 'notification'; data: { templateId: string; email: string; templateData: Record<string, unknown> } }>
     'Notification': EventHandler<{ templateId: string; email: string; templateData: Record<string, unknown> }, never>

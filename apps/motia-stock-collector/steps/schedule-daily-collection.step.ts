@@ -13,7 +13,7 @@
  * 契约: /specs/017-/contracts/schedule-daily-collection.step.json
  */
 
-import { getToday, checkTradeCalendar } from '../lib/utils.js';
+import { getToday, checkTradeCalendar } from '../lib/utils';
 
 /**
  * Step 配置
@@ -21,7 +21,7 @@ import { getToday, checkTradeCalendar } from '../lib/utils.js';
 export const config = {
   name: 'ScheduleDailyCollection',
   type: 'cron',
-  schedule: '0 17 * * 1-5', // 周一至周五 17:00 执行
+  cron: '0 17 * * 1-5', // 周一至周五 17:00 执行
   emits: ['data.collection.triggered'],
 };
 

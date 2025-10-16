@@ -17,9 +17,9 @@
  * - lib/utils.ts - 日期格式转换
  */
 
-import { TushareService } from '../lib/tushare-client.js';
-import { db } from '../lib/database.js';
-import { formatDateToTushare } from '../lib/utils.js';
+import { TushareService } from '../lib/tushare-client';
+import { db } from '../lib/database';
+import { formatDateToTushare } from '../lib/utils';
 
 /**
  * Step 配置
@@ -28,8 +28,6 @@ export const config = {
   name: 'CollectDailyQuotes',
   type: 'event',
   subscribes: ['data.collection.triggered'],
-  retries: 3, // 失败后最多重试 3 次
-  retryDelay: 60000, // 重试延迟 60 秒
   emits: ['quotes.collected'],
 };
 

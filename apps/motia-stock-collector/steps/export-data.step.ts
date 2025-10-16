@@ -4,7 +4,7 @@
  * 提供 HTTP API 导出查询数据为 CSV 或 JSON 格式
  */
 
-import type { DailyQuote } from '../types/index.js';
+import type { DailyQuote } from '../types/index';
 
 /**
  * Step 配置
@@ -14,6 +14,8 @@ export const config = {
   type: 'api',
   path: '/api/export',
   method: 'GET',
+  flows: ['basic-tutorial'],
+  emits: [],
 };
 
 /**
@@ -132,7 +134,7 @@ export const handler = async (req: any, { logger }: any) => {
     }
 
     // 动态导入数据库服务
-    const { db } = await import('../lib/database.js');
+    const { db } = await import('../lib/database');
 
     // 查询数据
     const results = db.queryQuotes({

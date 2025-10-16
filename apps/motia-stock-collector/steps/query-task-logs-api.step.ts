@@ -31,11 +31,13 @@ export const config = {
   type: 'api',
   path: '/api/task-logs',
   method: 'GET',
+  flows: ['basic-tutorial'],
+  emits: [],
 };
 
 export const handler = async (req: any, { logger }: any) => {
   try {
-    const { db } = await import('../lib/database.js');
+    const { db } = await import('../lib/database');
 
     // 解析查询参数
     const {
