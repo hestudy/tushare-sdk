@@ -19,9 +19,48 @@ import { TushareService } from '../../lib/tushare-client.js';
 import { backfillHistoricalData } from '../../lib/backfill.js';
 import { handler as scheduleHandler } from '../../steps/schedule-daily-collection.step.js';
 import { handler as collectHandler } from '../../steps/collect-daily-quotes.step.js';
+import * as utils from '../../lib/utils.js';
 
 // 测试专用数据库
 let testDb: DatabaseService;
+
+// 获取下一个交易日 (周一至周五)
+function getNextTradeDay(fromDate?: Date): string {
+  const date = fromDate ? new Date(fromDate) : new Date();
+  const dayOfWeek = date.getDay();
+
+  // 如果是周末,跳到下周一
+  if (dayOfWeek === 0) {
+    date.setDate(date.getDate() + 1); // 周日->周一
+  } else if (dayOfWeek === 6) {
+    date.setDate(date.getDate() + 2); // 周六->周一
+  }
+
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
+// 获取周末日期
+function getWeekendDay(): string {
+  const date = new Date();
+  const dayOfWeek = date.getDay();
+
+  // 跳到下一个周末
+  let daysToAdd = 0;
+  if (dayOfWeek >= 0 && dayOfWeek < 6) {
+    daysToAdd = 6 - dayOfWeek; // 跳到周六
+  } else if (dayOfWeek === 6) {
+    daysToAdd = 1; // 跳到周日
+  }
+
+  date.setDate(date.getDate() + daysToAdd);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
 
 describe('Data Collection Flow - End-to-End Tests', () => {
   // Mock logger
@@ -52,14 +91,26 @@ describe('Data Collection Flow - End-to-End Tests', () => {
 
   describe('Scenario 1: Complete Collection Flow on Trade Day', () => {
     it('should complete full flow from cron trigger to data storage', async () => {
-      // Step 1: 准备交易日历数据
-      const today = '2024-01-15';
+      // Step 1: 准备交易日历数据 - 使用下一个交易日
+      const today = getNextTradeDay();
+
+      // Mock getToday() 以返回测试日期
+      vi.spyOn(utils, 'getToday').mockReturnValue(today);
+
+      // 计算前一个交易日
+      const prevDate = new Date(today);
+      prevDate.setDate(prevDate.getDate() - 1);
+      const prevYear = prevDate.getFullYear();
+      const prevMonth = String(prevDate.getMonth() + 1).padStart(2, '0');
+      const prevDay = String(prevDate.getDate()).padStart(2, '0');
+      const pretradeDate = `${prevYear}-${prevMonth}-${prevDay}`;
+
       testDb.saveTradeCalendar([
         {
           calDate: today,
           exchange: 'SSE',
           isOpen: 1, // 交易日
-          pretradeDate: '2024-01-12',
+          pretradeDate: pretradeDate,
         },
       ]);
 
@@ -147,14 +198,26 @@ describe('Data Collection Flow - End-to-End Tests', () => {
 
   describe('Scenario 2: Skip Collection on Non-Trade Day', () => {
     it('should skip collection and log on non-trade day', async () => {
-      // Step 1: 准备非交易日数据
-      const today = '2024-01-13'; // 假设是周六
+      // Step 1: 准备非交易日数据 - 使用周末
+      const today = getWeekendDay();
+
+      // Mock getToday() 以返回测试日期
+      vi.spyOn(utils, 'getToday').mockReturnValue(today);
+
+      // 计算前一个交易日
+      const prevDate = new Date(today);
+      prevDate.setDate(prevDate.getDate() - 1);
+      const prevYear = prevDate.getFullYear();
+      const prevMonth = String(prevDate.getMonth() + 1).padStart(2, '0');
+      const prevDay = String(prevDate.getDate()).padStart(2, '0');
+      const pretradeDate = `${prevYear}-${prevMonth}-${prevDay}`;
+
       testDb.saveTradeCalendar([
         {
           calDate: today,
           exchange: 'SSE',
           isOpen: 0, // 非交易日
-          pretradeDate: '2024-01-12',
+          pretradeDate: pretradeDate,
         },
       ]);
 
@@ -190,7 +253,8 @@ describe('Data Collection Flow - End-to-End Tests', () => {
   describe('Scenario 3: API Failure and Retry', () => {
     it('should handle API failure and throw error for retry', async () => {
       // Step 1: 准备交易日数据
-      const today = '2024-01-15';
+      const today = getNextTradeDay();
+
       testDb.saveTradeCalendar([
         {
           calDate: today,
@@ -231,7 +295,8 @@ describe('Data Collection Flow - End-to-End Tests', () => {
 
     it('should succeed after retry with API recovery', async () => {
       // Step 1: 准备交易日数据
-      const today = '2024-01-15';
+      const today = getNextTradeDay();
+
       testDb.saveTradeCalendar([
         {
           calDate: today,
@@ -299,7 +364,22 @@ describe('Data Collection Flow - End-to-End Tests', () => {
   describe('Scenario 4: Historical Data Backfill', () => {
     it('should backfill multiple trade days successfully', async () => {
       // Step 1: 准备交易日历数据 (连续 3 个交易日)
-      const tradeDays = ['2024-01-15', '2024-01-16', '2024-01-17'];
+      const startDate = getNextTradeDay();
+      const date2 = new Date(startDate);
+      date2.setDate(date2.getDate() + 1);
+      const y2 = date2.getFullYear();
+      const m2 = String(date2.getMonth() + 1).padStart(2, '0');
+      const d2 = String(date2.getDate()).padStart(2, '0');
+      const date2Str = `${y2}-${m2}-${d2}`;
+
+      const date3 = new Date(startDate);
+      date3.setDate(date3.getDate() + 2);
+      const y3 = date3.getFullYear();
+      const m3 = String(date3.getMonth() + 1).padStart(2, '0');
+      const d3 = String(date3.getDate()).padStart(2, '0');
+      const date3Str = `${y3}-${m3}-${d3}`;
+
+      const tradeDays = [startDate, date2Str, date3Str];
       testDb.saveTradeCalendar(
         tradeDays.map((date) => ({
           calDate: date,
@@ -313,7 +393,7 @@ describe('Data Collection Flow - End-to-End Tests', () => {
       vi.spyOn(TushareService.prototype, 'getDailyQuotes').mockResolvedValue([
         {
           tsCode: '600519.SH',
-          tradeDate: '2024-01-15', // 日期会被动态替换
+          tradeDate: startDate,
           open: 1450.0,
           high: 1460.0,
           low: 1445.0,
@@ -338,8 +418,8 @@ describe('Data Collection Flow - End-to-End Tests', () => {
       });
 
       const result = await backfillHistoricalData({
-        startDate: '2024-01-15',
-        endDate: '2024-01-17',
+        startDate: startDate,
+        endDate: date3Str,
         emit: mockEmit,
         logger: mockLogger,
         batchDelay: 100, // 测试时缩短延迟
@@ -363,7 +443,9 @@ describe('Data Collection Flow - End-to-End Tests', () => {
       expect(taskLogs.length).toBeGreaterThanOrEqual(3);
 
       // Step 7: 验证所有任务都成功
-      const successfulTasks = taskLogs.filter((log) => log.status === 'SUCCESS');
+      const successfulTasks = taskLogs.filter(
+        (log) => log.status === 'SUCCESS'
+      );
       expect(successfulTasks.length).toBeGreaterThanOrEqual(3);
     });
 

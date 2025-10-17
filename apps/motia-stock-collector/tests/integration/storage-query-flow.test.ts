@@ -11,12 +11,18 @@
 import { describe, it, expect, beforeAll, afterAll, beforeEach } from 'vitest';
 import { db } from '../../lib/database.js';
 import type { DailyQuote } from '../../types/index.js';
+import { getTestDate } from '../helpers/date-helpers.js';
+
+// 生成测试日期
+const DATE_01_02 = getTestDate(0);
+const DATE_01_03 = getTestDate(1);
+const DATE_01_04 = getTestDate(2);
 
 // 测试数据集
 const testQuotes: Omit<DailyQuote, 'id' | 'createdAt'>[] = [
   {
     tsCode: '600519.SH',
-    tradeDate: '2024-01-02',
+    tradeDate: DATE_01_02,
     open: 1650.0,
     high: 1680.0,
     low: 1645.0,
@@ -29,7 +35,7 @@ const testQuotes: Omit<DailyQuote, 'id' | 'createdAt'>[] = [
   },
   {
     tsCode: '600519.SH',
-    tradeDate: '2024-01-03',
+    tradeDate: DATE_01_03,
     open: 1670.0,
     high: 1690.0,
     low: 1665.0,
@@ -42,7 +48,7 @@ const testQuotes: Omit<DailyQuote, 'id' | 'createdAt'>[] = [
   },
   {
     tsCode: '600519.SH',
-    tradeDate: '2024-01-04',
+    tradeDate: DATE_01_04,
     open: 1685.0,
     high: 1700.0,
     low: 1680.0,
@@ -55,7 +61,7 @@ const testQuotes: Omit<DailyQuote, 'id' | 'createdAt'>[] = [
   },
   {
     tsCode: '000001.SZ',
-    tradeDate: '2024-01-02',
+    tradeDate: DATE_01_02,
     open: 12.5,
     high: 12.8,
     low: 12.4,
@@ -68,7 +74,7 @@ const testQuotes: Omit<DailyQuote, 'id' | 'createdAt'>[] = [
   },
   {
     tsCode: '000001.SZ',
-    tradeDate: '2024-01-03',
+    tradeDate: DATE_01_03,
     open: 12.7,
     high: 13.0,
     low: 12.6,
@@ -96,20 +102,20 @@ describe('T019 [US3] 存储与查询端到端测试', () => {
   describe('场景 1: 按时间范围查询', () => {
     it('应该能查询指定时间范围内的所有股票数据', () => {
       const results = db.queryQuotes({
-        startDate: '2024-01-02',
-        endDate: '2024-01-03',
+        startDate: DATE_01_02,
+        endDate: DATE_01_03,
       });
 
       // 验证返回记录数
       expect(results.length).toBe(4); // 600519.SH (2条) + 000001.SZ (2条)
 
       // 验证数据按日期降序排列
-      expect(results[0].tradeDate).toBe('2024-01-03');
-      expect(results[results.length - 1].tradeDate).toBe('2024-01-02');
+      expect(results[0].tradeDate).toBe(DATE_01_03);
+      expect(results[results.length - 1].tradeDate).toBe(DATE_01_02);
 
       // 验证数据完整性
       const quote = results.find(
-        (q) => q.tsCode === '600519.SH' && q.tradeDate === '2024-01-02'
+        (q) => q.tsCode === '600519.SH' && q.tradeDate === DATE_01_02
       );
       expect(quote).toBeDefined();
       expect(quote?.open).toBe(1650.0);
@@ -119,8 +125,8 @@ describe('T019 [US3] 存储与查询端到端测试', () => {
 
     it('应该能查询单日数据', () => {
       const results = db.queryQuotes({
-        startDate: '2024-01-02',
-        endDate: '2024-01-02',
+        startDate: DATE_01_02,
+        endDate: DATE_01_02,
       });
 
       // 验证返回记录数
@@ -128,21 +134,21 @@ describe('T019 [US3] 存储与查询端到端测试', () => {
 
       // 验证所有记录都是指定日期
       results.forEach((quote) => {
-        expect(quote.tradeDate).toBe('2024-01-02');
+        expect(quote.tradeDate).toBe(DATE_01_02);
       });
     });
 
     it('应该正确处理开放式时间范围查询', () => {
       // 只指定开始日期
       const resultsFrom = db.queryQuotes({
-        startDate: '2024-01-03',
+        startDate: DATE_01_03,
       });
 
       expect(resultsFrom.length).toBe(3); // 01-03 (2条) + 01-04 (1条)
 
       // 只指定结束日期
       const resultsTo = db.queryQuotes({
-        endDate: '2024-01-03',
+        endDate: DATE_01_03,
       });
 
       expect(resultsTo.length).toBe(4); // 01-02 (2条) + 01-03 (2条)
@@ -164,16 +170,16 @@ describe('T019 [US3] 存储与查询端到端测试', () => {
       });
 
       // 验证按日期降序排列
-      expect(results[0].tradeDate).toBe('2024-01-04');
-      expect(results[1].tradeDate).toBe('2024-01-03');
-      expect(results[2].tradeDate).toBe('2024-01-02');
+      expect(results[0].tradeDate).toBe(DATE_01_04);
+      expect(results[1].tradeDate).toBe(DATE_01_03);
+      expect(results[2].tradeDate).toBe(DATE_01_02);
     });
 
     it('应该能查询指定股票的指定时间范围数据', () => {
       const results = db.queryQuotes({
         tsCode: '600519.SH',
-        startDate: '2024-01-02',
-        endDate: '2024-01-03',
+        startDate: DATE_01_02,
+        endDate: DATE_01_03,
       });
 
       // 验证返回记录数
@@ -182,8 +188,8 @@ describe('T019 [US3] 存储与查询端到端测试', () => {
       // 验证所有记录都符合条件
       results.forEach((quote) => {
         expect(quote.tsCode).toBe('600519.SH');
-        expect(quote.tradeDate >= '2024-01-02').toBe(true);
-        expect(quote.tradeDate <= '2024-01-03').toBe(true);
+        expect(quote.tradeDate >= DATE_01_02).toBe(true);
+        expect(quote.tradeDate <= DATE_01_03).toBe(true);
       });
     });
 
@@ -291,8 +297,8 @@ describe('T019 [US3] 存储与查询端到端测试', () => {
       // 初始查询
       const initialResults = db.queryQuotes({
         tsCode: '600519.SH',
-        startDate: '2024-01-02',
-        endDate: '2024-01-02',
+        startDate: DATE_01_02,
+        endDate: DATE_01_02,
       });
 
       const initialCount = initialResults.length;
@@ -301,7 +307,7 @@ describe('T019 [US3] 存储与查询端到端测试', () => {
       // 重复插入相同日期的数据，但价格不同
       const duplicateQuote: Omit<DailyQuote, 'id' | 'createdAt'> = {
         tsCode: '600519.SH',
-        tradeDate: '2024-01-02',
+        tradeDate: DATE_01_02,
         open: 1660.0, // 不同的开盘价
         high: 1690.0,
         low: 1655.0,
@@ -318,8 +324,8 @@ describe('T019 [US3] 存储与查询端到端测试', () => {
       // 再次查询
       const updatedResults = db.queryQuotes({
         tsCode: '600519.SH',
-        startDate: '2024-01-02',
-        endDate: '2024-01-02',
+        startDate: DATE_01_02,
+        endDate: DATE_01_02,
       });
 
       // 验证记录数没有增加 (去重生效)
@@ -337,7 +343,7 @@ describe('T019 [US3] 存储与查询端到端测试', () => {
         // 重复数据 (已存在)
         {
           tsCode: '600519.SH',
-          tradeDate: '2024-01-03',
+          tradeDate: DATE_01_03,
           open: 1675.0,
           high: 1695.0,
           low: 1670.0,
@@ -378,8 +384,8 @@ describe('T019 [US3] 存储与查询端到端测试', () => {
       // 验证重复数据被更新
       const updatedQuote = db.queryQuotes({
         tsCode: '600519.SH',
-        startDate: '2024-01-03',
-        endDate: '2024-01-03',
+        startDate: DATE_01_03,
+        endDate: DATE_01_03,
       })[0];
       expect(updatedQuote?.close).toBe(1690.0);
 
@@ -416,7 +422,7 @@ describe('T019 [US3] 存储与查询端到端测试', () => {
 
       expect(results.length).toBe(1);
       // 最新的数据应该是初始测试数据中的最新日期 2024-01-04
-      expect(results[0].tradeDate).toBe('2024-01-04');
+      expect(results[0].tradeDate).toBe(DATE_01_04);
     });
   });
 

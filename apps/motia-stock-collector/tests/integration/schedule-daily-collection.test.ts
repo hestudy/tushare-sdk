@@ -15,6 +15,7 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { config, handler } from '../../steps/schedule-daily-collection.step.js';
 import { db } from '../../lib/database.js';
+import * as utils from '../../lib/utils.js';
 
 describe('ScheduleDailyCollection Step - Contract Tests', () => {
   // Mock emit 函数
@@ -63,11 +64,16 @@ describe('ScheduleDailyCollection Step - Contract Tests', () => {
 
   describe('Handler - Trade Day Behavior', () => {
     it('should trigger collection on trade day', async () => {
-      // 准备: 插入交易日历数据,设置今天为交易日
-      const today = new Date().toISOString().split('T')[0];
+      // 准备: 使用固定的交易日（周一）
+      const tradeDate = '2025-10-20'; // 固定为周一
+
+      // Mock getToday 以返回交易日
+      vi.spyOn(utils, 'getToday').mockReturnValue(tradeDate);
+
+      // 插入交易日历数据
       db.saveTradeCalendar([
         {
-          calDate: today,
+          calDate: tradeDate,
           exchange: 'SSE',
           isOpen: 1, // 开盘日
           pretradeDate: null,
@@ -85,18 +91,23 @@ describe('ScheduleDailyCollection Step - Contract Tests', () => {
       const event = emittedEvents[0];
       expect(event.topic).toBe('data.collection.triggered');
       expect(event.data).toHaveProperty('tradeDate');
-      expect(event.data.tradeDate).toBe(today);
+      expect(event.data.tradeDate).toBe(tradeDate);
 
       // 验证日志
       expect(mockLogger.info).toHaveBeenCalled();
     });
 
     it('should skip collection on non-trade day', async () => {
-      // 准备: 插入交易日历数据,设置今天为非交易日
-      const today = new Date().toISOString().split('T')[0];
+      // 准备: 使用固定的非交易日（周六）
+      const nonTradeDate = '2025-10-25'; // 固定为周六
+
+      // Mock getToday 以返回非交易日
+      vi.spyOn(utils, 'getToday').mockReturnValue(nonTradeDate);
+
+      // 插入交易日历数据
       db.saveTradeCalendar([
         {
-          calDate: today,
+          calDate: nonTradeDate,
           exchange: 'SSE',
           isOpen: 0, // 休市日
           pretradeDate: null,
@@ -114,13 +125,15 @@ describe('ScheduleDailyCollection Step - Contract Tests', () => {
       expect(mockLogger.info).toHaveBeenCalledWith(
         'Skipping collection - Not a trade day',
         expect.objectContaining({
-          tradeDate: today,
+          tradeDate: nonTradeDate,
         })
       );
     });
 
     it('should handle missing trade calendar gracefully', async () => {
-      // 准备: 不插入任何交易日历数据
+      // 准备: 使用固定日期,但不插入任何交易日历数据
+      const testDate = '2025-10-20';
+      vi.spyOn(utils, 'getToday').mockReturnValue(testDate);
 
       // 执行: 调用 handler
       await handler({}, { emit: mockEmit, logger: mockLogger });
@@ -139,11 +152,14 @@ describe('ScheduleDailyCollection Step - Contract Tests', () => {
 
   describe('Event Emit Format', () => {
     it('should emit event with correct schema', async () => {
-      // 准备: 设置今天为交易日
-      const today = new Date().toISOString().split('T')[0];
+      // 准备: 使用固定的交易日
+      const tradeDate = '2025-10-20';
+
+      vi.spyOn(utils, 'getToday').mockReturnValue(tradeDate);
+
       db.saveTradeCalendar([
         {
-          calDate: today,
+          calDate: tradeDate,
           exchange: 'SSE',
           isOpen: 1,
           pretradeDate: null,
@@ -168,6 +184,10 @@ describe('ScheduleDailyCollection Step - Contract Tests', () => {
 
   describe('Error Handling', () => {
     it('should not throw error on database failure', async () => {
+      // 准备: 使用固定日期
+      const testDate = '2025-10-20';
+      vi.spyOn(utils, 'getToday').mockReturnValue(testDate);
+
       // Mock 数据库抛出错误
       const originalIsTradeDay = db.isTradeDay;
       db.isTradeDay = vi.fn(() => {
@@ -187,11 +207,14 @@ describe('ScheduleDailyCollection Step - Contract Tests', () => {
     });
 
     it('should not throw error on emit failure', async () => {
-      // 准备: 设置今天为交易日
-      const today = new Date().toISOString().split('T')[0];
+      // 准备: 使用固定的交易日
+      const tradeDate = '2025-10-20';
+
+      vi.spyOn(utils, 'getToday').mockReturnValue(tradeDate);
+
       db.saveTradeCalendar([
         {
-          calDate: today,
+          calDate: tradeDate,
           exchange: 'SSE',
           isOpen: 1,
           pretradeDate: null,

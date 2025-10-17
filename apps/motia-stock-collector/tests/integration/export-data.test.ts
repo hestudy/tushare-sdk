@@ -11,12 +11,18 @@
 import { describe, it, expect, beforeAll, afterAll, beforeEach } from 'vitest';
 import { db } from '../../lib/database.js';
 import type { DailyQuote } from '../../types/index.js';
+import { getTestDate } from '../helpers/date-helpers.js';
+
+// 生成测试日期
+const DATE_01_02 = getTestDate(0);
+const DATE_01_03 = getTestDate(1);
+const DATE_01_05 = getTestDate(3);
 
 // 模拟测试数据
 const mockQuotes: Omit<DailyQuote, 'id' | 'createdAt'>[] = [
   {
     tsCode: '600519.SH',
-    tradeDate: '2024-01-02',
+    tradeDate: DATE_01_02,
     open: 1650.0,
     high: 1680.0,
     low: 1645.0,
@@ -29,7 +35,7 @@ const mockQuotes: Omit<DailyQuote, 'id' | 'createdAt'>[] = [
   },
   {
     tsCode: '600519.SH',
-    tradeDate: '2024-01-03',
+    tradeDate: DATE_01_03,
     open: 1670.0,
     high: 1690.0,
     low: 1665.0,
@@ -42,7 +48,7 @@ const mockQuotes: Omit<DailyQuote, 'id' | 'createdAt'>[] = [
   },
   {
     tsCode: '000001.SZ',
-    tradeDate: '2024-01-02',
+    tradeDate: DATE_01_02,
     open: 12.5,
     high: 12.8,
     low: 12.4,
@@ -127,7 +133,7 @@ describe('T018 [US3] ExportDataAPI Step - Contract Tests', () => {
 
       // 验证数据内容
       expect(csvBody).toContain('600519.SH');
-      expect(csvBody).toContain('2024-01-02');
+      expect(csvBody).toContain(DATE_01_02);
       expect(csvBody).toContain('1650');
     });
 
@@ -164,7 +170,7 @@ describe('T018 [US3] ExportDataAPI Step - Contract Tests', () => {
       // 插入包含空值的测试数据
       const quoteWithNulls: Omit<DailyQuote, 'id' | 'createdAt'> = {
         tsCode: '600000.SH',
-        tradeDate: '2024-01-05',
+        tradeDate: DATE_01_05,
         open: null,
         high: null,
         low: null,
@@ -359,7 +365,7 @@ describe('T018 [US3] ExportDataAPI Step - Contract Tests', () => {
         query: {
           tsCode: '600519.SH',
           startDate: '2024-01-01',
-          endDate: '2024-01-31',
+          endDate: endDate,
           limit: '100',
           format: 'json',
         },
