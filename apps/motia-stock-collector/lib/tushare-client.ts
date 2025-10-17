@@ -1,6 +1,29 @@
 import { TushareClient } from '@hestudy/tushare-sdk';
-import pLimit from 'p-limit';
 import type { DailyQuote, TradeCalendar } from '../types/index';
+
+// 简单的并发限制实现，避免直接依赖 p-limit ESM 模块
+class SimpleLimiter {
+  private concurrent: number;
+  private running: number = 0;
+  private queue: (() => Promise<any>)[] = [];
+
+  constructor(concurrent: number) {
+    this.concurrent = concurrent;
+  }
+
+  async run<T>(fn: () => Promise<T>): Promise<T> {
+    while (this.running >= this.concurrent) {
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    }
+
+    this.running++;
+    try {
+      return await fn();
+    } finally {
+      this.running--;
+    }
+  }
+}
 
 /**
  * Tushare 服务封装
@@ -8,7 +31,7 @@ import type { DailyQuote, TradeCalendar } from '../types/index';
  */
 export class TushareService {
   private client: TushareClient;
-  private limiter: ReturnType<typeof pLimit>;
+  private limiter: SimpleLimiter;
 
   constructor(token?: string, concurrency?: number) {
     const apiToken = token || process.env.TUSHARE_TOKEN;
@@ -32,7 +55,7 @@ export class TushareService {
     // SDK 已经内置并发控制，这里的 limiter 用于额外控制
     const concurrent =
       concurrency || parseInt(process.env.RATE_LIMIT_CONCURRENT || '5');
-    this.limiter = pLimit(concurrent);
+    this.limiter = new SimpleLimiter(concurrent);
   }
 
   /**
@@ -43,7 +66,7 @@ export class TushareService {
   async getDailyQuotes(
     tradeDate: string
   ): Promise<Omit<DailyQuote, 'id' | 'createdAt'>[]> {
-    return this.limiter(async () => {
+    return this.limiter.run(async () => {
       const response = await this.client.query<any>('daily', {
         trade_date: tradeDate,
       });
@@ -77,7 +100,7 @@ export class TushareService {
     endDate: string,
     exchange: 'SSE' | 'SZSE' = 'SSE'
   ): Promise<Omit<TradeCalendar, 'createdAt'>[]> {
-    return this.limiter(async () => {
+    return this.limiter.run(async () => {
       const response = await this.client.query<any>('trade_cal', {
         start_date: startDate,
         end_date: endDate,
