@@ -36,9 +36,13 @@ describe('CollectDailyQuotes Step - Contract Tests', () => {
     error: vi.fn(),
   };
 
-  beforeEach(() => {
+  beforeEach(async () => {
     // 使用内存数据库进行测试
     testDb = new DatabaseService(':memory:');
+
+    // Mock 全局 db 实例,使其指向测试数据库
+    const dbModule = await import('../../lib/database.js');
+    vi.spyOn(dbModule, 'db', 'get').mockReturnValue(testDb);
 
     // 清空 mock 调用记录
     emittedEvents = [];
@@ -50,6 +54,7 @@ describe('CollectDailyQuotes Step - Contract Tests', () => {
 
   afterEach(() => {
     testDb.close();
+    vi.restoreAllMocks();
   });
 
   describe('Step Configuration', () => {
@@ -118,8 +123,9 @@ describe('CollectDailyQuotes Step - Contract Tests', () => {
       });
 
       expect(savedQuotes).toHaveLength(2);
-      expect(savedQuotes[0].tsCode).toBe('600519.SH');
-      expect(savedQuotes[1].tsCode).toBe('000001.SZ');
+      // 查询结果按 trade_date DESC, ts_code ASC 排序
+      const codes = savedQuotes.map((q) => q.tsCode).sort();
+      expect(codes).toEqual(['000001.SZ', '600519.SH']);
 
       // 验证: 错误日志
       const taskLogs = testDb.queryTaskLogsByName('CollectDailyQuotes');
@@ -192,7 +198,9 @@ describe('CollectDailyQuotes Step - Contract Tests', () => {
       );
 
       // 验证: TaskLog 记录失败
-      const taskLogs = testDb.queryTaskLogs('CollectDailyQuotes');
+      const { logs: taskLogs } = testDb.queryTaskLogs({
+        taskName: 'CollectDailyQuotes',
+      });
       expect(taskLogs).toHaveLength(1);
       expect(taskLogs[0].status).toBe('FAILED');
       expect(taskLogs[0].errorMessage).toContain('API rate limit exceeded');

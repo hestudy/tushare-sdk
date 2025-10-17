@@ -8,7 +8,7 @@
  * 4. 连续失败3次 → 验证告警日志
  */
 
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { DatabaseService } from '../../lib/database.js';
 import { taskConfigManager } from '../../lib/task-config.js';
 import { handler as listTasksHandler } from '../../steps/list-tasks-api.step.js';
@@ -17,13 +17,18 @@ import { handler as queryLogsHandler } from '../../steps/query-task-logs-api.ste
 describe('Task Management Flow', () => {
   let testDb: DatabaseService;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     // 使用内存数据库进行测试
     testDb = new DatabaseService(':memory:');
+
+    // Mock 全局 db 实例,使其指向测试数据库
+    const dbModule = await import('../../lib/database.js');
+    vi.spyOn(dbModule, 'db', 'get').mockReturnValue(testDb);
   });
 
   afterEach(() => {
     testDb.close();
+    vi.restoreAllMocks();
   });
 
   describe('Scenario 1: Query task list and verify configuration', () => {
@@ -109,33 +114,42 @@ describe('Task Management Flow', () => {
 
   describe('Scenario 3: Query execution history', () => {
     beforeEach(() => {
-      // 插入测试执行历史
-      testDb.logTask({
-        taskName: 'CollectDailyQuotes',
-        startTime: new Date('2024-01-10T17:00:00Z').toISOString(),
-        endTime: new Date('2024-01-10T17:30:00Z').toISOString(),
-        status: 'SUCCESS',
-        recordsCount: 4000,
-        errorMessage: null,
-      });
+      // 插入测试执行历史,手动指定 createdAt 以便测试日期范围过滤
+      testDb.logTask(
+        {
+          taskName: 'CollectDailyQuotes',
+          startTime: new Date('2024-01-10T17:00:00Z').toISOString(),
+          endTime: new Date('2024-01-10T17:30:00Z').toISOString(),
+          status: 'SUCCESS',
+          recordsCount: 4000,
+          errorMessage: null,
+        },
+        new Date('2024-01-10T17:00:00Z').toISOString()
+      );
 
-      testDb.logTask({
-        taskName: 'CollectDailyQuotes',
-        startTime: new Date('2024-01-11T17:00:00Z').toISOString(),
-        endTime: new Date('2024-01-11T17:25:00Z').toISOString(),
-        status: 'SUCCESS',
-        recordsCount: 3950,
-        errorMessage: null,
-      });
+      testDb.logTask(
+        {
+          taskName: 'CollectDailyQuotes',
+          startTime: new Date('2024-01-11T17:00:00Z').toISOString(),
+          endTime: new Date('2024-01-11T17:25:00Z').toISOString(),
+          status: 'SUCCESS',
+          recordsCount: 3950,
+          errorMessage: null,
+        },
+        new Date('2024-01-11T17:00:00Z').toISOString()
+      );
 
-      testDb.logTask({
-        taskName: 'CollectDailyQuotes',
-        startTime: new Date('2024-01-12T17:00:00Z').toISOString(),
-        endTime: new Date('2024-01-12T17:05:00Z').toISOString(),
-        status: 'FAILED',
-        recordsCount: 0,
-        errorMessage: 'API rate limit exceeded',
-      });
+      testDb.logTask(
+        {
+          taskName: 'CollectDailyQuotes',
+          startTime: new Date('2024-01-12T17:00:00Z').toISOString(),
+          endTime: new Date('2024-01-12T17:05:00Z').toISOString(),
+          status: 'FAILED',
+          recordsCount: 0,
+          errorMessage: 'API rate limit exceeded',
+        },
+        new Date('2024-01-12T17:00:00Z').toISOString()
+      );
     });
 
     it('should query execution history with complete records', async () => {

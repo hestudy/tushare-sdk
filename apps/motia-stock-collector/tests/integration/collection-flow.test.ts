@@ -31,9 +31,13 @@ describe('Data Collection Flow - End-to-End Tests', () => {
     error: vi.fn(),
   };
 
-  beforeEach(() => {
+  beforeEach(async () => {
     // 使用内存数据库
     testDb = new DatabaseService(':memory:');
+
+    // Mock 全局 db 实例,使其指向测试数据库
+    const dbModule = await import('../../lib/database.js');
+    vi.spyOn(dbModule, 'db', 'get').mockReturnValue(testDb);
 
     // 清空 mock 记录
     mockLogger.info.mockClear();
@@ -43,6 +47,7 @@ describe('Data Collection Flow - End-to-End Tests', () => {
 
   afterEach(() => {
     testDb.close();
+    vi.restoreAllMocks();
   });
 
   describe('Scenario 1: Complete Collection Flow on Trade Day', () => {

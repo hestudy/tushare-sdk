@@ -236,23 +236,40 @@ export class DatabaseService {
   /**
    * 记录任务日志
    * @param log 任务日志
+   * @param createdAt 可选的创建时间 (仅用于测试)
    * @returns 插入的日志 ID
    */
-  logTask(log: Omit<TaskLog, 'id' | 'createdAt'>): number {
-    const stmt = this.db.prepare(`
-      INSERT INTO task_logs 
-      (task_name, start_time, end_time, status, records_count, error_message)
-      VALUES (?, ?, ?, ?, ?, ?)
-    `);
+  logTask(log: Omit<TaskLog, 'id' | 'createdAt'>, createdAt?: string): number {
+    const stmt = createdAt
+      ? this.db.prepare(`
+          INSERT INTO task_logs
+          (task_name, start_time, end_time, status, records_count, error_message, created_at)
+          VALUES (?, ?, ?, ?, ?, ?, ?)
+        `)
+      : this.db.prepare(`
+          INSERT INTO task_logs
+          (task_name, start_time, end_time, status, records_count, error_message)
+          VALUES (?, ?, ?, ?, ?, ?)
+        `);
 
-    const result = stmt.run(
-      log.taskName,
-      log.startTime,
-      log.endTime,
-      log.status,
-      log.recordsCount,
-      log.errorMessage
-    );
+    const result = createdAt
+      ? stmt.run(
+          log.taskName,
+          log.startTime,
+          log.endTime,
+          log.status,
+          log.recordsCount,
+          log.errorMessage,
+          createdAt
+        )
+      : stmt.run(
+          log.taskName,
+          log.startTime,
+          log.endTime,
+          log.status,
+          log.recordsCount,
+          log.errorMessage
+        );
 
     return result.lastInsertRowid as number;
   }
