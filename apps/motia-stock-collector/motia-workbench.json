@@ -2,6 +2,22 @@
   {
     "id": "basic-tutorial",
     "config": {
+      "steps/query-task-logs-api.step.ts": {
+        "x": 0,
+        "y": 562
+      },
+      "steps/query-quotes-api.step.ts": {
+        "x": 6,
+        "y": 866
+      },
+      "steps/list-tasks-api.step.ts": {
+        "x": 21,
+        "y": 410
+      },
+      "steps/export-data.step.ts": {
+        "x": 13,
+        "y": 714
+      },
       "steps/petstore/state-audit-cron.step.ts": {
         "x": -165,
         "y": 217,
@@ -23,21 +39,9 @@
         "sourceHandlePosition": "right",
         "targetHandlePosition": "left"
       },
-      "steps/list-tasks-api.step.ts": {
-        "x": 21,
-        "y": 410
-      },
-      "steps/query-task-logs-api.step.ts": {
-        "x": 0,
-        "y": 562
-      },
-      "steps/export-data.step.ts": {
-        "x": 13,
-        "y": 714
-      },
-      "steps/query-quotes-api.step.ts": {
-        "x": 6,
-        "y": 866
+      "steps/schedule-daily-collection.step.ts": {
+        "x": 333,
+        "y": 582
       }
     }
   }

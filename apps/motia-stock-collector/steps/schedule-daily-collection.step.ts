@@ -23,6 +23,7 @@ export const config = {
   name: 'ScheduleDailyCollection',
   type: 'cron',
   cron: '0 17 * * 1-5', // 周一至周五 17:00 执行
+  flows: ['basic-tutorial'],
   emits: ['data.collection.triggered'],
 };
 
