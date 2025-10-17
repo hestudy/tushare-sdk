@@ -17,7 +17,18 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
 import { config, handler } from '../../steps/collect-daily-quotes.step.js';
 import { DatabaseService } from '../../lib/database.js';
-import { TushareService } from '../../lib/tushare-client.js';
+
+// 创建一个全局的 mock 函数，在 mock 工厂中使用
+const mockGetDailyQuotes = vi.fn();
+
+// Mock TushareService 模块 - 必须在文件顶部
+vi.mock('../../lib/tushare-client.js', () => {
+  return {
+    TushareService: class MockTushareService {
+      getDailyQuotes = mockGetDailyQuotes;
+    },
+  };
+});
 
 // 创建测试专用数据库
 let testDb: DatabaseService;
@@ -50,6 +61,9 @@ describe('CollectDailyQuotes Step - Contract Tests', () => {
     mockLogger.info.mockClear();
     mockLogger.warn.mockClear();
     mockLogger.error.mockClear();
+
+    // 重置所有 mock
+    vi.clearAllMocks();
   });
 
   afterEach(() => {
@@ -108,9 +122,7 @@ describe('CollectDailyQuotes Step - Contract Tests', () => {
       ];
 
       // Mock TushareService.getDailyQuotes
-      vi.spyOn(TushareService.prototype, 'getDailyQuotes').mockResolvedValue(
-        mockQuotes
-      );
+      mockGetDailyQuotes.mockResolvedValue(mockQuotes);
 
       // 执行
       const input = { tradeDate: '2024-01-15' };
@@ -151,9 +163,7 @@ describe('CollectDailyQuotes Step - Contract Tests', () => {
 
     it('should handle empty quotes gracefully', async () => {
       // Mock TushareService 返回空数组
-      vi.spyOn(TushareService.prototype, 'getDailyQuotes').mockResolvedValue(
-        []
-      );
+      mockGetDailyQuotes.mockResolvedValue([]);
 
       // 执行
       const input = { tradeDate: '2024-01-15' };
@@ -178,7 +188,7 @@ describe('CollectDailyQuotes Step - Contract Tests', () => {
   describe('Handler - Error Handling', () => {
     it('should record failure on API error', async () => {
       // Mock TushareService 抛出错误
-      vi.spyOn(TushareService.prototype, 'getDailyQuotes').mockRejectedValue(
+      mockGetDailyQuotes.mockRejectedValue(
         new Error('API rate limit exceeded')
       );
 
@@ -224,14 +234,12 @@ describe('CollectDailyQuotes Step - Contract Tests', () => {
         },
       ];
 
-      vi.spyOn(TushareService.prototype, 'getDailyQuotes').mockResolvedValue(
-        mockQuotes
-      );
-
-      // Mock 数据库保存失败
       vi.spyOn(testDb, 'saveQuotes').mockImplementation(() => {
         throw new Error('Database write failed');
       });
+
+      // Mock TushareService 返回数据
+      mockGetDailyQuotes.mockResolvedValue(mockQuotes);
 
       // 执行: 应该抛出错误
       const input = { tradeDate: '2024-01-15' };
@@ -247,7 +255,7 @@ describe('CollectDailyQuotes Step - Contract Tests', () => {
   describe('Event Emit Format', () => {
     it('should emit event with correct schema', async () => {
       // Mock TushareService
-      vi.spyOn(TushareService.prototype, 'getDailyQuotes').mockResolvedValue([
+      mockGetDailyQuotes.mockResolvedValue([
         {
           tsCode: '600519.SH',
           tradeDate: '2024-01-15',
@@ -304,9 +312,8 @@ describe('CollectDailyQuotes Step - Contract Tests', () => {
         },
       ];
 
-      vi.spyOn(TushareService.prototype, 'getDailyQuotes').mockResolvedValue(
-        mockQuotes
-      );
+      // Mock TushareService 返回数据
+      mockGetDailyQuotes.mockResolvedValue(mockQuotes);
 
       // 第一次采集
       const input = { tradeDate: '2024-01-15' };
