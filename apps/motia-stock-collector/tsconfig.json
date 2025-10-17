@@ -14,20 +14,14 @@
     "baseUrl": ".",
     "jsx": "react-jsx"
   },
-  "include": [
-    "**/*.ts",
-    "**/*.tsx",
-    "**/*.js",
-    "**/*.jsx",
-    "types.d.ts"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist",
-    "tests"
-  ],
+  "include": ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx", "types.d.ts"],
+  "exclude": ["node_modules", "dist", "tests"],
   "ts-node": {
     "esm": true,
-    "experimentalSpecifierResolution": "node"
+    "experimentalSpecifierResolution": "node",
+    "moduleTypes": {
+      "p-limit": "esm"
+    },
+    "transpileOnly": true
   }
 }
