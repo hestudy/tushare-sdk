@@ -368,8 +368,10 @@ describe('Data Collection Flow - End-to-End Tests', () => {
       // Step 7: 验证有 2 条 TaskLog (1 失败, 1 成功)
       const taskLogs = testDb.queryTaskLogsByName('CollectDailyQuotes');
       expect(taskLogs).toHaveLength(2);
-      expect(taskLogs[0].status).toBe('SUCCESS'); // 最新的记录
-      expect(taskLogs[1].status).toBe('FAILED');
+      // 按 created_at DESC, id DESC 排列，最新的在前
+      const [latestLog, previousLog] = taskLogs;
+      expect(latestLog.status).toBe('SUCCESS');
+      expect(previousLog.status).toBe('FAILED');
     });
   });
 
@@ -401,9 +403,9 @@ describe('Data Collection Flow - End-to-End Tests', () => {
         }))
       );
 
-      // Step 2: Mock Tushare API
-      vi.spyOn(TushareService.prototype, 'getDailyQuotes').mockResolvedValue([
-        {
+      // Step 2: Mock Tushare API - 根据 tradeDate 返回对应数据
+      const apiDataMap: Record<string, any> = {
+        [startDate]: {
           tsCode: '600519.SH',
           tradeDate: startDate,
           open: 1450.0,
@@ -416,7 +418,46 @@ describe('Data Collection Flow - End-to-End Tests', () => {
           vol: 50000.0,
           amount: 7250000.0,
         },
-      ]);
+        [date2Str]: {
+          tsCode: '600519.SH',
+          tradeDate: date2Str,
+          open: 1455.0,
+          high: 1465.0,
+          low: 1450.0,
+          close: 1460.0,
+          preClose: 1455.0,
+          change: 5.0,
+          pctChg: 0.34,
+          vol: 45000.0,
+          amount: 6570000.0,
+        },
+        [date3Str]: {
+          tsCode: '600519.SH',
+          tradeDate: date3Str,
+          open: 1460.0,
+          high: 1470.0,
+          low: 1455.0,
+          close: 1465.0,
+          preClose: 1460.0,
+          change: 5.0,
+          pctChg: 0.34,
+          vol: 48000.0,
+          amount: 7032000.0,
+        },
+      };
+
+      vi.spyOn(TushareService.prototype, 'getDailyQuotes').mockImplementation(
+        async (dateStr: string) => {
+          // 将 YYYYMMDD 格式转换为 YYYY-MM-DD
+          const date =
+            dateStr.slice(0, 4) +
+            '-' +
+            dateStr.slice(4, 6) +
+            '-' +
+            dateStr.slice(6, 8);
+          return [apiDataMap[date]];
+        }
+      );
 
       // Step 3: 执行历史数据补齐
       const mockEmit = vi.fn(async (event: any) => {
@@ -425,6 +466,7 @@ describe('Data Collection Flow - End-to-End Tests', () => {
           await collectHandler(event.data, {
             emit: mockEmit,
             logger: mockLogger,
+            db: testDb,
           });
         }
       });
@@ -445,8 +487,8 @@ describe('Data Collection Flow - End-to-End Tests', () => {
 
       // Step 5: 验证数据库有 3 条记录 (每个交易日 1 条)
       const savedQuotes = testDb.queryQuotes({
-        startDate: '2024-01-15',
-        endDate: '2024-01-17',
+        startDate: startDate,
+        endDate: date3Str,
       });
       expect(savedQuotes.length).toBeGreaterThanOrEqual(3);
 

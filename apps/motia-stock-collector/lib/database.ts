@@ -353,8 +353,8 @@ export class DatabaseService {
    */
   queryTaskLogsByName(taskName?: string, limit: number = 100): TaskLog[] {
     const sql = taskName
-      ? 'SELECT * FROM task_logs WHERE task_name = ? ORDER BY created_at DESC LIMIT ?'
-      : 'SELECT * FROM task_logs ORDER BY created_at DESC LIMIT ?';
+      ? 'SELECT * FROM task_logs WHERE task_name = ? ORDER BY created_at DESC, id DESC LIMIT ?'
+      : 'SELECT * FROM task_logs ORDER BY created_at DESC, id DESC LIMIT ?';
 
     const params = taskName ? [taskName, limit] : [limit];
     const results = this.db.prepare(sql).all(...params) as any[];

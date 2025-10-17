@@ -12,12 +12,15 @@
  * - Mock 时间 (可选)
  */
 
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { config, handler } from '../../steps/schedule-daily-collection.step.js';
-import { db } from '../../lib/database.js';
+import { DatabaseService } from '../../lib/database.js';
 import * as utils from '../../lib/utils.js';
 
 describe('ScheduleDailyCollection Step - Contract Tests', () => {
+  // 使用内存数据库进行隔离
+  let testDb: DatabaseService;
+
   // Mock emit 函数
   let emittedEvents: any[] = [];
   const mockEmit = vi.fn(async (event: any) => {
@@ -31,16 +34,25 @@ describe('ScheduleDailyCollection Step - Contract Tests', () => {
     error: vi.fn(),
   };
 
-  beforeEach(() => {
+  beforeEach(async () => {
+    // 创建内存数据库
+    testDb = new DatabaseService(':memory:');
+
+    // 模拟全局 db 实例
+    const dbModule = await import('../../lib/database.js');
+    vi.spyOn(dbModule, 'db', 'get').mockReturnValue(testDb);
+
     // 清空 mock 调用记录
     emittedEvents = [];
     mockEmit.mockClear();
     mockLogger.info.mockClear();
     mockLogger.warn.mockClear();
     mockLogger.error.mockClear();
+  });
 
-    // 清理数据库
-    db.clearAllData();
+  afterEach(() => {
+    testDb.close();
+    vi.restoreAllMocks();
   });
 
   describe('Step Configuration', () => {
@@ -71,7 +83,7 @@ describe('ScheduleDailyCollection Step - Contract Tests', () => {
       vi.spyOn(utils, 'getToday').mockReturnValue(tradeDate);
 
       // 插入交易日历数据
-      db.saveTradeCalendar([
+      testDb.saveTradeCalendar([
         {
           calDate: tradeDate,
           exchange: 'SSE',
@@ -105,7 +117,7 @@ describe('ScheduleDailyCollection Step - Contract Tests', () => {
       vi.spyOn(utils, 'getToday').mockReturnValue(nonTradeDate);
 
       // 插入交易日历数据
-      db.saveTradeCalendar([
+      testDb.saveTradeCalendar([
         {
           calDate: nonTradeDate,
           exchange: 'SSE',
@@ -157,7 +169,7 @@ describe('ScheduleDailyCollection Step - Contract Tests', () => {
 
       vi.spyOn(utils, 'getToday').mockReturnValue(tradeDate);
 
-      db.saveTradeCalendar([
+      testDb.saveTradeCalendar([
         {
           calDate: tradeDate,
           exchange: 'SSE',
@@ -189,8 +201,8 @@ describe('ScheduleDailyCollection Step - Contract Tests', () => {
       vi.spyOn(utils, 'getToday').mockReturnValue(testDate);
 
       // Mock 数据库的 hasTradeCalendarData 抛出错误
-      const originalHasTradeCalendarData = db.hasTradeCalendarData;
-      db.hasTradeCalendarData = vi.fn(() => {
+      const originalHasTradeCalendarData = testDb.hasTradeCalendarData;
+      testDb.hasTradeCalendarData = vi.fn(() => {
         throw new Error('Database connection failed');
       });
 
@@ -203,7 +215,7 @@ describe('ScheduleDailyCollection Step - Contract Tests', () => {
       expect(mockLogger.error).toHaveBeenCalled();
 
       // 恢复原始方法
-      db.hasTradeCalendarData = originalHasTradeCalendarData;
+      testDb.hasTradeCalendarData = originalHasTradeCalendarData;
     });
 
     it('should not throw error on emit failure', async () => {
@@ -212,7 +224,7 @@ describe('ScheduleDailyCollection Step - Contract Tests', () => {
 
       vi.spyOn(utils, 'getToday').mockReturnValue(tradeDate);
 
-      db.saveTradeCalendar([
+      testDb.saveTradeCalendar([
         {
           calDate: tradeDate,
           exchange: 'SSE',
