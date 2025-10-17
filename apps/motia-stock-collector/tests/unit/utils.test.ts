@@ -155,20 +155,28 @@ describe('Utils', () => {
     let mockDb: any;
     let mockEmit: any;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       mockEmit = vi.fn();
+
+      // 创建 mock 对象
       mockDb = {
         isTradeDay: vi.fn(),
       };
 
-      vi.mock('../../lib/database.js', () => ({
+      // 使用 vi.doMock 在 beforeEach 中重新配置 mock
+      vi.resetModules();
+      vi.doMock('../../lib/database.js', () => ({
         db: mockDb,
       }));
+
+      // 重新导入模块以使 mock 生效
+      const utils = await import('../../lib/utils.js');
+      Object.assign(global, utils);
     });
 
     afterEach(() => {
       vi.clearAllMocks();
-      vi.resetModules();
+      vi.unmock('../../lib/database.js');
     });
 
     describe('checkTradeCalendar', () => {

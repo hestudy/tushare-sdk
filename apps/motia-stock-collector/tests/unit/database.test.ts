@@ -326,7 +326,7 @@ describe('DatabaseService', () => {
 
       logs.forEach((log) => db.logTask(log));
 
-      const results = db.queryTaskLogs('CollectDailyQuotes');
+      const results = db.queryTaskLogsByName('CollectDailyQuotes');
       expect(results).toHaveLength(2);
     });
 
@@ -352,7 +352,7 @@ describe('DatabaseService', () => {
 
       logs.forEach((log) => db.logTask(log));
 
-      const results = db.queryTaskLogs('CollectDailyQuotes');
+      const results = db.queryTaskLogsByName('CollectDailyQuotes');
       expect(results).toHaveLength(1);
       expect(results[0].taskName).toBe('CollectDailyQuotes');
     });

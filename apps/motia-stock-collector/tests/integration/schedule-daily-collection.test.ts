@@ -53,7 +53,7 @@ describe('ScheduleDailyCollection Step - Contract Tests', () => {
 
     it('should have correct cron schedule', () => {
       // 周一至周五 17:00
-      expect(config.schedule).toBe('0 17 * * 1-5');
+      expect(config.cron).toBe('0 17 * * 1-5');
     });
 
     it('should emit correct event topics', () => {

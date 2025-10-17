@@ -127,7 +127,7 @@ describe('Data Collection Flow - End-to-End Tests', () => {
       expect(savedQuotes.find((q) => q.tsCode === '000001.SZ')).toBeDefined();
 
       // Step 7: 验证 TaskLog 记录
-      const taskLogs = testDb.queryTaskLogs('CollectDailyQuotes');
+      const taskLogs = testDb.queryTaskLogsByName('CollectDailyQuotes');
       expect(taskLogs).toHaveLength(1);
       expect(taskLogs[0].status).toBe('SUCCESS');
       expect(taskLogs[0].recordsCount).toBe(2);
@@ -218,7 +218,7 @@ describe('Data Collection Flow - End-to-End Tests', () => {
       );
 
       // Step 6: 验证 TaskLog 记录失败
-      const taskLogs = testDb.queryTaskLogs('CollectDailyQuotes');
+      const taskLogs = testDb.queryTaskLogsByName('CollectDailyQuotes');
       expect(taskLogs).toHaveLength(1);
       expect(taskLogs[0].status).toBe('FAILED');
       expect(taskLogs[0].errorMessage).toContain('API rate limit exceeded');
@@ -284,7 +284,7 @@ describe('Data Collection Flow - End-to-End Tests', () => {
       expect(savedQuotes).toHaveLength(1);
 
       // Step 7: 验证有 2 条 TaskLog (1 失败, 1 成功)
-      const taskLogs = testDb.queryTaskLogs('CollectDailyQuotes');
+      const taskLogs = testDb.queryTaskLogsByName('CollectDailyQuotes');
       expect(taskLogs).toHaveLength(2);
       expect(taskLogs[0].status).toBe('SUCCESS'); // 最新的记录
       expect(taskLogs[1].status).toBe('FAILED');
@@ -354,7 +354,7 @@ describe('Data Collection Flow - End-to-End Tests', () => {
       expect(savedQuotes.length).toBeGreaterThanOrEqual(3);
 
       // Step 6: 验证 TaskLog 记录
-      const taskLogs = testDb.queryTaskLogs('CollectDailyQuotes');
+      const taskLogs = testDb.queryTaskLogsByName('CollectDailyQuotes');
       expect(taskLogs.length).toBeGreaterThanOrEqual(3);
 
       // Step 7: 验证所有任务都成功

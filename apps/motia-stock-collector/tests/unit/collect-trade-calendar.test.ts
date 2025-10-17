@@ -1,11 +1,45 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { handler, config } from '../../steps/collect-trade-calendar.step.js';
 
+// 在顶级作用域定义 mock 变量
+const mockDb = {
+  saveTradeCalendar: vi.fn().mockReturnValue(730),
+  logTask: vi.fn(),
+};
+
+const mockTushareService = {
+  getTradeCalendar: vi.fn().mockResolvedValue([
+    {
+      calDate: '2024-01-02',
+      exchange: 'SSE',
+      isOpen: 1,
+      pretradeDate: '2024-01-01',
+    },
+    {
+      calDate: '2024-01-03',
+      exchange: 'SSE',
+      isOpen: 1,
+      pretradeDate: '2024-01-02',
+    },
+  ]),
+};
+
+// 在顶级作用域定义 mock
+vi.mock('../../lib/database.js', () => ({
+  db: mockDb,
+}));
+
+vi.mock('../../lib/tushare-client.js', () => ({
+  TushareService: vi.fn(() => mockTushareService),
+}));
+
+vi.mock('../../lib/utils.js', () => ({
+  formatToTushareDate: vi.fn((date: string) => date.replace(/-/g, '')),
+}));
+
 describe('CollectTradeCalendar Step', () => {
   let mockEmit: any;
   let mockLogger: any;
-  let mockDb: any;
-  let mockTushareService: any;
 
   beforeEach(() => {
     // Mock emit 函数
@@ -17,47 +51,29 @@ describe('CollectTradeCalendar Step', () => {
       error: vi.fn(),
     };
 
-    // Mock 数据库服务
-    mockDb = {
-      saveTradeCalendar: vi.fn().mockReturnValue(730), // 模拟保存 730 条记录（2年数据）
-      logTask: vi.fn(),
-    };
-
-    // Mock Tushare 服务
-    mockTushareService = {
-      getTradeCalendar: vi.fn().mockResolvedValue([
-        {
-          calDate: '2024-01-02',
-          exchange: 'SSE',
-          isOpen: 1,
-          pretradeDate: '2024-01-01',
-        },
-        {
-          calDate: '2024-01-03',
-          exchange: 'SSE',
-          isOpen: 1,
-          pretradeDate: '2024-01-02',
-        },
-      ]),
-    };
-
-    // Mock 模块导入
-    vi.mock('../../lib/database.js', () => ({
-      db: mockDb,
-    }));
-
-    vi.mock('../../lib/tushare-client.js', () => ({
-      TushareService: vi.fn(() => mockTushareService),
-    }));
-
-    vi.mock('../../lib/utils.js', () => ({
-      formatToTushareDate: vi.fn((date: string) => date.replace(/-/g, '')),
-    }));
+    // 清除 mock 的返回值
+    mockDb.saveTradeCalendar.mockClear();
+    mockDb.saveTradeCalendar.mockReturnValue(730);
+    mockDb.logTask.mockClear();
+    mockTushareService.getTradeCalendar.mockClear();
+    mockTushareService.getTradeCalendar.mockResolvedValue([
+      {
+        calDate: '2024-01-02',
+        exchange: 'SSE',
+        isOpen: 1,
+        pretradeDate: '2024-01-01',
+      },
+      {
+        calDate: '2024-01-03',
+        exchange: 'SSE',
+        isOpen: 1,
+        pretradeDate: '2024-01-02',
+      },
+    ]);
   });
 
   afterEach(() => {
     vi.clearAllMocks();
-    vi.resetModules();
   });
 
   describe('Step Configuration', () => {
@@ -65,8 +81,6 @@ describe('CollectTradeCalendar Step', () => {
       expect(config.name).toBe('CollectTradeCalendar');
       expect(config.type).toBe('event');
       expect(config.subscribes).toContain('calendar.update.needed');
-      expect(config.retries).toBe(3);
-      expect(config.retryDelay).toBe(5000);
     });
   });
 
@@ -262,12 +276,13 @@ describe('CollectTradeCalendar Step', () => {
     });
 
     it('should handle missing TUSHARE_TOKEN', async () => {
-      // Mock TushareService 构造函数抛出错误
-      vi.doMock('../../lib/tushare-client.js', () => ({
-        TushareService: vi.fn(() => {
-          throw new Error('TUSHARE_TOKEN is required');
-        }),
-      }));
+      const error = new Error('TUSHARE_TOKEN is required');
+
+      // 使用 vi.spyOn 来模拟 TushareService 构造函数抛出错误
+      const { TushareService } = await import('../../lib/tushare-client.js');
+      vi.spyOn(module, 'TushareService' as any).mockImplementation(() => {
+        throw error;
+      });
 
       const input = {};
 

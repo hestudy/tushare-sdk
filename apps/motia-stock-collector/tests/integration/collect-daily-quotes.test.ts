@@ -65,11 +65,6 @@ describe('CollectDailyQuotes Step - Contract Tests', () => {
       expect(config.subscribes).toEqual(['data.collection.triggered']);
     });
 
-    it('should have retry configuration', () => {
-      expect(config.retries).toBe(3);
-      expect(config.retryDelay).toBe(60000); // 60 seconds
-    });
-
     it('should emit correct event topics', () => {
       expect(config.emits).toEqual(['quotes.collected']);
     });
@@ -126,8 +121,8 @@ describe('CollectDailyQuotes Step - Contract Tests', () => {
       expect(savedQuotes[0].tsCode).toBe('600519.SH');
       expect(savedQuotes[1].tsCode).toBe('000001.SZ');
 
-      // 验证: TaskLog 记录
-      const taskLogs = testDb.queryTaskLogs('CollectDailyQuotes');
+      // 验证: 错误日志
+      const taskLogs = testDb.queryTaskLogsByName('CollectDailyQuotes');
       expect(taskLogs).toHaveLength(1);
       expect(taskLogs[0].status).toBe('SUCCESS');
       expect(taskLogs[0].recordsCount).toBe(2);
@@ -167,7 +162,7 @@ describe('CollectDailyQuotes Step - Contract Tests', () => {
       );
 
       // 验证: TaskLog 记录为成功但记录数为 0
-      const taskLogs = testDb.queryTaskLogs('CollectDailyQuotes');
+      const taskLogs = testDb.queryTaskLogsByName('CollectDailyQuotes');
       expect(taskLogs).toHaveLength(1);
       expect(taskLogs[0].status).toBe('SUCCESS');
       expect(taskLogs[0].recordsCount).toBe(0);

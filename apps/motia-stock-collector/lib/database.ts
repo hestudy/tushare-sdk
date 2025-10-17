@@ -120,6 +120,19 @@ export class DatabaseService {
   }
 
   /**
+   * 检查指定日期是否在日历数据中存在
+   * @param date 日期 YYYY-MM-DD
+   * @returns 是否存在
+   */
+  hasTradeCalendarData(date: string): boolean {
+    const stmt = this.db.prepare(`
+      SELECT 1 FROM trade_calendar WHERE cal_date = ? LIMIT 1
+    `);
+    const result = stmt.get(date);
+    return result !== undefined;
+  }
+
+  /**
    * 获取日期范围内的所有交易日
    * @param startDate 开始日期 YYYY-MM-DD
    * @param endDate 结束日期 YYYY-MM-DD
@@ -249,9 +262,11 @@ export class DatabaseService {
    * @param filters 查询条件
    * @returns 任务日志数组和总数
    */
-  queryTaskLogs(
-    filters: QueryTaskLogsFilters = {}
-  ): { logs: TaskLog[]; total: number } {
+  queryTaskLogs(filters?: QueryTaskLogsFilters): {
+    logs: TaskLog[];
+    total: number;
+  } {
+    const filterObj = filters || {};
     const {
       taskName,
       status,
@@ -259,7 +274,7 @@ export class DatabaseService {
       endTime,
       limit = 100,
       page = 1,
-    } = filters;
+    } = filterObj;
 
     // 构建查询条件
     let sql = 'SELECT * FROM task_logs WHERE 1=1';
@@ -320,7 +335,23 @@ export class DatabaseService {
    * @returns 任务日志数组
    */
   queryTaskLogsByName(taskName?: string, limit: number = 100): TaskLog[] {
-    return this.queryTaskLogs({ taskName, limit }).logs;
+    const sql = taskName
+      ? 'SELECT * FROM task_logs WHERE task_name = ? ORDER BY created_at DESC LIMIT ?'
+      : 'SELECT * FROM task_logs ORDER BY created_at DESC LIMIT ?';
+
+    const params = taskName ? [taskName, limit] : [limit];
+    const results = this.db.prepare(sql).all(...params) as any[];
+
+    return results.map((row) => ({
+      id: row.id,
+      taskName: row.task_name,
+      startTime: row.start_time,
+      endTime: row.end_time,
+      status: row.status,
+      recordsCount: row.records_count,
+      errorMessage: row.error_message,
+      createdAt: row.created_at,
+    }));
   }
 
   /**

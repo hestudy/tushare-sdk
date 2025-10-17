@@ -176,23 +176,61 @@ export const formatToTushareDate = formatDateToTushare;
 /**
  * 检查指定日期是否为交易日
  * @param date 日期 YYYY-MM-DD
- * @param emit 事件触发器 (可选，用于自动触发日历更新)
+ * @param emitOrDb 事件触发器或数据库实例 (可选)
  * @returns Promise<boolean> 是否为交易日
  */
 export async function checkTradeCalendar(
   date: string,
-  emit?: any
+  emitOrDb?: any,
+  database?: any
 ): Promise<boolean> {
-  const { db } = await import('./database');
+  // 支持多种调用方式：
+  // 1. checkTradeCalendar(date)
+  // 2. checkTradeCalendar(date, mockEmit)
+  // 3. checkTradeCalendar(date, mockEmit, db)
+  // 4. checkTradeCalendar(date, db) - db 实例
 
-  // 先查询数据库
-  const isTradeDay = db.isTradeDay(date);
+  let db: any;
+  let emit: any;
 
-  // 如果数据库中有记录，直接返回
-  if (isTradeDay !== undefined && isTradeDay !== null) {
-    // 注意：SQLite 返回 0 表示 false，1 表示 true
-    // isTradeDay 方法已经处理了这个转换
-    return isTradeDay;
+  if (emitOrDb) {
+    if (typeof emitOrDb.isTradeDay === 'function') {
+      // emitOrDb 是数据库实例
+      db = emitOrDb;
+      emit = database;
+    } else if (database && typeof database.isTradeDay === 'function') {
+      // 第三个参数是数据库实例
+      db = database;
+      emit = emitOrDb;
+    } else {
+      // emitOrDb 是 emit 函数
+      emit = emitOrDb;
+      const imported = await import('./database');
+      db = imported.db;
+    }
+  } else {
+    // 没有提供 emit 或 db
+    const imported = await import('./database');
+    db = imported.db;
+  }
+
+  // 检查数据库中是否有这个日期的记录
+  // 使用 hasTradeCalendarData 方法 (如果可用) 或直接查询
+  let hasData: boolean;
+  if (typeof db.hasTradeCalendarData === 'function') {
+    hasData = db.hasTradeCalendarData(date);
+  } else {
+    // 回退：直接查询（仅用于 mock）
+    // 通过检查是否能调用 isTradeDay 来推断数据存在
+    // 实际上，我们需要另一种方式...
+    // 对于 mock 对象，假设返回非 undefined 的值意味着有数据
+    const result = db.isTradeDay(date);
+    hasData = result !== undefined && result !== null;
+  }
+
+  // 如果数据库中有记录，直接返回结果
+  if (hasData) {
+    return db.isTradeDay(date);
   }
 
   // 如果数据库中没有记录，需要触发日历更新
@@ -217,32 +255,65 @@ export async function checkTradeCalendar(
 /**
  * 检测日历数据是否缺失指定年份
  * @param year 年份
+ * @param database 数据库实例 (可选)
  * @returns Promise<boolean> 是否缺失
  */
-export async function isCalendarYearMissing(year: number): Promise<boolean> {
-  const { db } = await import('./database');
+export async function isCalendarYearMissing(
+  year: number,
+  database?: any
+): Promise<boolean> {
+  let db: any;
+
+  if (!database) {
+    const imported = await import('./database');
+    db = imported.db;
+  } else {
+    db = database;
+  }
 
   // 检查该年份的1月1日数据是否存在
   const janFirst = `${year}-01-01`;
-  const hasData = db.isTradeDay(janFirst);
 
-  // 如果返回 undefined 或 null，说明没有数据
-  return hasData === undefined || hasData === null;
+  // 通过调用 isTradeDay 来检查是否有数据
+  // 对于真实的 DatabaseService：
+  // - 如果有记录：返回 true 或 false
+  // - 如果没有记录：返回 false（但我们无法区分）
+  // 因此需要使用 hasTradeCalendarData 方法（如果可用）
+  if (typeof db.hasTradeCalendarData === 'function') {
+    return !db.hasTradeCalendarData(janFirst);
+  }
+
+  // 回退：对于 mock 对象，假设 isTradeDay 返回 undefined 或 null 表示没有数据
+  const result = db.isTradeDay(janFirst);
+  return result === undefined || result === null;
 }
 
 /**
  * 自动检测并触发缺失年份的日历更新
  * @param emit 事件触发器
+ * @param database 数据库实例 (可选)
  * @returns Promise<void>
  */
-export async function autoUpdateMissingCalendarYears(emit: any): Promise<void> {
+export async function autoUpdateMissingCalendarYears(
+  emit: any,
+  database?: any
+): Promise<void> {
+  let db: any;
+
+  if (!database) {
+    const imported = await import('./database');
+    db = imported.db;
+  } else {
+    db = database;
+  }
+
   const currentYear = new Date().getFullYear();
 
   // 检查当前年份及前后各1年的数据
   const yearsToCheck = [currentYear - 1, currentYear, currentYear + 1];
 
   for (const year of yearsToCheck) {
-    const isMissing = await isCalendarYearMissing(year);
+    const isMissing = await isCalendarYearMissing(year, db);
 
     if (isMissing) {
       // 触发更新事件

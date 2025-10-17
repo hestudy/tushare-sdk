@@ -1,10 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { DatabaseService } from '../../lib/database.js';
 import { TushareService } from '../../lib/tushare-client.js';
-import {
-  checkTradeCalendar,
-  isCalendarYearMissing,
-} from '../../lib/utils.js';
+import { checkTradeCalendar, isCalendarYearMissing } from '../../lib/utils.js';
 import { handler as collectHandler } from '../../steps/collect-trade-calendar.step.js';
 
 /**
@@ -88,7 +85,7 @@ describe('Trade Calendar Integration Flow', () => {
       }));
 
       // 初始状态：数据库为空
-      const isMissing = await isCalendarYearMissing(2023);
+      const isMissing = await isCalendarYearMissing(2023, db);
       expect(isMissing).toBe(true);
 
       // 触发采集任务
@@ -156,11 +153,11 @@ describe('Trade Calendar Integration Flow', () => {
       ]);
 
       // 检查当前年份 - 应该存在
-      const currentYearMissing = await isCalendarYearMissing(currentYear);
+      const currentYearMissing = await isCalendarYearMissing(currentYear, db);
       expect(currentYearMissing).toBe(false);
 
       // 检查下一年度 - 应该缺失
-      const nextYearMissing = await isCalendarYearMissing(currentYear + 1);
+      const nextYearMissing = await isCalendarYearMissing(currentYear + 1, db);
       expect(nextYearMissing).toBe(true);
     });
 
@@ -168,7 +165,7 @@ describe('Trade Calendar Integration Flow', () => {
       const currentYear = new Date().getFullYear();
 
       // 检查缺失年份并触发更新
-      const isMissing = await isCalendarYearMissing(currentYear + 1);
+      const isMissing = await isCalendarYearMissing(currentYear + 1, db);
 
       if (isMissing) {
         await mockEmit({
@@ -192,7 +189,7 @@ describe('Trade Calendar Integration Flow', () => {
 
   describe('场景 3: 查询不存在的日期触发更新', () => {
     it('应该在数据不存在时返回 false', async () => {
-      const isTradeDay = await checkTradeCalendar('2099-01-01');
+      const isTradeDay = await checkTradeCalendar('2099-01-01', db);
 
       expect(isTradeDay).toBe(false);
     });
@@ -230,7 +227,7 @@ describe('Trade Calendar Integration Flow', () => {
     });
 
     it('应该触发更新事件当数据缺失', async () => {
-      const isTradeDay = await checkTradeCalendar('2099-12-31', mockEmit);
+      const isTradeDay = await checkTradeCalendar('2099-12-31', mockEmit, db);
 
       expect(isTradeDay).toBe(false);
       expect(mockEmit).toHaveBeenCalledWith({
