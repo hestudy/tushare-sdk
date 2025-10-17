@@ -1,0 +1,99 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Schedule Daily Collection Step Contract",
+  "description": "定时触发每日股票数据采集任务的 Cron Step",
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "const": "ScheduleDailyCollection",
+          "description": "Step 名称"
+        },
+        "type": {
+          "type": "string",
+          "const": "cron",
+          "description": "Step 类型: Cron 定时任务"
+        },
+        "schedule": {
+          "type": "string",
+          "const": "0 17 * * 1-5",
+          "description": "Cron 表达式: 周一到周五 17:00 执行"
+        },
+        "emits": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "const": "data.collection.triggered"
+          },
+          "description": "触发的事件主题"
+        }
+      },
+      "required": ["name", "type", "schedule", "emits"]
+    },
+    "handler": {
+      "type": "object",
+      "description": "Handler 函数签名",
+      "properties": {
+        "input": {
+          "type": "object",
+          "description": "Cron 触发时无输入参数",
+          "properties": {}
+        },
+        "context": {
+          "type": "object",
+          "properties": {
+            "emit": {
+              "description": "触发事件的函数"
+            },
+            "logger": {
+              "type": "object",
+              "description": "日志记录器"
+            }
+          }
+        },
+        "output": {
+          "type": "object",
+          "description": "Handler 返回值",
+          "properties": {
+            "topic": {
+              "type": "string",
+              "const": "data.collection.triggered"
+            },
+            "data": {
+              "type": "object",
+              "properties": {
+                "tradeDate": {
+                  "type": "string",
+                  "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+                  "description": "交易日期 YYYY-MM-DD"
+                }
+              },
+              "required": ["tradeDate"]
+            }
+          }
+        }
+      }
+    }
+  },
+  "examples": [
+    {
+      "config": {
+        "name": "ScheduleDailyCollection",
+        "type": "cron",
+        "schedule": "0 17 * * 1-5",
+        "emits": ["data.collection.triggered"]
+      },
+      "handler": {
+        "emittedEvent": {
+          "topic": "data.collection.triggered",
+          "data": {
+            "tradeDate": "2024-01-15"
+          }
+        }
+      }
+    }
+  ]
+}
