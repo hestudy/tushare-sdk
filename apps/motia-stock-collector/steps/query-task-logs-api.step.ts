@@ -35,9 +35,13 @@ export const config = {
   emits: [],
 };
 
-export const handler = async (req: any, { logger }: any) => {
+export const handler = async (req: any, { logger, db: injectedDb }: any) => {
   try {
-    const { db } = await import('../lib/database');
+    let db = injectedDb;
+    if (!db) {
+      const imported = await import('../lib/database');
+      db = imported.db;
+    }
 
     // 解析查询参数
     const {

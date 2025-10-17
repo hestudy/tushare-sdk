@@ -275,7 +275,11 @@ describe('Data Collection Flow - End-to-End Tests', () => {
       // Step 4: 执行采集 handler,应该抛出错误
       const input = { tradeDate: today };
       await expect(
-        collectHandler(input, { emit: mockEmit, logger: mockLogger })
+        collectHandler(input, {
+          emit: mockEmit,
+          logger: mockLogger,
+          db: testDb,
+        })
       ).rejects.toThrow('Failed to collect daily quotes');
 
       // Step 5: 验证错误日志
@@ -338,12 +342,20 @@ describe('Data Collection Flow - End-to-End Tests', () => {
       // Step 4: 第一次执行失败
       const input = { tradeDate: today };
       await expect(
-        collectHandler(input, { emit: mockEmit, logger: mockLogger })
+        collectHandler(input, {
+          emit: mockEmit,
+          logger: mockLogger,
+          db: testDb,
+        })
       ).rejects.toThrow();
 
       // Step 5: 第二次执行成功 (模拟重试)
       await expect(
-        collectHandler(input, { emit: mockEmit, logger: mockLogger })
+        collectHandler(input, {
+          emit: mockEmit,
+          logger: mockLogger,
+          db: testDb,
+        })
       ).resolves.not.toThrow();
 
       // Step 6: 验证数据最终保存成功

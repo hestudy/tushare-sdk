@@ -10,7 +10,7 @@
  * 4. 测试空结果处理
  */
 
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { DatabaseService } from '../../lib/database.js';
 import { handler, config } from '../../steps/query-task-logs-api.step.js';
 
@@ -75,7 +75,7 @@ describe('Query Task Logs API Step', () => {
       error: vi.fn(),
     };
 
-    const response = await handler(req, { logger });
+    const response = await handler(req, { logger, db: testDb });
 
     expect(response.status).toBe(200);
     expect(response.body.success).toBe(true);
@@ -101,7 +101,7 @@ describe('Query Task Logs API Step', () => {
       error: vi.fn(),
     };
 
-    const response = await handler(req, { logger });
+    const response = await handler(req, { logger, db: testDb });
 
     expect(response.status).toBe(200);
     expect(response.body.data.length).toBeGreaterThanOrEqual(2);
@@ -124,7 +124,7 @@ describe('Query Task Logs API Step', () => {
       error: vi.fn(),
     };
 
-    const response = await handler(req, { logger });
+    const response = await handler(req, { logger, db: testDb });
 
     expect(response.status).toBe(200);
 
@@ -146,7 +146,7 @@ describe('Query Task Logs API Step', () => {
       error: vi.fn(),
     };
 
-    const response = await handler(req, { logger });
+    const response = await handler(req, { logger, db: testDb });
 
     expect(response.status).toBe(400);
     expect(response.body.success).toBe(false);
@@ -166,7 +166,7 @@ describe('Query Task Logs API Step', () => {
       error: vi.fn(),
     };
 
-    const response = await handler(req, { logger });
+    const response = await handler(req, { logger, db: testDb });
 
     expect(response.status).toBe(200);
     expect(response.body.data.length).toBeLessThanOrEqual(2);
@@ -186,7 +186,7 @@ describe('Query Task Logs API Step', () => {
       error: vi.fn(),
     };
 
-    const response = await handler(req, { logger });
+    const response = await handler(req, { logger, db: testDb });
 
     expect(response.status).toBe(400);
     expect(response.body.success).toBe(false);
@@ -205,7 +205,7 @@ describe('Query Task Logs API Step', () => {
       error: vi.fn(),
     };
 
-    const response = await handler(req, { logger });
+    const response = await handler(req, { logger, db: testDb });
 
     expect(response.status).toBe(400);
     expect(response.body.success).toBe(false);
@@ -224,7 +224,7 @@ describe('Query Task Logs API Step', () => {
       error: vi.fn(),
     };
 
-    const response = await handler(req, { logger });
+    const response = await handler(req, { logger, db: testDb });
 
     expect(response.status).toBe(200);
     expect(response.body.success).toBe(true);
@@ -245,7 +245,7 @@ describe('Query Task Logs API Step', () => {
       error: vi.fn(),
     };
 
-    await handler(req, { logger });
+    await handler(req, { logger, db: testDb });
 
     expect(logger.info).toHaveBeenCalledWith(
       'Task logs retrieved',
@@ -271,7 +271,7 @@ describe('Query Task Logs API Step', () => {
       error: vi.fn(),
     };
 
-    const response = await handler(req, { logger });
+    const response = await handler(req, { logger, db: testDb });
 
     const { total, limit, totalPages } = response.body.pagination;
     expect(totalPages).toBe(Math.ceil(total / limit));

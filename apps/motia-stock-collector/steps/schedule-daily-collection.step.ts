@@ -14,6 +14,7 @@
  */
 
 import { getToday, checkTradeCalendar } from '../lib/utils';
+import { db } from '../lib/database';
 
 /**
  * Step 配置
@@ -47,7 +48,7 @@ export const handler = async (
 
   try {
     // 检查是否为交易日
-    const isTradeDay = await checkTradeCalendar(today, emit);
+    const isTradeDay = await checkTradeCalendar(today, emit, db);
 
     if (!isTradeDay) {
       // 非交易日,跳过采集

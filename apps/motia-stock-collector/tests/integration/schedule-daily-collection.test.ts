@@ -188,9 +188,9 @@ describe('ScheduleDailyCollection Step - Contract Tests', () => {
       const testDate = '2025-10-20';
       vi.spyOn(utils, 'getToday').mockReturnValue(testDate);
 
-      // Mock 数据库抛出错误
-      const originalIsTradeDay = db.isTradeDay;
-      db.isTradeDay = vi.fn(() => {
+      // Mock 数据库的 hasTradeCalendarData 抛出错误
+      const originalHasTradeCalendarData = db.hasTradeCalendarData;
+      db.hasTradeCalendarData = vi.fn(() => {
         throw new Error('Database connection failed');
       });
 
@@ -203,7 +203,7 @@ describe('ScheduleDailyCollection Step - Contract Tests', () => {
       expect(mockLogger.error).toHaveBeenCalled();
 
       // 恢复原始方法
-      db.isTradeDay = originalIsTradeDay;
+      db.hasTradeCalendarData = originalHasTradeCalendarData;
     });
 
     it('should not throw error on emit failure', async () => {

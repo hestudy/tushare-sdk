@@ -94,6 +94,12 @@ describe('T019 [US3] 存储与查询端到端测试', () => {
     db.saveQuotes(testQuotes);
   });
 
+  beforeEach(() => {
+    // 在每个测试前清除额外数据并重新插入初始数据
+    db.clearAllData();
+    db.saveQuotes(testQuotes);
+  });
+
   afterAll(() => {
     // 清理测试数据
     db.clearAllData();
@@ -249,7 +255,7 @@ describe('T019 [US3] 存储与查询端到端测试', () => {
 
       // 验证数据内容
       expect(csvBody).toContain('600519.SH');
-      expect(csvBody).toContain('2024-01-');
+      expect(csvBody).toContain(DATE_01_02);
     });
 
     it('应该能将查询结果导出为 JSON 格式', async () => {

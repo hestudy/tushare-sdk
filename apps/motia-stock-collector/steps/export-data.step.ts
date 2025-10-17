@@ -5,6 +5,7 @@
  */
 
 import type { DailyQuote } from '../types/index';
+import { db } from '../lib/database';
 
 /**
  * Step 配置
@@ -132,9 +133,6 @@ export const handler = async (req: any, { logger }: any) => {
         },
       };
     }
-
-    // 动态导入数据库服务
-    const { db } = await import('../lib/database');
 
     // 查询数据
     const results = db.queryQuotes({

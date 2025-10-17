@@ -18,7 +18,7 @@
  */
 
 import { TushareService } from '../lib/tushare-client';
-import { db } from '../lib/database';
+import { db as defaultDb } from '../lib/database';
 import { formatDateToTushare } from '../lib/utils';
 
 /**
@@ -39,12 +39,16 @@ export const config = {
  * @param context - 上下文对象
  * @param context.emit - 事件触发函数
  * @param context.logger - 日志记录器
+ * @param context.db - 数据库实例 (可选,用于测试)
  */
 export const handler = async (
   input: { tradeDate: string },
-  { emit, logger }: { emit: any; logger: any }
+  { emit, logger, db }: { emit: any; logger: any; db?: any }
 ) => {
   const { tradeDate } = input;
+
+  // 使用注入的 db 或默认 db
+  const database = db || defaultDb;
 
   // 记录任务开始时间
   const startTime = new Date().toISOString();
@@ -76,7 +80,7 @@ export const handler = async (
 
     // 保存到数据库
     if (quotes.length > 0) {
-      const savedCount = db.saveQuotes(quotes);
+      const savedCount = database.saveQuotes(quotes);
 
       logger.info('Saved quotes to database', {
         savedCount,
@@ -93,7 +97,7 @@ export const handler = async (
     const endTime = new Date().toISOString();
 
     // 记录任务日志
-    db.logTask({
+    database.logTask({
       taskName: 'CollectDailyQuotes',
       startTime,
       endTime,
@@ -123,7 +127,7 @@ export const handler = async (
     const endTime = new Date().toISOString();
 
     // 记录任务失败日志
-    db.logTask({
+    database.logTask({
       taskName: 'CollectDailyQuotes',
       startTime,
       endTime,

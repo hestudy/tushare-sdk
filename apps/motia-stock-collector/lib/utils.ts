@@ -186,30 +186,38 @@ export async function checkTradeCalendar(
 ): Promise<boolean> {
   // 支持多种调用方式：
   // 1. checkTradeCalendar(date)
-  // 2. checkTradeCalendar(date, mockEmit)
-  // 3. checkTradeCalendar(date, mockEmit, db)
-  // 4. checkTradeCalendar(date, db) - db 实例
+  // 2. checkTradeCalendar(date, emit)
+  // 3. checkTradeCalendar(date, emit, db)
+  // 4. checkTradeCalendar(date, db) - db 实例 (has isTradeDay, hasTradeCalendarData)
 
   let db: any;
   let emit: any;
 
-  if (emitOrDb) {
-    if (typeof emitOrDb.isTradeDay === 'function') {
-      // emitOrDb 是数据库实例
-      db = emitOrDb;
-      emit = database;
-    } else if (database && typeof database.isTradeDay === 'function') {
-      // 第三个参数是数据库实例
-      db = database;
-      emit = emitOrDb;
-    } else {
-      // emitOrDb 是 emit 函数
-      emit = emitOrDb;
-      const imported = await import('./database');
-      db = imported.db;
-    }
+  // 检测数据库实例的特征
+  const isDbInstance = (obj: any) => {
+    return (
+      obj &&
+      typeof obj.isTradeDay === 'function' &&
+      typeof obj.hasTradeCalendarData === 'function'
+    );
+  };
+
+  if (database && isDbInstance(database)) {
+    // 第三个参数是数据库实例
+    db = database;
+    emit = emitOrDb;
+  } else if (emitOrDb && isDbInstance(emitOrDb)) {
+    // 第二个参数是数据库实例 (这种情况通常不会发生,但保留以防万一)
+    db = emitOrDb;
+    emit = undefined;
   } else {
-    // 没有提供 emit 或 db
+    // 第二个参数是 emit 函数 (或 undefined)
+    emit = emitOrDb;
+    db = database;
+  }
+
+  // 如果没有 db 实例,则动态导入
+  if (!db) {
     const imported = await import('./database');
     db = imported.db;
   }

@@ -17,6 +17,7 @@ import { getTestDate } from '../helpers/date-helpers.js';
 const DATE_01_02 = getTestDate(0);
 const DATE_01_03 = getTestDate(1);
 const DATE_01_05 = getTestDate(3);
+const endDate = getTestDate(5);
 
 // 模拟测试数据
 const mockQuotes: Omit<DailyQuote, 'id' | 'createdAt'>[] = [
@@ -71,6 +72,13 @@ describe('T018 [US3] ExportDataAPI Step - Contract Tests', () => {
     handler = module.handler;
 
     // 准备测试数据
+    db.saveQuotes(mockQuotes);
+  });
+
+  beforeEach(() => {
+    // 在每个测试前清除额外的数据，但保留初始的 mockQuotes
+    // 通过清除所有并重新插入来重置
+    db.clearAllData();
     db.saveQuotes(mockQuotes);
   });
 
@@ -203,7 +211,7 @@ describe('T018 [US3] ExportDataAPI Step - Contract Tests', () => {
 
       const csvBody = response.body;
       // 验证空值被正确处理 (转换为空字符串)
-      expect(csvBody).toContain('600000.SH,2024-01-05,,,,100,99,1,1.01,,');
+      expect(csvBody).toContain(`600000.SH,${DATE_01_05},,,,100,99,1,1.01,,`);
     });
   });
 
