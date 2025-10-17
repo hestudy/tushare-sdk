@@ -71,6 +71,9 @@ describe('Data Collection Flow - End-to-End Tests', () => {
   };
 
   beforeEach(async () => {
+    // 设置虚拟 TUSHARE_TOKEN 环境变量，允许 TushareService 构造函数通过验证
+    process.env.TUSHARE_TOKEN = 'test-token-for-testing';
+
     // 使用内存数据库
     testDb = new DatabaseService(':memory:');
 
